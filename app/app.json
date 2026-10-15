@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "SQLidik",
+    "slug": "sqlidik",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "sqlidik",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#141826",
+    "ios": {
+      "bundleIdentifier": "id.sqlidik.app",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "id.sqlidik.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#1B1B2F",
+        "foregroundImage": "./assets/images/adaptive-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/favicon.png",
+      "name": "SQLidik",
+      "shortName": "SQLidik",
+      "themeColor": "#141826",
+      "backgroundColor": "#141826"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "color": "#E8B33D"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#141826",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 128
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false,
+      "reactCompiler": false
+    }
+  }
+}
