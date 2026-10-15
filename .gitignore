@@ -1,0 +1,13 @@
+node_modules/
+app/dist/
+app/.expo/
+app/.env
+app/android/
+app/ios/
+backend/.venv/
+backend/.env
+backend/*.db
+__pycache__/
+.pytest_cache/
+konten/dist/laporan.txt
+*.log

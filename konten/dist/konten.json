@@ -1,0 +1,3023 @@
+{
+ "versi": 1,
+ "aturan": {
+  "koin_awal": 30,
+  "biaya_petunjuk": 5,
+  "faktor_xp_bintang": [
+   0.6,
+   0.8,
+   1.0
+  ],
+  "bonus_koin_tiga_bintang": 5,
+  "batas_percobaan_salah": 6,
+  "zona_waktu_jam": 7,
+  "detik_kilat": 120,
+  "bukti_kolektor": 20
+ },
+ "berkas": [
+  {
+   "nomor": 1,
+   "konsep": "SELECT",
+   "judul": "SELECT dan FROM",
+   "ikon": "select",
+   "ringkas": "Menampilkan isi tabel dan memilih kolom."
+  },
+  {
+   "nomor": 2,
+   "konsep": "WHERE",
+   "judul": "WHERE",
+   "ikon": "where",
+   "ringkas": "Menyaring baris dengan syarat."
+  },
+  {
+   "nomor": 3,
+   "konsep": "LIKE",
+   "judul": "LIKE",
+   "ikon": "like",
+   "ringkas": "Mencari teks dengan pola."
+  },
+  {
+   "nomor": 4,
+   "konsep": "AGREGASI",
+   "judul": "COUNT, SUM, GROUP BY",
+   "ikon": "sum_count",
+   "ringkas": "Menghitung dan mengelompokkan data."
+  },
+  {
+   "nomor": 5,
+   "konsep": "JOIN",
+   "judul": "Kasus Besar: JOIN",
+   "ikon": "kasus_besar",
+   "ringkas": "Menggabungkan beberapa tabel."
+  }
+ ],
+ "kasus": [
+  {
+   "id": "b1k1",
+   "berkas": 1,
+   "urutan": 1,
+   "jenis": "utama",
+   "judul": "Kunci Ruang OSIS",
+   "tkp": "Ruang OSIS, Senin pagi",
+   "konsep": "SELECT",
+   "briefing": [
+    "Selamat datang, Detektif. Pagi ini Ruang OSIS ditemukan tidak terkunci, dan spanduk pensi hilang dari dalam.",
+    "Setiap peminjaman kunci dicatat Pak Darto di tabel peminjaman_kunci. Kita mulai dari sana."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan seluruh isi tabel peminjaman_kunci.",
+     "query_kunci": "SELECT * FROM peminjaman_kunci",
+     "petunjuk": [
+      "Nama tabelnya peminjaman_kunci.",
+      "Tanda * berarti semua kolom.",
+      "SELECT * FROM ____"
+     ],
+     "komentar_benar": "Bagus. Ada tujuh catatan peminjaman. Sekarang kita pilih kolom yang penting saja supaya lebih mudah dibaca.",
+     "wajib": [
+      "SELECT",
+      "FROM"
+     ],
+     "cocok": "tepat",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Tampilkan kolom nama, ruang, dan jam_kembali saja.",
+     "query_kunci": "SELECT nama, ruang, jam_kembali FROM peminjaman_kunci",
+     "petunjuk": [
+      "Tulis nama kolom setelah SELECT, dipisah koma.",
+      "Kolomnya nama, ruang, dan jam_kembali.",
+      "SELECT nama, ____, ____ FROM peminjaman_kunci"
+     ],
+     "komentar_benar": "Perhatikan baris yang jam_kembali-nya NULL. NULL berarti kosong, jadi kunci itu belum dikembalikan.",
+     "wajib": [
+      "SELECT",
+      "FROM"
+     ],
+     "cocok": "tepat",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Nadia",
+     "peran": "Siswi XI RPL, sekretaris OSIS",
+     "avatar": "nadia",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Bima",
+     "peran": "Siswa XII TKJ",
+     "avatar": "bima",
+     "pelaku": false,
+     "alasan": "Bima memang meminjam kunci Ruang OSIS, tetapi sudah mengembalikannya pukul 11.30."
+    },
+    {
+     "nama": "Pak Darto",
+     "peran": "Satpam sekolah",
+     "avatar": "pak_darto",
+     "pelaku": false,
+     "alasan": "Pak Darto hanya meminjam kunci gudang dan sudah mengembalikannya pukul 15.25."
+    }
+   ],
+   "penjelasan": "Nadia meminjam kunci Ruang OSIS pukul 14.05 dan tidak mengembalikannya. Spanduk ia bawa pulang untuk dijahit, tetapi ia lupa mengunci pintu dan melapor. Spanduk sudah kembali.",
+   "penutup": "Kerja bagus, Detektif. Kamu sudah bisa membaca isi tabel. Kasus berikutnya sudah terbuka.",
+   "xp": 40,
+   "koin": 15,
+   "durasi": "2-3 menit",
+   "sql": "CREATE TABLE peminjaman_kunci (id INTEGER PRIMARY KEY, nama TEXT, ruang TEXT, jam_pinjam TEXT, jam_kembali TEXT);\nINSERT INTO peminjaman_kunci (id, nama, ruang, jam_pinjam, jam_kembali) VALUES (1, 'Pak Hendra', 'Lab RPL', '07:00', '15:00');\nINSERT INTO peminjaman_kunci (id, nama, ruang, jam_pinjam, jam_kembali) VALUES (2, 'Bu Ratna', 'Perpustakaan', '07:15', '15:30');\nINSERT INTO peminjaman_kunci (id, nama, ruang, jam_pinjam, jam_kembali) VALUES (3, 'Bima', 'Ruang OSIS', '10:00', '11:30');\nINSERT INTO peminjaman_kunci (id, nama, ruang, jam_pinjam, jam_kembali) VALUES (4, 'Raka', 'Lab RPL', '13:00', '14:10');\nINSERT INTO peminjaman_kunci (id, nama, ruang, jam_pinjam, jam_kembali) VALUES (5, 'Nadia', 'Ruang OSIS', '14:05', NULL);\nINSERT INTO peminjaman_kunci (id, nama, ruang, jam_pinjam, jam_kembali) VALUES (6, 'Sinta', 'Ruang Musik', '13:30', '14:45');\nINSERT INTO peminjaman_kunci (id, nama, ruang, jam_pinjam, jam_kembali) VALUES (7, 'Pak Darto', 'Gudang', '15:10', '15:25');",
+   "tabel": [
+    {
+     "nama": "peminjaman_kunci",
+     "keterangan": "Catatan peminjaman kunci ruangan hari Jumat",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama peminjam"
+      },
+      {
+       "nama": "ruang",
+       "tipe": "TEXT",
+       "keterangan": "Ruangan yang kuncinya dipinjam"
+      },
+      {
+       "nama": "jam_pinjam",
+       "tipe": "TEXT",
+       "keterangan": "Jam kunci diambil"
+      },
+      {
+       "nama": "jam_kembali",
+       "tipe": "TEXT",
+       "keterangan": "Jam kunci dikembalikan, kosong jika belum"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 7
+    }
+   ],
+   "kartu": {
+    "judul": "SELECT dan FROM",
+    "isi": "SELECT memilih kolom yang ingin ditampilkan. FROM menyebut tabel asal datanya. Tanda * berarti semua kolom.",
+    "contoh": "SELECT * FROM siswa;\nSELECT nama, kelas FROM siswa;"
+   }
+  },
+  {
+   "id": "b1k2",
+   "berkas": 1,
+   "urutan": 2,
+   "jenis": "utama",
+   "judul": "Poster Lomba yang Tercoret",
+   "tkp": "Mading lantai 2, Kamis sore",
+   "konsep": "SELECT",
+   "briefing": [
+    "Poster lomba desain di mading lantai 2 dicoret spidol merah sekitar pukul 16.00.",
+    "Kita punya dua catatan: peminjaman spidol di ruang guru dan presensi ekskul sore itu. Bandingkan keduanya."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan kolom nama dan warna dari tabel pinjam_spidol.",
+     "query_kunci": "SELECT nama, warna FROM pinjam_spidol",
+     "petunjuk": [
+      "Tabelnya pinjam_spidol.",
+      "Kolom yang dibutuhkan nama dan warna.",
+      "SELECT ____, ____ FROM pinjam_spidol"
+     ],
+     "komentar_benar": "Ada dua orang yang meminjam spidol merah: Sinta dan Raka. Sekarang cek siapa yang masih di sekolah sekitar pukul 16.00.",
+     "wajib": [
+      "SELECT",
+      "FROM"
+     ],
+     "cocok": "tepat",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Tampilkan kolom nama dan jam_pulang dari tabel presensi_ekskul.",
+     "query_kunci": "SELECT nama, jam_pulang FROM presensi_ekskul",
+     "petunjuk": [
+      "Tabelnya presensi_ekskul.",
+      "Kolom yang dibutuhkan nama dan jam_pulang.",
+      "SELECT nama, ____ FROM ____"
+     ],
+     "komentar_benar": "Poster dicoret sekitar pukul 16.00. Siapa pemegang spidol merah yang masih di sekolah saat itu?",
+     "wajib": [
+      "SELECT",
+      "FROM"
+     ],
+     "cocok": "tepat",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Raka",
+     "peran": "Siswa XI RPL",
+     "avatar": "raka",
+     "pelaku": false,
+     "alasan": "Raka memang meminjam spidol merah, tetapi sudah pulang pukul 15.10."
+    },
+    {
+     "nama": "Sinta",
+     "peran": "Siswi X RPL",
+     "avatar": "sinta",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Bima",
+     "peran": "Siswa XII TKJ",
+     "avatar": "bima",
+     "pelaku": false,
+     "alasan": "Bima masih di sekolah sampai pukul 17.00, tetapi spidol yang ia pinjam berwarna biru."
+    }
+   ],
+   "penjelasan": "Sinta mencoret poster karena kesal desainnya tidak lolos seleksi. Ia sudah meminta maaf dan membantu mencetak ulang poster lomba.",
+   "penutup": "Dua tabel, satu kesimpulan. Berkas SELECT selesai, Detektif. Berkas WHERE sudah menunggu.",
+   "xp": 40,
+   "koin": 15,
+   "durasi": "3 menit",
+   "sql": "CREATE TABLE pinjam_spidol (id INTEGER PRIMARY KEY, nama TEXT, warna TEXT, jam_pinjam TEXT);\nINSERT INTO pinjam_spidol (id, nama, warna, jam_pinjam) VALUES (1, 'Nadia', 'Hitam', '13:10');\nINSERT INTO pinjam_spidol (id, nama, warna, jam_pinjam) VALUES (2, 'Sinta', 'Merah', '14:00');\nINSERT INTO pinjam_spidol (id, nama, warna, jam_pinjam) VALUES (3, 'Raka', 'Merah', '14:20');\nINSERT INTO pinjam_spidol (id, nama, warna, jam_pinjam) VALUES (4, 'Bima', 'Biru', '14:35');\nINSERT INTO pinjam_spidol (id, nama, warna, jam_pinjam) VALUES (5, 'Pak Hendra', 'Hijau', '15:00');\nINSERT INTO pinjam_spidol (id, nama, warna, jam_pinjam) VALUES (6, 'Nadia', 'Biru', '15:20');\nCREATE TABLE presensi_ekskul (id INTEGER PRIMARY KEY, nama TEXT, ekskul TEXT, jam_datang TEXT, jam_pulang TEXT);\nINSERT INTO presensi_ekskul (id, nama, ekskul, jam_datang, jam_pulang) VALUES (1, 'Raka', 'Futsal', '14:30', '15:10');\nINSERT INTO presensi_ekskul (id, nama, ekskul, jam_datang, jam_pulang) VALUES (2, 'Sinta', 'Desain Grafis', '14:15', '16:40');\nINSERT INTO presensi_ekskul (id, nama, ekskul, jam_datang, jam_pulang) VALUES (3, 'Bima', 'Robotik', '14:40', '17:00');\nINSERT INTO presensi_ekskul (id, nama, ekskul, jam_datang, jam_pulang) VALUES (4, 'Nadia', 'Jurnalistik', '13:00', '15:30');\nINSERT INTO presensi_ekskul (id, nama, ekskul, jam_datang, jam_pulang) VALUES (5, 'Dewi', 'Paduan Suara', '14:00', '15:45');",
+   "tabel": [
+    {
+     "nama": "pinjam_spidol",
+     "keterangan": "Peminjaman spidol di ruang guru",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama peminjam"
+      },
+      {
+       "nama": "warna",
+       "tipe": "TEXT",
+       "keterangan": "Warna spidol"
+      },
+      {
+       "nama": "jam_pinjam",
+       "tipe": "TEXT",
+       "keterangan": "Jam spidol dipinjam"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 6
+    },
+    {
+     "nama": "presensi_ekskul",
+     "keterangan": "Presensi ekskul hari Kamis",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama siswa"
+      },
+      {
+       "nama": "ekskul",
+       "tipe": "TEXT",
+       "keterangan": "Nama ekskul"
+      },
+      {
+       "nama": "jam_datang",
+       "tipe": "TEXT",
+       "keterangan": "Jam datang"
+      },
+      {
+       "nama": "jam_pulang",
+       "tipe": "TEXT",
+       "keterangan": "Jam pulang"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 5
+    }
+   ],
+   "kartu": {
+    "judul": "SELECT dan FROM",
+    "isi": "SELECT memilih kolom yang ingin ditampilkan. FROM menyebut tabel asal datanya. Tanda * berarti semua kolom.",
+    "contoh": "SELECT * FROM siswa;\nSELECT nama, kelas FROM siswa;"
+   }
+  },
+  {
+   "id": "b2k1",
+   "berkas": 2,
+   "urutan": 1,
+   "jenis": "utama",
+   "judul": "Laptop Hilang di Lab",
+   "tkp": "Lab Komputer 2, pukul 15.40",
+   "konsep": "WHERE",
+   "briefing": [
+    "Laptop guru hilang dari Lab Komputer 2 setelah jam 15.00. Laptop itu dikunci ke meja dengan baut.",
+    "Cari siapa saja yang masuk lab setelah jam itu, lalu periksa alat yang mereka pinjam."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Cari siapa saja yang masuk lab setelah pukul 15.00. Tampilkan nama dan jam_masuk.",
+     "query_kunci": "SELECT nama, jam_masuk FROM akses_lab WHERE jam_masuk > '15:00'",
+     "petunjuk": [
+      "Datanya ada di tabel akses_lab.",
+      "Saring kolom jam_masuk dengan tanda >.",
+      "SELECT nama, jam_masuk FROM akses_lab WHERE jam_masuk > '____'"
+     ],
+     "komentar_benar": "Bagus! Tinggal 3 orang. Sekarang cek alat yang dipinjam setelah pukul 15.00.",
+     "wajib": [
+      "WHERE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Tampilkan nama, alat, dan jam_pinjam dari peminjaman_alat yang dipinjam setelah pukul 15.00.",
+     "query_kunci": "SELECT nama, alat, jam_pinjam FROM peminjaman_alat WHERE jam_pinjam > '15:00'",
+     "petunjuk": [
+      "Datanya ada di tabel peminjaman_alat.",
+      "Saring kolom jam_pinjam, sama seperti langkah sebelumnya.",
+      "SELECT nama, alat, jam_pinjam FROM peminjaman_alat WHERE ____ > '15:00'"
+     ],
+     "komentar_benar": "Ingat, laptop itu dikunci ke meja dengan baut. Alat apa yang dibutuhkan untuk membukanya?",
+     "wajib": [
+      "WHERE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Raka",
+     "peran": "Siswa XI RPL",
+     "avatar": "raka",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Sinta",
+     "peran": "Siswi X RPL",
+     "avatar": "sinta",
+     "pelaku": false,
+     "alasan": "Sinta masuk lab pukul 15.20, tetapi hanya meminjam kabel LAN. Baut pengunci laptop hanya bisa dibuka dengan obeng."
+    },
+    {
+     "nama": "Bima",
+     "peran": "Siswa XII TKJ",
+     "avatar": "bima",
+     "pelaku": false,
+     "alasan": "Bima masuk lab pukul 15.41 dan tidak meminjam alat apa pun setelah pukul 15.00."
+    }
+   ],
+   "penjelasan": "Raka meminjam obeng pukul 15.30 untuk membuka baut pengunci laptop. Laptop itu ia bawa ke ruang OSIS untuk latihan presentasi, lalu lupa mengembalikannya. Laptop sudah kembali ke lab.",
+   "penutup": "Kerja bagus, Detektif. WHERE membuat puluhan baris menjadi tiga nama saja.",
+   "xp": 50,
+   "koin": 20,
+   "durasi": "3-5 menit",
+   "sql": "CREATE TABLE akses_lab (id INTEGER PRIMARY KEY, nama TEXT, kelas TEXT, jam_masuk TEXT, jam_keluar TEXT);\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (1, 'Pak Hendra', 'Guru', '07:05', '12:00');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (2, 'Dewi', 'XI RPL', '07:30', '09:10');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (3, 'Fajar', 'XI RPL', '07:30', '09:10');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (4, 'Nadia', 'XI RPL', '09:20', '11:00');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (5, 'Rizky', 'X TKJ', '09:25', '11:00');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (6, 'Bima', 'XII TKJ', '11:10', '12:30');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (7, 'Putri', 'X RPL', '12:40', '14:00');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (8, 'Sinta', 'X RPL', '12:40', '14:00');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (9, 'Pak Hendra', 'Guru', '13:00', '14:50');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (10, 'Fajar', 'XI RPL', '14:05', '14:55');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (11, 'Raka', 'XI RPL', '15:12', '15:58');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (12, 'Sinta', 'X RPL', '15:20', '15:35');\nINSERT INTO akses_lab (id, nama, kelas, jam_masuk, jam_keluar) VALUES (13, 'Bima', 'XII TKJ', '15:41', '15:50');\nCREATE TABLE peminjaman_alat (id INTEGER PRIMARY KEY, nama TEXT, alat TEXT, jam_pinjam TEXT, jam_kembali TEXT);\nINSERT INTO peminjaman_alat (id, nama, alat, jam_pinjam, jam_kembali) VALUES (1, 'Pak Hendra', 'Obeng', '09:00', '10:00');\nINSERT INTO peminjaman_alat (id, nama, alat, jam_pinjam, jam_kembali) VALUES (2, 'Rizky', 'Tang', '09:30', '10:45');\nINSERT INTO peminjaman_alat (id, nama, alat, jam_pinjam, jam_kembali) VALUES (3, 'Bima', 'Multimeter', '11:15', '12:20');\nINSERT INTO peminjaman_alat (id, nama, alat, jam_pinjam, jam_kembali) VALUES (4, 'Putri', 'Kabel LAN', '12:45', '13:50');\nINSERT INTO peminjaman_alat (id, nama, alat, jam_pinjam, jam_kembali) VALUES (5, 'Fajar', 'Crimping tool', '14:10', '14:50');\nINSERT INTO peminjaman_alat (id, nama, alat, jam_pinjam, jam_kembali) VALUES (6, 'Sinta', 'Kabel LAN', '15:25', '15:34');\nINSERT INTO peminjaman_alat (id, nama, alat, jam_pinjam, jam_kembali) VALUES (7, 'Raka', 'Obeng', '15:30', '15:55');\nINSERT INTO peminjaman_alat (id, nama, alat, jam_pinjam, jam_kembali) VALUES (8, 'Pak Darto', 'Senter', '15:50', '17:00');",
+   "tabel": [
+    {
+     "nama": "akses_lab",
+     "keterangan": "Catatan kartu akses Lab Komputer 2",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama pemilik kartu"
+      },
+      {
+       "nama": "kelas",
+       "tipe": "TEXT",
+       "keterangan": "Kelas atau jabatan"
+      },
+      {
+       "nama": "jam_masuk",
+       "tipe": "TEXT",
+       "keterangan": "Jam masuk lab"
+      },
+      {
+       "nama": "jam_keluar",
+       "tipe": "TEXT",
+       "keterangan": "Jam keluar lab"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 13
+    },
+    {
+     "nama": "peminjaman_alat",
+     "keterangan": "Peminjaman alat di ruang teknisi",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama peminjam"
+      },
+      {
+       "nama": "alat",
+       "tipe": "TEXT",
+       "keterangan": "Alat yang dipinjam"
+      },
+      {
+       "nama": "jam_pinjam",
+       "tipe": "TEXT",
+       "keterangan": "Jam alat dipinjam"
+      },
+      {
+       "nama": "jam_kembali",
+       "tipe": "TEXT",
+       "keterangan": "Jam alat dikembalikan"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 8
+    }
+   ],
+   "kartu": {
+    "judul": "WHERE",
+    "isi": "WHERE menyaring baris. Hanya baris yang memenuhi syarat yang ditampilkan. Syarat bisa memakai =, >, <, >=, <=, <>, serta AND dan OR.",
+    "contoh": "SELECT * FROM akses_lab\nWHERE jam_masuk > '15:00';"
+   }
+  },
+  {
+   "id": "b2k2",
+   "berkas": 2,
+   "urutan": 2,
+   "jenis": "utama",
+   "judul": "Kas Ekskul Robotik",
+   "tkp": "Sekretariat Ekskul Robotik",
+   "konsep": "WHERE",
+   "briefing": [
+    "Saldo kas Ekskul Robotik kurang Rp135.000 dari seharusnya. Ada pengeluaran yang terlihat terlalu besar.",
+    "Periksa buku kas, nota belanja, lalu presensi pengurus. Pakai AND kalau syaratnya lebih dari satu."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan tanggal, keterangan, dan keluar dari kas_robotik untuk pengeluaran yang lebih dari 50000.",
+     "query_kunci": "SELECT tanggal, keterangan, keluar FROM kas_robotik WHERE keluar > 50000",
+     "petunjuk": [
+      "Tabelnya kas_robotik, kolom uang keluar bernama keluar.",
+      "Angka tidak perlu diberi tanda kutip.",
+      "SELECT tanggal, keterangan, keluar FROM kas_robotik WHERE keluar > ____"
+     ],
+     "komentar_benar": "Ada tiga pengeluaran besar. Beli spidol dan kertas sampai Rp150.000? Cek notanya.",
+     "wajib": [
+      "WHERE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Tampilkan nota_belanja pada tanggal 2026-09-14.",
+     "query_kunci": "SELECT * FROM nota_belanja WHERE tanggal = '2026-09-14'",
+     "petunjuk": [
+      "Tabelnya nota_belanja.",
+      "Tanggal ditulis sebagai teks, jadi pakai tanda kutip.",
+      "SELECT * FROM nota_belanja WHERE tanggal = '____'"
+     ],
+     "komentar_benar": "Notanya hanya Rp15.000, tetapi di buku kas tertulis Rp150.000. Ada yang menambah satu angka nol. Siapa bendahara yang bertugas hari itu?",
+     "wajib": [
+      "WHERE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Tampilkan nama dan status dari presensi_pengurus untuk jabatan Bendahara pada tanggal 2026-09-14.",
+     "query_kunci": "SELECT nama, status FROM presensi_pengurus WHERE tanggal = '2026-09-14' AND jabatan = 'Bendahara'",
+     "petunjuk": [
+      "Ada dua syarat: tanggal dan jabatan.",
+      "Gabungkan dua syarat dengan AND.",
+      "SELECT nama, status FROM presensi_pengurus WHERE tanggal = '2026-09-14' AND ____ = '____'"
+     ],
+     "komentar_benar": "Dua bendahara, tetapi hanya satu yang hadir saat transaksi itu dicatat.",
+     "wajib": [
+      "WHERE",
+      "AND"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Bima",
+     "peran": "Siswa XII TKJ, bendahara",
+     "avatar": "bima",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Nadia",
+     "peran": "Siswi XI RPL, bendahara",
+     "avatar": "nadia",
+     "pelaku": false,
+     "alasan": "Nadia juga bendahara, tetapi pada 14 September ia izin dan tidak mencatat kas."
+    },
+    {
+     "nama": "Raka",
+     "peran": "Siswa XI RPL, ketua ekskul",
+     "avatar": "raka",
+     "pelaku": false,
+     "alasan": "Raka ketua ekskul dan tidak memegang buku kas."
+    }
+   ],
+   "penjelasan": "Bima mencatat Rp150.000 padahal notanya Rp15.000. Selisihnya ia pakai untuk membeli suku cadang robot tanpa nota. Bima sudah mengembalikan uangnya dan membetulkan catatan kas.",
+   "penutup": "Tiga tabel, dua syarat, satu pelaku. Berkas WHERE selesai, Detektif.",
+   "xp": 60,
+   "koin": 20,
+   "durasi": "4-5 menit",
+   "sql": "CREATE TABLE kas_robotik (id INTEGER PRIMARY KEY, tanggal TEXT, keterangan TEXT, masuk INTEGER, keluar INTEGER);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (1, '2026-09-01', 'Iuran anggota', 300000, 0);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (2, '2026-09-03', 'Beli baterai', 0, 45000);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (3, '2026-09-08', 'Beli kabel jumper', 0, 30000);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (4, '2026-09-10', 'Iuran anggota', 250000, 0);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (5, '2026-09-14', 'Beli spidol dan kertas', 0, 150000);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (6, '2026-09-17', 'Cetak banner lomba', 0, 60000);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (7, '2026-09-21', 'Beli sensor ultrasonik', 0, 85000);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (8, '2026-09-24', 'Iuran anggota', 200000, 0);\nINSERT INTO kas_robotik (id, tanggal, keterangan, masuk, keluar) VALUES (9, '2026-09-28', 'Beli lem tembak', 0, 25000);\nCREATE TABLE nota_belanja (id INTEGER PRIMARY KEY, tanggal TEXT, toko TEXT, barang TEXT, total INTEGER);\nINSERT INTO nota_belanja (id, tanggal, toko, barang, total) VALUES (1, '2026-09-03', 'Toko Elektro Jaya', 'Baterai AA', 45000);\nINSERT INTO nota_belanja (id, tanggal, toko, barang, total) VALUES (2, '2026-09-08', 'Toko Elektro Jaya', 'Kabel jumper', 30000);\nINSERT INTO nota_belanja (id, tanggal, toko, barang, total) VALUES (3, '2026-09-14', 'Toko Buku Pelangi', 'Spidol dan kertas', 15000);\nINSERT INTO nota_belanja (id, tanggal, toko, barang, total) VALUES (4, '2026-09-17', 'Percetakan Kilat', 'Banner lomba', 60000);\nINSERT INTO nota_belanja (id, tanggal, toko, barang, total) VALUES (5, '2026-09-21', 'Toko Elektro Jaya', 'Sensor ultrasonik', 85000);\nINSERT INTO nota_belanja (id, tanggal, toko, barang, total) VALUES (6, '2026-09-28', 'Toko Bangunan Sejahtera', 'Lem tembak', 25000);\nCREATE TABLE presensi_pengurus (id INTEGER PRIMARY KEY, tanggal TEXT, nama TEXT, jabatan TEXT, status TEXT);\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (1, '2026-09-10', 'Raka', 'Ketua', 'Hadir');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (2, '2026-09-10', 'Bima', 'Bendahara', 'Hadir');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (3, '2026-09-10', 'Nadia', 'Bendahara', 'Hadir');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (4, '2026-09-10', 'Sinta', 'Sekretaris', 'Hadir');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (5, '2026-09-14', 'Raka', 'Ketua', 'Hadir');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (6, '2026-09-14', 'Bima', 'Bendahara', 'Hadir');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (7, '2026-09-14', 'Nadia', 'Bendahara', 'Izin');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (8, '2026-09-14', 'Sinta', 'Sekretaris', 'Hadir');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (9, '2026-09-17', 'Raka', 'Ketua', 'Sakit');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (10, '2026-09-17', 'Bima', 'Bendahara', 'Izin');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (11, '2026-09-17', 'Nadia', 'Bendahara', 'Hadir');\nINSERT INTO presensi_pengurus (id, tanggal, nama, jabatan, status) VALUES (12, '2026-09-17', 'Sinta', 'Sekretaris', 'Hadir');",
+   "tabel": [
+    {
+     "nama": "kas_robotik",
+     "keterangan": "Buku kas Ekskul Robotik bulan September",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "tanggal",
+       "tipe": "TEXT",
+       "keterangan": "Tanggal transaksi"
+      },
+      {
+       "nama": "keterangan",
+       "tipe": "TEXT",
+       "keterangan": "Keterangan"
+      },
+      {
+       "nama": "masuk",
+       "tipe": "INTEGER",
+       "keterangan": "Uang masuk (rupiah)"
+      },
+      {
+       "nama": "keluar",
+       "tipe": "INTEGER",
+       "keterangan": "Uang keluar (rupiah)"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 9
+    },
+    {
+     "nama": "nota_belanja",
+     "keterangan": "Nota belanja yang disimpan pengurus",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor nota"
+      },
+      {
+       "nama": "tanggal",
+       "tipe": "TEXT",
+       "keterangan": "Tanggal belanja"
+      },
+      {
+       "nama": "toko",
+       "tipe": "TEXT",
+       "keterangan": "Nama toko"
+      },
+      {
+       "nama": "barang",
+       "tipe": "TEXT",
+       "keterangan": "Barang yang dibeli"
+      },
+      {
+       "nama": "total",
+       "tipe": "INTEGER",
+       "keterangan": "Total di nota (rupiah)"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 6
+    },
+    {
+     "nama": "presensi_pengurus",
+     "keterangan": "Presensi pengurus ekskul",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "tanggal",
+       "tipe": "TEXT",
+       "keterangan": "Tanggal"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama pengurus"
+      },
+      {
+       "nama": "jabatan",
+       "tipe": "TEXT",
+       "keterangan": "Jabatan"
+      },
+      {
+       "nama": "status",
+       "tipe": "TEXT",
+       "keterangan": "Hadir, Izin, atau Sakit"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 12
+    }
+   ],
+   "kartu": {
+    "judul": "WHERE",
+    "isi": "WHERE menyaring baris. Hanya baris yang memenuhi syarat yang ditampilkan. Syarat bisa memakai =, >, <, >=, <=, <>, serta AND dan OR.",
+    "contoh": "SELECT * FROM akses_lab\nWHERE jam_masuk > '15:00';"
+   }
+  },
+  {
+   "id": "b3k1",
+   "berkas": 3,
+   "urutan": 1,
+   "jenis": "utama",
+   "judul": "Akun Palsu di Grup Kelas",
+   "tkp": "Grup chat XI RPL",
+   "konsep": "LIKE",
+   "briefing": [
+    "Ada akun yang mengaku Pak Hendra dan menyebarkan pengumuman libur palsu di grup kelas.",
+    "Nama akunnya mirip, jadi kita perlu mencari dengan pola. Di sinilah LIKE berguna."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Cari akun di anggota_grup yang nama_tampilan-nya mengandung kata Hendra.",
+     "query_kunci": "SELECT nama_tampilan, nomor_hp FROM anggota_grup WHERE nama_tampilan LIKE '%Hendra%'",
+     "petunjuk": [
+      "Tabelnya anggota_grup.",
+      "Kata Hendra bisa ada di tengah nama, jadi pakai % di depan dan di belakang.",
+      "SELECT nama_tampilan, nomor_hp FROM anggota_grup WHERE nama_tampilan LIKE '%____%'"
+     ],
+     "komentar_benar": "Ada dua akun. Pak Hendra memastikan nomornya berawalan 0812, jadi Hendra Official itu palsu. Catat nomornya.",
+     "wajib": [
+      "LIKE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Data siswa menulis nomor dengan tanda strip. Cari siswa yang nomor_hp-nya berakhiran 0042.",
+     "query_kunci": "SELECT nama, kelas, nomor_hp FROM data_siswa WHERE nomor_hp LIKE '%0042'",
+     "petunjuk": [
+      "Tabelnya data_siswa.",
+      "Berakhiran berarti % hanya ditaruh di depan.",
+      "SELECT nama, kelas, nomor_hp FROM data_siswa WHERE nomor_hp LIKE '%____'"
+     ],
+     "komentar_benar": "Ada dua siswa. Nomor akun palsu diawali 0896. Persempit lagi polanya.",
+     "wajib": [
+      "LIKE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Cari siswa yang nomor_hp-nya diawali 0896 dan berakhiran 0042.",
+     "query_kunci": "SELECT nama, kelas, nomor_hp FROM data_siswa WHERE nomor_hp LIKE '0896%0042'",
+     "petunjuk": [
+      "Satu pola LIKE bisa memuat awal dan akhir sekaligus.",
+      "Taruh % di antara awalan dan akhiran.",
+      "SELECT nama, kelas, nomor_hp FROM data_siswa WHERE nomor_hp LIKE '0896%____'"
+     ],
+     "komentar_benar": "Pola itu hanya cocok dengan satu nomor. Sekarang kamu tahu siapa pemilik akun palsu itu.",
+     "wajib": [
+      "LIKE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Sinta",
+     "peran": "Siswi X RPL",
+     "avatar": "sinta",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Bima",
+     "peran": "Siswa XII TKJ",
+     "avatar": "bima",
+     "pelaku": false,
+     "alasan": "Nomor Bima memang berakhiran 0042, tetapi diawali 0821, bukan 0896."
+    },
+    {
+     "nama": "Raka",
+     "peran": "Siswa XI RPL",
+     "avatar": "raka",
+     "pelaku": false,
+     "alasan": "Nomor Raka tidak cocok dengan pola nomor akun palsu."
+    }
+   ],
+   "penjelasan": "Sinta membuat akun Hendra Official untuk bercanda. Ia tidak menyangka pengumuman palsunya membuat beberapa teman tidak masuk sekolah. Akun sudah dihapus dan Sinta meminta maaf di grup.",
+   "penutup": "Pola yang tepat bisa menemukan satu nomor di antara banyak data. Kerja bagus, Detektif.",
+   "xp": 60,
+   "koin": 20,
+   "durasi": "4-5 menit",
+   "sql": "CREATE TABLE anggota_grup (id INTEGER PRIMARY KEY, nama_tampilan TEXT, nomor_hp TEXT, bergabung TEXT);\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (1, 'Pak Hendra', '081234560001', '2025-07-14');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (2, 'Raka R.', '081377889900', '2025-07-14');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (3, 'Nadia', '085712345678', '2025-07-14');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (4, 'Dewi Lestari', '081299001122', '2025-07-15');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (5, 'Fajar', '089911223344', '2025-07-15');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (6, 'Bu Wulan BK', '081255501234', '2025-07-20');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (7, 'Putri', '082144556677', '2025-08-02');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (8, 'Rizky', '083866771122', '2025-08-02');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (9, 'Hendra Official', '089612340042', '2026-10-11');\nINSERT INTO anggota_grup (id, nama_tampilan, nomor_hp, bergabung) VALUES (10, 'Admin Kelas', '081377889900', '2025-07-14');\nCREATE TABLE data_siswa (nis TEXT PRIMARY KEY, nama TEXT, kelas TEXT, nomor_hp TEXT);\nINSERT INTO data_siswa (nis, nama, kelas, nomor_hp) VALUES ('24101', 'Raka Pratama', 'XI RPL', '0813-7788-9900');\nINSERT INTO data_siswa (nis, nama, kelas, nomor_hp) VALUES ('24102', 'Nadia Putri', 'XI RPL', '0857-1234-5678');\nINSERT INTO data_siswa (nis, nama, kelas, nomor_hp) VALUES ('24103', 'Dewi Lestari', 'XI RPL', '0812-9900-1122');\nINSERT INTO data_siswa (nis, nama, kelas, nomor_hp) VALUES ('24104', 'Fajar Nugroho', 'XI RPL', '0899-1122-3344');\nINSERT INTO data_siswa (nis, nama, kelas, nomor_hp) VALUES ('25105', 'Sinta Maharani', 'X RPL', '0896-1234-0042');\nINSERT INTO data_siswa (nis, nama, kelas, nomor_hp) VALUES ('23106', 'Bima Saputra', 'XII TKJ', '0821-7788-0042');\nINSERT INTO data_siswa (nis, nama, kelas, nomor_hp) VALUES ('25107', 'Putri Ayu', 'X RPL', '0821-4455-6677');\nINSERT INTO data_siswa (nis, nama, kelas, nomor_hp) VALUES ('25108', 'Rizky Ramadhan', 'X TKJ', '0838-6677-1122');",
+   "tabel": [
+    {
+     "nama": "anggota_grup",
+     "keterangan": "Daftar anggota grup chat XI RPL",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor anggota"
+      },
+      {
+       "nama": "nama_tampilan",
+       "tipe": "TEXT",
+       "keterangan": "Nama yang terlihat di grup"
+      },
+      {
+       "nama": "nomor_hp",
+       "tipe": "TEXT",
+       "keterangan": "Nomor ponsel"
+      },
+      {
+       "nama": "bergabung",
+       "tipe": "TEXT",
+       "keterangan": "Tanggal bergabung"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 10
+    },
+    {
+     "nama": "data_siswa",
+     "keterangan": "Data siswa dari tata usaha",
+     "kolom": [
+      {
+       "nama": "nis",
+       "tipe": "TEXT",
+       "keterangan": "Nomor induk siswa"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama siswa"
+      },
+      {
+       "nama": "kelas",
+       "tipe": "TEXT",
+       "keterangan": "Kelas"
+      },
+      {
+       "nama": "nomor_hp",
+       "tipe": "TEXT",
+       "keterangan": "Nomor ponsel yang didaftarkan"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 8
+    }
+   ],
+   "kartu": {
+    "judul": "LIKE",
+    "isi": "LIKE mencari teks yang cocok dengan pola. Tanda % mewakili huruf apa saja dengan jumlah berapa pun, sedangkan _ mewakili tepat satu huruf.",
+    "contoh": "SELECT * FROM siswa\nWHERE nama LIKE 'A%';"
+   }
+  },
+  {
+   "id": "b3k2",
+   "berkas": 3,
+   "urutan": 2,
+   "jenis": "utama",
+   "judul": "Halaman Buku yang Disobek",
+   "tkp": "Perpustakaan, rak TI",
+   "konsep": "LIKE",
+   "briefing": [
+    "Bu Ratna menemukan buku yang dikembalikan hari Kamis, 8 Oktober, dengan satu halaman disobek.",
+    "Label kodenya rusak. Yang terbaca hanya TI-0, satu angka yang tidak jelas, lalu angka 4. Judulnya mengandung kata Basis Data."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan kode dan judul buku yang judulnya mengandung kata Basis Data.",
+     "query_kunci": "SELECT kode, judul FROM buku WHERE judul LIKE '%Basis Data%'",
+     "petunjuk": [
+      "Tabelnya buku.",
+      "Kata Basis Data bisa di awal, tengah, atau akhir judul.",
+      "SELECT kode, judul FROM buku WHERE judul LIKE '%____%'"
+     ],
+     "komentar_benar": "Ada empat buku Basis Data. Sekarang pakai petunjuk dari label kode.",
+     "wajib": [
+      "LIKE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Cari buku yang kodenya cocok dengan pola TI-0, satu angka, lalu 4, dan judulnya mengandung Basis Data.",
+     "query_kunci": "SELECT kode, judul FROM buku WHERE kode LIKE 'TI-0_4' AND judul LIKE '%Basis Data%'",
+     "petunjuk": [
+      "Satu angka yang tidak terbaca diwakili tanda _.",
+      "Gabungkan dua pola LIKE dengan AND.",
+      "SELECT kode, judul FROM buku WHERE kode LIKE 'TI-0_4' AND judul LIKE '____'"
+     ],
+     "komentar_benar": "Tinggal dua kemungkinan: TI-014 dan TI-044. Cek siapa yang mengembalikan buku pada 8 Oktober.",
+     "wajib": [
+      "LIKE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Tampilkan kode_buku dan peminjam untuk buku berpola TI-0_4 yang dikembalikan pada 2026-10-08.",
+     "query_kunci": "SELECT kode_buku, peminjam FROM peminjaman_buku WHERE kode_buku LIKE 'TI-0_4' AND tanggal_kembali = '2026-10-08'",
+     "petunjuk": [
+      "Tabelnya peminjaman_buku.",
+      "Pakai pola kode yang sama, lalu tambahkan syarat tanggal_kembali.",
+      "SELECT kode_buku, peminjam FROM peminjaman_buku WHERE kode_buku LIKE 'TI-0_4' AND ____ = '2026-10-08'"
+     ],
+     "komentar_benar": "Dua buku kembali hari itu. Mana yang judulnya mengandung Basis Data?",
+     "wajib": [
+      "LIKE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Nadia",
+     "peran": "Siswi XI RPL",
+     "avatar": "nadia",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Bima",
+     "peran": "Siswa XII TKJ",
+     "avatar": "bima",
+     "pelaku": false,
+     "alasan": "Bima mengembalikan TI-034 pada hari itu, tetapi judulnya Pemrograman Web Dasar, bukan buku Basis Data."
+    },
+    {
+     "nama": "Raka",
+     "peran": "Siswa XI RPL",
+     "avatar": "raka",
+     "pelaku": false,
+     "alasan": "Raka meminjam TI-014 pada bulan September dan bukunya kembali dalam keadaan utuh."
+    }
+   ],
+   "penjelasan": "Nadia tidak sengaja menyobek halaman saat memfotokopi bab normalisasi. Ia takut melapor, jadi bukunya langsung dikembalikan. Nadia sudah mengganti halaman itu dan meminta maaf kepada Bu Ratna.",
+   "penutup": "Tanda % dan _ sudah kamu kuasai. Berkas LIKE selesai, Detektif.",
+   "xp": 60,
+   "koin": 20,
+   "durasi": "4-5 menit",
+   "sql": "CREATE TABLE buku (kode TEXT PRIMARY KEY, judul TEXT, penulis TEXT, rak TEXT);\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('TI-004', 'Sistem Operasi', 'Andi Wijaya', 'TI-A');\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('TI-011', 'Dasar Pemrograman Python', 'Rina Kartika', 'TI-A');\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('TI-014', 'Basis Data untuk Pemula', 'Budi Santoso', 'TI-B');\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('TI-022', 'Desain Basis Data Relasional', 'Sari Utami', 'TI-B');\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('TI-024', 'Algoritma dan Struktur Data', 'Andi Wijaya', 'TI-B');\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('TI-031', 'Praktikum Basis Data SQL', 'Budi Santoso', 'TI-C');\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('TI-034', 'Pemrograman Web Dasar', 'Dian Prasetyo', 'TI-C');\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('TI-044', 'Basis Data Lanjut', 'Sari Utami', 'TI-C');\nINSERT INTO buku (kode, judul, penulis, rak) VALUES ('MT-014', 'Matematika Diskrit', 'Hadi Susilo', 'MT-A');\nCREATE TABLE peminjaman_buku (id INTEGER PRIMARY KEY, kode_buku TEXT, peminjam TEXT, tanggal_pinjam TEXT, tanggal_kembali TEXT);\nINSERT INTO peminjaman_buku (id, kode_buku, peminjam, tanggal_pinjam, tanggal_kembali) VALUES (1, 'TI-014', 'Raka', '2026-09-01', '2026-09-08');\nINSERT INTO peminjaman_buku (id, kode_buku, peminjam, tanggal_pinjam, tanggal_kembali) VALUES (2, 'TI-044', 'Bima', '2026-09-20', '2026-09-27');\nINSERT INTO peminjaman_buku (id, kode_buku, peminjam, tanggal_pinjam, tanggal_kembali) VALUES (3, 'TI-022', 'Sinta', '2026-09-29', '2026-10-06');\nINSERT INTO peminjaman_buku (id, kode_buku, peminjam, tanggal_pinjam, tanggal_kembali) VALUES (4, 'TI-014', 'Nadia', '2026-10-01', '2026-10-08');\nINSERT INTO peminjaman_buku (id, kode_buku, peminjam, tanggal_pinjam, tanggal_kembali) VALUES (5, 'TI-034', 'Bima', '2026-10-02', '2026-10-08');\nINSERT INTO peminjaman_buku (id, kode_buku, peminjam, tanggal_pinjam, tanggal_kembali) VALUES (6, 'TI-031', 'Raka', '2026-10-05', '2026-10-12');\nINSERT INTO peminjaman_buku (id, kode_buku, peminjam, tanggal_pinjam, tanggal_kembali) VALUES (7, 'MT-014', 'Sinta', '2026-10-06', '2026-10-08');",
+   "tabel": [
+    {
+     "nama": "buku",
+     "keterangan": "Koleksi buku perpustakaan",
+     "kolom": [
+      {
+       "nama": "kode",
+       "tipe": "TEXT",
+       "keterangan": "Kode buku"
+      },
+      {
+       "nama": "judul",
+       "tipe": "TEXT",
+       "keterangan": "Judul buku"
+      },
+      {
+       "nama": "penulis",
+       "tipe": "TEXT",
+       "keterangan": "Penulis"
+      },
+      {
+       "nama": "rak",
+       "tipe": "TEXT",
+       "keterangan": "Lokasi rak"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 9
+    },
+    {
+     "nama": "peminjaman_buku",
+     "keterangan": "Riwayat peminjaman buku",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "kode_buku",
+       "tipe": "TEXT",
+       "keterangan": "Kode buku"
+      },
+      {
+       "nama": "peminjam",
+       "tipe": "TEXT",
+       "keterangan": "Nama peminjam"
+      },
+      {
+       "nama": "tanggal_pinjam",
+       "tipe": "TEXT",
+       "keterangan": "Tanggal pinjam"
+      },
+      {
+       "nama": "tanggal_kembali",
+       "tipe": "TEXT",
+       "keterangan": "Tanggal kembali"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 7
+    }
+   ],
+   "kartu": {
+    "judul": "LIKE",
+    "isi": "LIKE mencari teks yang cocok dengan pola. Tanda % mewakili huruf apa saja dengan jumlah berapa pun, sedangkan _ mewakili tepat satu huruf.",
+    "contoh": "SELECT * FROM siswa\nWHERE nama LIKE 'A%';"
+   }
+  },
+  {
+   "id": "b4k1",
+   "berkas": 4,
+   "urutan": 1,
+   "jenis": "utama",
+   "judul": "Lomba Kelas Terbersih",
+   "tkp": "Tablet voting di lobi",
+   "konsep": "AGREGASI",
+   "briefing": [
+    "XI RPL menang Lomba Kelas Terbersih lewat voting di tablet lobi. Kelas lain curiga ada yang memilih berkali-kali.",
+    "Setiap orang seharusnya hanya memilih satu kali. Hitung suaranya dengan COUNT dan kelompokkan dengan GROUP BY."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Hitung jumlah suara untuk setiap kelas_pilihan.",
+     "query_kunci": "SELECT kelas_pilihan, COUNT(*) FROM suara GROUP BY kelas_pilihan",
+     "petunjuk": [
+      "Tabelnya suara. Kelompokkan berdasarkan kelas_pilihan.",
+      "COUNT(*) menghitung banyak baris di setiap kelompok.",
+      "SELECT kelas_pilihan, COUNT(*) FROM suara GROUP BY ____"
+     ],
+     "komentar_benar": "XI RPL unggul tipis. Sekarang cek apakah ada pemilih yang memilih lebih dari satu kali.",
+     "wajib": [
+      "COUNT",
+      "GROUP BY"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Cari pemilih yang memberikan suara lebih dari satu kali, beserta jumlah suaranya.",
+     "query_kunci": "SELECT pemilih, COUNT(*) FROM suara GROUP BY pemilih HAVING COUNT(*) > 1",
+     "petunjuk": [
+      "Kelompokkan berdasarkan pemilih.",
+      "Syarat untuk hasil kelompok ditulis dengan HAVING, bukan WHERE.",
+      "SELECT pemilih, COUNT(*) FROM suara GROUP BY pemilih HAVING COUNT(*) > ____"
+     ],
+     "komentar_benar": "Satu nama muncul empat kali dalam dua menit. Kalau suara gandanya dihapus, siapa juaranya?",
+     "wajib": [
+      "GROUP BY",
+      "HAVING"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Raka",
+     "peran": "Siswa XI RPL",
+     "avatar": "raka",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Nadia",
+     "peran": "Siswi XI RPL",
+     "avatar": "nadia",
+     "pelaku": false,
+     "alasan": "Nadia hanya memilih satu kali, pukul 06.45."
+    },
+    {
+     "nama": "Sinta",
+     "peran": "Siswi X RPL",
+     "avatar": "sinta",
+     "pelaku": false,
+     "alasan": "Sinta memilih satu kali, dan pilihannya X TKJ."
+    }
+   ],
+   "penjelasan": "Raka memilih empat kali untuk kelasnya sendiri karena tablet tidak menolak nama yang sama. Setelah suara ganda dihapus, X TKJ yang menang. Panitia juga menambahkan pemeriksaan nama di tablet.",
+   "penutup": "COUNT dan GROUP BY membuka kecurangan yang tidak terlihat dari daftar biasa. Kerja bagus, Detektif.",
+   "xp": 60,
+   "koin": 20,
+   "durasi": "3-5 menit",
+   "sql": "CREATE TABLE suara (id INTEGER PRIMARY KEY, pemilih TEXT, kelas_pemilih TEXT, kelas_pilihan TEXT, waktu TEXT);\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (1, 'Dewi', 'XI RPL', 'XI RPL', '06:30');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (2, 'Fajar', 'XI RPL', 'XI RPL', '06:32');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (3, 'Putri', 'X RPL', 'X TKJ', '06:33');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (4, 'Rizky', 'X TKJ', 'X TKJ', '06:35');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (5, 'Bima', 'XII TKJ', 'XII RPL', '06:36');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (6, 'Raka', 'XI RPL', 'XI RPL', '06:41');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (7, 'Raka', 'XI RPL', 'XI RPL', '06:41');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (8, 'Raka', 'XI RPL', 'XI RPL', '06:42');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (9, 'Raka', 'XI RPL', 'XI RPL', '06:42');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (10, 'Sinta', 'X RPL', 'X TKJ', '06:44');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (11, 'Nadia', 'XI RPL', 'XI RPL', '06:45');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (12, 'Gilang', 'XII RPL', 'XII RPL', '06:46');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (13, 'Ayu', 'XII RPL', 'XII RPL', '06:47');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (14, 'Bayu', 'X TKJ', 'X TKJ', '06:48');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (15, 'Citra', 'XI TKJ', 'X TKJ', '06:50');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (16, 'Doni', 'XI TKJ', 'XI RPL', '06:51');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (17, 'Eka', 'X RPL', 'X TKJ', '06:52');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (18, 'Fitri', 'XII TKJ', 'XII RPL', '06:53');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (19, 'Galih', 'XI RPL', 'XI RPL', '06:54');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (20, 'Hana', 'X TKJ', 'X TKJ', '06:55');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (21, 'Indra', 'XII RPL', 'XII RPL', '06:56');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (22, 'Joko', 'XI TKJ', 'X TKJ', '06:57');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (23, 'Kiki', 'X RPL', 'XI RPL', '06:58');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (24, 'Lina', 'XII TKJ', 'XII RPL', '06:59');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (25, 'Maya', 'XI RPL', 'XI RPL', '07:00');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (26, 'Nanda', 'X TKJ', 'X TKJ', '07:01');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (27, 'Oki', 'XII RPL', 'XII RPL', '07:02');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (28, 'Pandu', 'XI TKJ', 'X TKJ', '07:03');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (29, 'Rani', 'X RPL', 'XI RPL', '07:04');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (30, 'Salsa', 'XII TKJ', 'XII RPL', '07:05');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (31, 'Tegar', 'XII RPL', 'XII RPL', '07:06');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (32, 'Umi', 'XI TKJ', 'XII RPL', '07:07');\nINSERT INTO suara (id, pemilih, kelas_pemilih, kelas_pilihan, waktu) VALUES (33, 'Vina', 'X TKJ', 'X TKJ', '07:08');",
+   "tabel": [
+    {
+     "nama": "suara",
+     "keterangan": "Suara yang masuk lewat tablet lobi",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor suara"
+      },
+      {
+       "nama": "pemilih",
+       "tipe": "TEXT",
+       "keterangan": "Nama pemilih"
+      },
+      {
+       "nama": "kelas_pemilih",
+       "tipe": "TEXT",
+       "keterangan": "Kelas pemilih"
+      },
+      {
+       "nama": "kelas_pilihan",
+       "tipe": "TEXT",
+       "keterangan": "Kelas yang dipilih"
+      },
+      {
+       "nama": "waktu",
+       "tipe": "TEXT",
+       "keterangan": "Jam memilih"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 33
+    }
+   ],
+   "kartu": {
+    "judul": "COUNT, SUM, dan GROUP BY",
+    "isi": "COUNT menghitung banyak baris dan SUM menjumlahkan nilai. GROUP BY mengelompokkan baris yang nilainya sama, lalu HAVING menyaring hasil kelompok.",
+    "contoh": "SELECT kelas, COUNT(*)\nFROM siswa\nGROUP BY kelas;"
+   }
+  },
+  {
+   "id": "b4k2",
+   "berkas": 4,
+   "urutan": 2,
+   "jenis": "utama",
+   "judul": "Setoran Bazar Kurang",
+   "tkp": "Bazar Hari Guru",
+   "konsep": "AGREGASI",
+   "briefing": [
+    "Bazar Hari Guru mencatat setiap penjualan di tabel penjualan_bazar. Uang yang disetor ke panitia ternyata kurang.",
+    "Jumlahkan penjualan dan setoran setiap stand dengan SUM, lalu cari penjaga yang setorannya tidak cocok."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Hitung total penjualan setiap stand.",
+     "query_kunci": "SELECT stand, SUM(total) FROM penjualan_bazar GROUP BY stand",
+     "petunjuk": [
+      "Tabelnya penjualan_bazar.",
+      "SUM(total) menjumlahkan kolom total di setiap kelompok.",
+      "SELECT stand, SUM(total) FROM penjualan_bazar GROUP BY ____"
+     ],
+     "komentar_benar": "Sudah ada total penjualan tiap stand. Sekarang hitung setorannya.",
+     "wajib": [
+      "SUM",
+      "GROUP BY"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Hitung total setoran setiap stand dari tabel setoran.",
+     "query_kunci": "SELECT stand, SUM(jumlah) FROM setoran GROUP BY stand",
+     "petunjuk": [
+      "Tabelnya setoran, kolom uangnya bernama jumlah.",
+      "Caranya sama seperti langkah sebelumnya.",
+      "SELECT stand, SUM(____) FROM setoran GROUP BY stand"
+     ],
+     "komentar_benar": "Stand Es Teh menjual Rp250.000, tetapi setorannya hanya Rp200.000. Stand itu dijaga dua orang.",
+     "wajib": [
+      "SUM",
+      "GROUP BY"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Untuk stand Es Teh saja, hitung total penjualan setiap penjaga.",
+     "query_kunci": "SELECT penjaga, SUM(total) FROM penjualan_bazar WHERE stand = 'Es Teh' GROUP BY penjaga",
+     "petunjuk": [
+      "Saring dulu stand Es Teh dengan WHERE, baru kelompokkan.",
+      "WHERE ditulis sebelum GROUP BY.",
+      "SELECT penjaga, SUM(total) FROM penjualan_bazar WHERE stand = 'Es Teh' GROUP BY ____"
+     ],
+     "komentar_benar": "Bandingkan dengan tabel setoran: Sinta menyetor Rp120.000 dan Bima Rp80.000.",
+     "wajib": [
+      "SUM",
+      "GROUP BY",
+      "WHERE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Bima",
+     "peran": "Siswa XII TKJ",
+     "avatar": "bima",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Sinta",
+     "peran": "Siswi X RPL",
+     "avatar": "sinta",
+     "pelaku": false,
+     "alasan": "Penjualan Sinta Rp120.000 dan setorannya juga Rp120.000."
+    },
+    {
+     "nama": "Raka",
+     "peran": "Siswa XI RPL",
+     "avatar": "raka",
+     "pelaku": false,
+     "alasan": "Stand Cireng yang dijaga Raka setorannya sudah cocok dengan penjualan."
+    }
+   ],
+   "penjelasan": "Bima menyimpan Rp50.000 di tas untuk uang kembalian dan lupa menyetorkannya. Uang itu sudah diserahkan ke panitia.",
+   "penutup": "SUM dan GROUP BY membuat selisih kecil langsung terlihat. Berkas agregasi selesai, Detektif.",
+   "xp": 70,
+   "koin": 25,
+   "durasi": "4-5 menit",
+   "sql": "CREATE TABLE penjualan_bazar (id INTEGER PRIMARY KEY, stand TEXT, penjaga TEXT, total INTEGER);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (1, 'Es Teh', 'Sinta', 15000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (2, 'Es Teh', 'Sinta', 20000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (3, 'Es Teh', 'Sinta', 25000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (4, 'Es Teh', 'Sinta', 10000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (5, 'Es Teh', 'Sinta', 30000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (6, 'Es Teh', 'Sinta', 20000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (7, 'Es Teh', 'Bima', 25000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (8, 'Es Teh', 'Bima', 30000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (9, 'Es Teh', 'Bima', 20000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (10, 'Es Teh', 'Bima', 15000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (11, 'Es Teh', 'Bima', 25000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (12, 'Es Teh', 'Bima', 15000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (13, 'Cireng', 'Raka', 30000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (14, 'Cireng', 'Raka', 25000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (15, 'Cireng', 'Raka', 40000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (16, 'Cireng', 'Raka', 35000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (17, 'Cireng', 'Raka', 20000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (18, 'Cireng', 'Raka', 30000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (19, 'Donat', 'Nadia', 20000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (20, 'Donat', 'Nadia', 30000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (21, 'Donat', 'Nadia', 25000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (22, 'Donat', 'Nadia', 35000);\nINSERT INTO penjualan_bazar (id, stand, penjaga, total) VALUES (23, 'Donat', 'Nadia', 40000);\nCREATE TABLE setoran (id INTEGER PRIMARY KEY, stand TEXT, penjaga TEXT, jumlah INTEGER);\nINSERT INTO setoran (id, stand, penjaga, jumlah) VALUES (1, 'Es Teh', 'Sinta', 120000);\nINSERT INTO setoran (id, stand, penjaga, jumlah) VALUES (2, 'Es Teh', 'Bima', 80000);\nINSERT INTO setoran (id, stand, penjaga, jumlah) VALUES (3, 'Cireng', 'Raka', 180000);\nINSERT INTO setoran (id, stand, penjaga, jumlah) VALUES (4, 'Donat', 'Nadia', 150000);",
+   "tabel": [
+    {
+     "nama": "penjualan_bazar",
+     "keterangan": "Catatan penjualan setiap stand",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor transaksi"
+      },
+      {
+       "nama": "stand",
+       "tipe": "TEXT",
+       "keterangan": "Nama stand"
+      },
+      {
+       "nama": "penjaga",
+       "tipe": "TEXT",
+       "keterangan": "Penjaga yang mencatat"
+      },
+      {
+       "nama": "total",
+       "tipe": "INTEGER",
+       "keterangan": "Total transaksi (rupiah)"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 23
+    },
+    {
+     "nama": "setoran",
+     "keterangan": "Uang yang disetor ke panitia",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor setoran"
+      },
+      {
+       "nama": "stand",
+       "tipe": "TEXT",
+       "keterangan": "Nama stand"
+      },
+      {
+       "nama": "penjaga",
+       "tipe": "TEXT",
+       "keterangan": "Penjaga yang menyetor"
+      },
+      {
+       "nama": "jumlah",
+       "tipe": "INTEGER",
+       "keterangan": "Jumlah setoran (rupiah)"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 4
+    }
+   ],
+   "kartu": {
+    "judul": "COUNT, SUM, dan GROUP BY",
+    "isi": "COUNT menghitung banyak baris dan SUM menjumlahkan nilai. GROUP BY mengelompokkan baris yang nilainya sama, lalu HAVING menyaring hasil kelompok.",
+    "contoh": "SELECT kelas, COUNT(*)\nFROM siswa\nGROUP BY kelas;"
+   }
+  },
+  {
+   "id": "b5k1",
+   "berkas": 5,
+   "urutan": 1,
+   "jenis": "utama",
+   "judul": "Paket yang Tertukar",
+   "tkp": "Pos Satpam",
+   "konsep": "JOIN",
+   "briefing": [
+    "Paket berisi komponen robot milik Pak Hendra diambil orang lain dari Pos Satpam.",
+    "Pak Darto mencatat penerima dan pengambil paket dengan nomor ID, bukan nama. Gabungkan tabelnya dengan JOIN."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Gabungkan paket dan warga_sekolah. Tampilkan id paket, resi, dan nama penerimanya.",
+     "query_kunci": "SELECT paket.id, paket.resi, warga_sekolah.nama FROM paket JOIN warga_sekolah ON paket.id_penerima = warga_sekolah.id",
+     "petunjuk": [
+      "Kolom id_penerima di paket menunjuk ke id di warga_sekolah.",
+      "Tulis syarat penggabungan setelah ON.",
+      "SELECT paket.id, paket.resi, warga_sekolah.nama FROM paket JOIN warga_sekolah ON paket.____ = warga_sekolah.id"
+     ],
+     "komentar_benar": "Paket 101 milik Pak Hendra. Sekarang cari siapa yang mengambil setiap paket.",
+     "wajib": [
+      "JOIN",
+      "ON"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Gabungkan pengambilan dan warga_sekolah. Tampilkan id_paket, nama pengambil, dan jam_ambil.",
+     "query_kunci": "SELECT pengambilan.id_paket, warga_sekolah.nama, pengambilan.jam_ambil FROM pengambilan JOIN warga_sekolah ON pengambilan.id_pengambil = warga_sekolah.id",
+     "petunjuk": [
+      "Kali ini yang dihubungkan kolom id_pengambil.",
+      "Polanya sama dengan langkah pertama.",
+      "SELECT pengambilan.id_paket, warga_sekolah.nama, pengambilan.jam_ambil FROM pengambilan JOIN warga_sekolah ON pengambilan.____ = warga_sekolah.id"
+     ],
+     "komentar_benar": "Cocokkan nomor paket 101 dengan nama pengambilnya. Apakah orangnya sama dengan penerima?",
+     "wajib": [
+      "JOIN",
+      "ON"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Bu Sri",
+     "peran": "Ibu kantin",
+     "avatar": "bu_sri",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Pak Darto",
+     "peran": "Satpam sekolah",
+     "avatar": "pak_darto",
+     "pelaku": false,
+     "alasan": "Pak Darto hanya mencatat paket dan tidak tercatat mengambil paket 101."
+    },
+    {
+     "nama": "Sinta",
+     "peran": "Siswi X RPL",
+     "avatar": "sinta",
+     "pelaku": false,
+     "alasan": "Sinta mengambil paket 104, yaitu paketnya sendiri."
+    }
+   ],
+   "penjelasan": "Bu Sri mengambil paket 101 karena kardusnya mirip dengan paket peralatan dapur yang ia tunggu. Paket belum dibuka dan sudah diserahkan ke Pak Hendra. Paket Bu Sri masih menunggu di Pos Satpam.",
+   "penutup": "JOIN mengubah nomor ID menjadi nama yang bisa dibaca. Satu kasus besar lagi, Detektif.",
+   "xp": 70,
+   "koin": 25,
+   "durasi": "3-5 menit",
+   "sql": "CREATE TABLE warga_sekolah (id INTEGER PRIMARY KEY, nama TEXT, peran TEXT);\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (1, 'Pak Hendra', 'Guru produktif');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (2, 'Pak Darto', 'Satpam');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (3, 'Bu Sri', 'Ibu kantin');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (4, 'Bu Ratna', 'Pustakawan');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (5, 'Raka', 'Siswa XI RPL');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (6, 'Nadia', 'Siswi XI RPL');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (7, 'Bima', 'Siswa XII TKJ');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (8, 'Sinta', 'Siswi X RPL');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (9, 'Bu Wulan', 'Guru BK');\nINSERT INTO warga_sekolah (id, nama, peran) VALUES (10, 'Pak Joko', 'Staf TU');\nCREATE TABLE paket (id INTEGER PRIMARY KEY, resi TEXT, id_penerima INTEGER, isi_tertulis TEXT, jam_tiba TEXT, FOREIGN KEY (id_penerima) REFERENCES warga_sekolah(id));\nINSERT INTO paket (id, resi, id_penerima, isi_tertulis, jam_tiba) VALUES (101, 'JNT-2231', 1, 'Komponen elektronik', '09:10');\nINSERT INTO paket (id, resi, id_penerima, isi_tertulis, jam_tiba) VALUES (102, 'SPX-5512', 3, 'Peralatan dapur', '09:15');\nINSERT INTO paket (id, resi, id_penerima, isi_tertulis, jam_tiba) VALUES (103, 'JNE-7781', 4, 'Buku', '09:40');\nINSERT INTO paket (id, resi, id_penerima, isi_tertulis, jam_tiba) VALUES (104, 'SPX-1290', 8, 'Aksesoris ponsel', '10:00');\nINSERT INTO paket (id, resi, id_penerima, isi_tertulis, jam_tiba) VALUES (105, 'JNT-4410', 10, 'Alat tulis kantor', '10:20');\nINSERT INTO paket (id, resi, id_penerima, isi_tertulis, jam_tiba) VALUES (106, 'POS-3307', 9, 'Dokumen', '11:05');\nCREATE TABLE pengambilan (id INTEGER PRIMARY KEY, id_paket INTEGER, id_pengambil INTEGER, jam_ambil TEXT, FOREIGN KEY (id_paket) REFERENCES paket(id), FOREIGN KEY (id_pengambil) REFERENCES warga_sekolah(id));\nINSERT INTO pengambilan (id, id_paket, id_pengambil, jam_ambil) VALUES (1, 103, 4, '09:55');\nINSERT INTO pengambilan (id, id_paket, id_pengambil, jam_ambil) VALUES (2, 101, 3, '10:05');\nINSERT INTO pengambilan (id, id_paket, id_pengambil, jam_ambil) VALUES (3, 104, 8, '10:30');\nINSERT INTO pengambilan (id, id_paket, id_pengambil, jam_ambil) VALUES (4, 105, 10, '10:45');\nINSERT INTO pengambilan (id, id_paket, id_pengambil, jam_ambil) VALUES (5, 106, 9, '11:20');",
+   "tabel": [
+    {
+     "nama": "warga_sekolah",
+     "keterangan": "Daftar warga sekolah",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor ID"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama"
+      },
+      {
+       "nama": "peran",
+       "tipe": "TEXT",
+       "keterangan": "Peran di sekolah"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 10
+    },
+    {
+     "nama": "paket",
+     "keterangan": "Paket yang tiba di Pos Satpam",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor paket"
+      },
+      {
+       "nama": "resi",
+       "tipe": "TEXT",
+       "keterangan": "Nomor resi"
+      },
+      {
+       "nama": "id_penerima",
+       "tipe": "INTEGER",
+       "keterangan": "ID penerima"
+      },
+      {
+       "nama": "isi_tertulis",
+       "tipe": "TEXT",
+       "keterangan": "Isi menurut label"
+      },
+      {
+       "nama": "jam_tiba",
+       "tipe": "TEXT",
+       "keterangan": "Jam paket tiba"
+      }
+     ],
+     "relasi": [
+      {
+       "kolom": "id_penerima",
+       "tabel": "warga_sekolah",
+       "ke": "id"
+      }
+     ],
+     "jumlah_baris": 6
+    },
+    {
+     "nama": "pengambilan",
+     "keterangan": "Catatan pengambilan paket",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "id_paket",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor paket"
+      },
+      {
+       "nama": "id_pengambil",
+       "tipe": "INTEGER",
+       "keterangan": "ID pengambil"
+      },
+      {
+       "nama": "jam_ambil",
+       "tipe": "TEXT",
+       "keterangan": "Jam diambil"
+      }
+     ],
+     "relasi": [
+      {
+       "kolom": "id_paket",
+       "tabel": "paket",
+       "ke": "id"
+      },
+      {
+       "kolom": "id_pengambil",
+       "tabel": "warga_sekolah",
+       "ke": "id"
+      }
+     ],
+     "jumlah_baris": 5
+    }
+   ],
+   "kartu": {
+    "judul": "JOIN",
+    "isi": "JOIN menggabungkan dua tabel berdasarkan kolom yang nilainya sama, ditulis setelah ON. Tulis nama_tabel.kolom supaya jelas kolom itu milik tabel mana.",
+    "contoh": "SELECT siswa.nama, nilai.skor\nFROM nilai\nJOIN siswa ON nilai.nis = siswa.nis;"
+   }
+  },
+  {
+   "id": "b5k2",
+   "berkas": 5,
+   "urutan": 2,
+   "jenis": "utama",
+   "judul": "Piala yang Menghilang",
+   "tkp": "Lemari piala, lobi utama",
+   "konsep": "JOIN",
+   "briefing": [
+    "Piala juara LKS hilang dari lemari piala, dua jam sebelum upacara.",
+    "Lemari itu hanya bisa dibuka dengan kartu akses. Catatan pintu hanya menyimpan nomor kartu, jadi kamu perlu menggabungkan tiga tabel."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Gabungkan log_pintu dan kartu_akses. Tampilkan no_kartu, id_warga, dan waktu untuk pintu Lemari Piala.",
+     "query_kunci": "SELECT log_pintu.no_kartu, kartu_akses.id_warga, log_pintu.waktu FROM log_pintu JOIN kartu_akses ON log_pintu.no_kartu = kartu_akses.no_kartu WHERE log_pintu.pintu = 'Lemari Piala'",
+     "petunjuk": [
+      "Dua tabel itu sama-sama punya kolom no_kartu.",
+      "Setelah JOIN, saring pintunya dengan WHERE.",
+      "SELECT log_pintu.no_kartu, kartu_akses.id_warga, log_pintu.waktu FROM log_pintu JOIN kartu_akses ON log_pintu.no_kartu = kartu_akses.no_kartu WHERE log_pintu.pintu = '____'"
+     ],
+     "komentar_benar": "Sudah ada ID pemilik kartunya, tetapi belum ada nama. Tambahkan satu JOIN lagi ke tabel warga.",
+     "wajib": [
+      "JOIN",
+      "ON",
+      "WHERE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Gabungkan tiga tabel: log_pintu, kartu_akses, dan warga. Tampilkan nama dan waktu untuk pintu Lemari Piala.",
+     "query_kunci": "SELECT warga.nama, log_pintu.waktu FROM log_pintu JOIN kartu_akses ON log_pintu.no_kartu = kartu_akses.no_kartu JOIN warga ON kartu_akses.id_warga = warga.id WHERE log_pintu.pintu = 'Lemari Piala'",
+     "petunjuk": [
+      "JOIN bisa ditulis dua kali berturut-turut.",
+      "JOIN kedua menghubungkan kartu_akses.id_warga dengan warga.id.",
+      "... JOIN kartu_akses ON log_pintu.no_kartu = kartu_akses.no_kartu JOIN warga ON kartu_akses.____ = warga.id WHERE ..."
+     ],
+     "komentar_benar": "Ada empat kali lemari dibuka. Kapan terakhir kali piala terlihat?",
+     "wajib": [
+      "JOIN",
+      "ON"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    },
+    {
+     "instruksi": "Tampilkan catatan cctv_lobi antara pukul 06:30 dan 07:00.",
+     "query_kunci": "SELECT waktu, keterangan FROM cctv_lobi WHERE waktu >= '06:30' AND waktu <= '07:00'",
+     "petunjuk": [
+      "Tabelnya cctv_lobi.",
+      "Pakai dua syarat waktu yang digabung dengan AND.",
+      "SELECT waktu, keterangan FROM cctv_lobi WHERE waktu >= '06:30' AND waktu <= '____'"
+     ],
+     "komentar_benar": "Piala masih ada pukul 06.45. Siapa yang membuka lemari setelah itu dan sebelum piala dilaporkan hilang?",
+     "wajib": [
+      "WHERE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "tersangka": [
+    {
+     "nama": "Raka",
+     "peran": "Siswa XI RPL",
+     "avatar": "raka",
+     "pelaku": true,
+     "alasan": ""
+    },
+    {
+     "nama": "Bima",
+     "peran": "Siswa XII TKJ",
+     "avatar": "bima",
+     "pelaku": false,
+     "alasan": "Bima membuka lemari pukul 06.35, sedangkan CCTV pukul 06.45 masih memperlihatkan piala di lemari."
+    },
+    {
+     "nama": "Pak Darto",
+     "peran": "Satpam sekolah",
+     "avatar": "pak_darto",
+     "pelaku": false,
+     "alasan": "Pak Darto membuka lemari pukul 06.10 untuk pemeriksaan pagi dan pukul 07.15 saat piala sudah hilang."
+    }
+   ],
+   "penjelasan": "Raka mengambil piala pukul 06.52 dan membawanya ke ruang OSIS untuk dibersihkan sebagai kejutan sebelum upacara, tetapi tidak memberi tahu siapa pun. Piala sudah kembali sebelum upacara dimulai.",
+   "penutup": "Semua berkas selesai. Kamu sudah layak disebut detektif data, dan kasus harian tetap menunggu setiap hari.",
+   "xp": 90,
+   "koin": 30,
+   "durasi": "5-6 menit",
+   "sql": "CREATE TABLE warga (id INTEGER PRIMARY KEY, nama TEXT, peran TEXT);\nINSERT INTO warga (id, nama, peran) VALUES (1, 'Pak Hendra', 'Guru produktif');\nINSERT INTO warga (id, nama, peran) VALUES (2, 'Pak Darto', 'Satpam');\nINSERT INTO warga (id, nama, peran) VALUES (3, 'Bu Sri', 'Ibu kantin');\nINSERT INTO warga (id, nama, peran) VALUES (4, 'Bu Ratna', 'Pustakawan');\nINSERT INTO warga (id, nama, peran) VALUES (5, 'Raka', 'Siswa XI RPL');\nINSERT INTO warga (id, nama, peran) VALUES (6, 'Nadia', 'Siswi XI RPL');\nINSERT INTO warga (id, nama, peran) VALUES (7, 'Bima', 'Siswa XII TKJ');\nINSERT INTO warga (id, nama, peran) VALUES (8, 'Sinta', 'Siswi X RPL');\nINSERT INTO warga (id, nama, peran) VALUES (9, 'Bu Wulan', 'Guru BK');\nINSERT INTO warga (id, nama, peran) VALUES (10, 'Pak Joko', 'Staf TU');\nCREATE TABLE kartu_akses (no_kartu TEXT PRIMARY KEY, id_warga INTEGER, aktif INTEGER, FOREIGN KEY (id_warga) REFERENCES warga(id));\nINSERT INTO kartu_akses (no_kartu, id_warga, aktif) VALUES ('K-03', 1, 1);\nINSERT INTO kartu_akses (no_kartu, id_warga, aktif) VALUES ('K-07', 2, 1);\nINSERT INTO kartu_akses (no_kartu, id_warga, aktif) VALUES ('K-09', 9, 1);\nINSERT INTO kartu_akses (no_kartu, id_warga, aktif) VALUES ('K-11', 4, 1);\nINSERT INTO kartu_akses (no_kartu, id_warga, aktif) VALUES ('K-15', 7, 1);\nINSERT INTO kartu_akses (no_kartu, id_warga, aktif) VALUES ('K-18', 6, 1);\nINSERT INTO kartu_akses (no_kartu, id_warga, aktif) VALUES ('K-21', 5, 1);\nINSERT INTO kartu_akses (no_kartu, id_warga, aktif) VALUES ('K-24', 8, 0);\nCREATE TABLE log_pintu (id INTEGER PRIMARY KEY, no_kartu TEXT, pintu TEXT, waktu TEXT, FOREIGN KEY (no_kartu) REFERENCES kartu_akses(no_kartu));\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (1, 'K-07', 'Lobi', '05:58');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (2, 'K-07', 'Lemari Piala', '06:10');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (3, 'K-11', 'Lobi', '06:15');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (4, 'K-11', 'Perpustakaan', '06:20');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (5, 'K-15', 'Lobi', '06:30');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (6, 'K-15', 'Lemari Piala', '06:35');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (7, 'K-03', 'Lobi', '06:38');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (8, 'K-03', 'Lab RPL', '06:40');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (9, 'K-21', 'Lobi', '06:48');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (10, 'K-21', 'Lemari Piala', '06:52');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (11, 'K-18', 'Lobi', '06:55');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (12, 'K-09', 'Lobi', '07:02');\nINSERT INTO log_pintu (id, no_kartu, pintu, waktu) VALUES (13, 'K-07', 'Lemari Piala', '07:15');\nCREATE TABLE cctv_lobi (id INTEGER PRIMARY KEY, waktu TEXT, keterangan TEXT);\nINSERT INTO cctv_lobi (id, waktu, keterangan) VALUES (1, '06:05', 'Pak Darto berkeliling lobi');\nINSERT INTO cctv_lobi (id, waktu, keterangan) VALUES (2, '06:40', 'Petugas kebersihan memotret lemari, piala masih ada');\nINSERT INTO cctv_lobi (id, waktu, keterangan) VALUES (3, '06:45', 'Piala masih terlihat di lemari');\nINSERT INTO cctv_lobi (id, waktu, keterangan) VALUES (4, '06:56', 'Seseorang membawa kardus ke arah ruang OSIS');\nINSERT INTO cctv_lobi (id, waktu, keterangan) VALUES (5, '07:16', 'Pak Darto melapor piala hilang');",
+   "tabel": [
+    {
+     "nama": "warga",
+     "keterangan": "Daftar warga sekolah",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor ID"
+      },
+      {
+       "nama": "nama",
+       "tipe": "TEXT",
+       "keterangan": "Nama"
+      },
+      {
+       "nama": "peran",
+       "tipe": "TEXT",
+       "keterangan": "Peran di sekolah"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 10
+    },
+    {
+     "nama": "kartu_akses",
+     "keterangan": "Kartu akses pintu",
+     "kolom": [
+      {
+       "nama": "no_kartu",
+       "tipe": "TEXT",
+       "keterangan": "Nomor kartu"
+      },
+      {
+       "nama": "id_warga",
+       "tipe": "INTEGER",
+       "keterangan": "ID pemilik kartu"
+      },
+      {
+       "nama": "aktif",
+       "tipe": "INTEGER",
+       "keterangan": "1 jika kartu aktif"
+      }
+     ],
+     "relasi": [
+      {
+       "kolom": "id_warga",
+       "tabel": "warga",
+       "ke": "id"
+      }
+     ],
+     "jumlah_baris": 8
+    },
+    {
+     "nama": "log_pintu",
+     "keterangan": "Catatan pintu yang dibuka dengan kartu",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "no_kartu",
+       "tipe": "TEXT",
+       "keterangan": "Nomor kartu"
+      },
+      {
+       "nama": "pintu",
+       "tipe": "TEXT",
+       "keterangan": "Pintu yang dibuka"
+      },
+      {
+       "nama": "waktu",
+       "tipe": "TEXT",
+       "keterangan": "Jam dibuka"
+      }
+     ],
+     "relasi": [
+      {
+       "kolom": "no_kartu",
+       "tabel": "kartu_akses",
+       "ke": "no_kartu"
+      }
+     ],
+     "jumlah_baris": 13
+    },
+    {
+     "nama": "cctv_lobi",
+     "keterangan": "Catatan petugas dari rekaman CCTV lobi",
+     "kolom": [
+      {
+       "nama": "id",
+       "tipe": "INTEGER",
+       "keterangan": "Nomor catatan"
+      },
+      {
+       "nama": "waktu",
+       "tipe": "TEXT",
+       "keterangan": "Jam di rekaman"
+      },
+      {
+       "nama": "keterangan",
+       "tipe": "TEXT",
+       "keterangan": "Yang terlihat"
+      }
+     ],
+     "relasi": [],
+     "jumlah_baris": 5
+    }
+   ],
+   "kartu": {
+    "judul": "JOIN",
+    "isi": "JOIN menggabungkan dua tabel berdasarkan kolom yang nilainya sama, ditulis setelah ON. Tulis nama_tabel.kolom supaya jelas kolom itu milik tabel mana.",
+    "contoh": "SELECT siswa.nama, nilai.skor\nFROM nilai\nJOIN siswa ON nilai.nis = siswa.nis;"
+   }
+  }
+ ],
+ "harian": [
+  {
+   "id": "h01",
+   "jenis": "harian",
+   "konsep": "SELECT",
+   "judul": "Jadwal Ekskul Tertukar",
+   "briefing": [
+    "Pengumuman jadwal ekskul di mading tertukar. Ada siswa baru yang hanya bisa latihan hari Sabtu.",
+    "Lihat tabel ekskul, lalu tentukan ekskul yang latihan hari Sabtu."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan kolom nama dan hari dari tabel ekskul.",
+     "query_kunci": "SELECT nama, hari FROM ekskul",
+     "petunjuk": [
+      "Tabelnya ekskul.",
+      "Kolomnya nama dan hari.",
+      "SELECT nama, ____ FROM ekskul"
+     ],
+     "komentar_benar": "Sekarang baca kolom hari dengan teliti.",
+     "wajib": [
+      "SELECT",
+      "FROM"
+     ],
+     "cocok": "tepat",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Pramuka",
+    "Futsal",
+    "Robotik"
+   ],
+   "jawaban": "Pramuka",
+   "penjelasan": "Pramuka satu-satunya ekskul yang latihan hari Sabtu.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "SELECT dan FROM",
+    "isi": "SELECT memilih kolom yang ingin ditampilkan. FROM menyebut tabel asal datanya. Tanda * berarti semua kolom.",
+    "contoh": "SELECT * FROM siswa;\nSELECT nama, kelas FROM siswa;"
+   }
+  },
+  {
+   "id": "h02",
+   "jenis": "harian",
+   "konsep": "WHERE",
+   "judul": "Anggota Robotik dari Cimahi",
+   "briefing": [
+    "Pak Hendra butuh anggota Robotik yang tinggal di Cimahi untuk menjemput komponen dari toko.",
+    "Ada dua syarat: kota dan ekskul."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan nama siswa yang kotanya Cimahi dan ekskulnya Robotik.",
+     "query_kunci": "SELECT nama FROM siswa WHERE kota = 'Cimahi' AND ekskul = 'Robotik'",
+     "petunjuk": [
+      "Tabelnya siswa.",
+      "Gabungkan dua syarat dengan AND.",
+      "SELECT nama FROM siswa WHERE kota = 'Cimahi' AND ____ = 'Robotik'"
+     ],
+     "komentar_benar": "Hanya satu nama yang memenuhi dua syarat sekaligus.",
+     "wajib": [
+      "WHERE",
+      "AND"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Irfan Hakim",
+    "Vino Kurniawan",
+    "Gilang Ramadhan"
+   ],
+   "jawaban": "Irfan Hakim",
+   "penjelasan": "Irfan Hakim tinggal di Cimahi dan ikut Robotik. Vino dari Cimahi tetapi ikut Pramuka, Gilang ikut Robotik tetapi tinggal di Bandung.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "WHERE",
+    "isi": "WHERE menyaring baris. Hanya baris yang memenuhi syarat yang ditampilkan. Syarat bisa memakai =, >, <, >=, <=, <>, serta AND dan OR.",
+    "contoh": "SELECT * FROM akses_lab\nWHERE jam_masuk > '15:00';"
+   }
+  },
+  {
+   "id": "h03",
+   "jenis": "harian",
+   "konsep": "LIKE",
+   "judul": "Kartu Pelajar yang Luntur",
+   "briefing": [
+    "Kartu pelajar ditemukan di kantin. Tulisannya luntur, yang terbaca hanya awalan nama Sa dan kelas XII.",
+    "Cari pemiliknya dengan pola."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan nama dan kelas siswa yang namanya diawali Sa dan kelasnya diawali XII.",
+     "query_kunci": "SELECT nama, kelas FROM siswa WHERE nama LIKE 'Sa%' AND kelas LIKE 'XII%'",
+     "petunjuk": [
+      "Diawali berarti tanda % ditaruh di belakang.",
+      "Ada dua pola, gabungkan dengan AND.",
+      "SELECT nama, kelas FROM siswa WHERE nama LIKE 'Sa%' AND kelas LIKE '____'"
+     ],
+     "komentar_benar": "Polanya hanya cocok dengan satu siswa.",
+     "wajib": [
+      "LIKE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Salma Azzahra",
+    "Oktavia Sari",
+    "Farah Nabila"
+   ],
+   "jawaban": "Salma Azzahra",
+   "penjelasan": "Hanya Salma Azzahra yang namanya diawali Sa dan duduk di kelas XII. Nama Oktavia Sari memang mengandung Sa, tetapi tidak di awal.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "LIKE",
+    "isi": "LIKE mencari teks yang cocok dengan pola. Tanda % mewakili huruf apa saja dengan jumlah berapa pun, sedangkan _ mewakili tepat satu huruf.",
+    "contoh": "SELECT * FROM siswa\nWHERE nama LIKE 'A%';"
+   }
+  },
+  {
+   "id": "h04",
+   "jenis": "harian",
+   "konsep": "AGREGASI",
+   "judul": "Menu Paling Laris",
+   "briefing": [
+    "Bu Sri ingin menambah stok menu yang paling sering dibeli minggu ini.",
+    "Hitung berapa kali setiap menu dibeli."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Hitung jumlah pembelian untuk setiap menu di tabel kantin.",
+     "query_kunci": "SELECT menu, COUNT(*) FROM kantin GROUP BY menu",
+     "petunjuk": [
+      "Tabelnya kantin.",
+      "Kelompokkan berdasarkan menu, lalu hitung dengan COUNT(*).",
+      "SELECT menu, COUNT(*) FROM kantin GROUP BY ____"
+     ],
+     "komentar_benar": "Bandingkan angkanya. Menu mana yang paling banyak?",
+     "wajib": [
+      "COUNT",
+      "GROUP BY"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Nasi Goreng",
+    "Es Teh",
+    "Bakso"
+   ],
+   "jawaban": "Nasi Goreng",
+   "penjelasan": "Nasi Goreng dibeli 7 kali, paling banyak dibanding menu lain.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "COUNT, SUM, dan GROUP BY",
+    "isi": "COUNT menghitung banyak baris dan SUM menjumlahkan nilai. GROUP BY mengelompokkan baris yang nilainya sama, lalu HAVING menyaring hasil kelompok.",
+    "contoh": "SELECT kelas, COUNT(*)\nFROM siswa\nGROUP BY kelas;"
+   }
+  },
+  {
+   "id": "h05",
+   "jenis": "harian",
+   "konsep": "JOIN",
+   "judul": "Rekor Terlambat",
+   "briefing": [
+    "Wali kelas ingin tahu siapa yang paling sering terlambat bulan ini.",
+    "Tabel keterlambatan hanya menyimpan NIS, jadi gabungkan dengan tabel siswa."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan nama siswa dan berapa kali ia terlambat.",
+     "query_kunci": "SELECT siswa.nama, COUNT(*) FROM keterlambatan JOIN siswa ON keterlambatan.nis = siswa.nis GROUP BY siswa.nama",
+     "petunjuk": [
+      "Hubungkan keterlambatan.nis dengan siswa.nis.",
+      "Setelah JOIN, kelompokkan berdasarkan nama.",
+      "SELECT siswa.nama, COUNT(*) FROM keterlambatan JOIN siswa ON keterlambatan.nis = siswa.nis GROUP BY ____"
+     ],
+     "komentar_benar": "Cari jumlah yang paling besar.",
+     "wajib": [
+      "JOIN",
+      "GROUP BY"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Putra Mahendra",
+    "Eko Saputra",
+    "Kevin Anggara"
+   ],
+   "jawaban": "Putra Mahendra",
+   "penjelasan": "Putra Mahendra terlambat 5 kali. Eko dan Kevin masing-masing 3 kali.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "JOIN",
+    "isi": "JOIN menggabungkan dua tabel berdasarkan kolom yang nilainya sama, ditulis setelah ON. Tulis nama_tabel.kolom supaya jelas kolom itu milik tabel mana.",
+    "contoh": "SELECT siswa.nama, nilai.skor\nFROM nilai\nJOIN siswa ON nilai.nis = siswa.nis;"
+   }
+  },
+  {
+   "id": "h06",
+   "jenis": "harian",
+   "konsep": "WHERE",
+   "judul": "Bakso Hari Selasa",
+   "briefing": [
+    "Ada mangkuk bakso yang tertinggal di meja kantin pada 13 Oktober.",
+    "Bu Sri ingin mengembalikannya kepada pembelinya."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan pembeli dan menu di kantin pada tanggal 2026-10-13 dengan menu Bakso.",
+     "query_kunci": "SELECT pembeli, menu FROM kantin WHERE tanggal = '2026-10-13' AND menu = 'Bakso'",
+     "petunjuk": [
+      "Tabelnya kantin.",
+      "Ada dua syarat: tanggal dan menu.",
+      "SELECT pembeli, menu FROM kantin WHERE tanggal = '2026-10-13' AND menu = '____'"
+     ],
+     "komentar_benar": "Hanya satu orang yang membeli bakso hari itu.",
+     "wajib": [
+      "WHERE",
+      "AND"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Putra Mahendra",
+    "Hani Lestari",
+    "Aditya Pratama"
+   ],
+   "jawaban": "Putra Mahendra",
+   "penjelasan": "Putra Mahendra membeli bakso pada 13 Oktober. Hani membelinya tanggal 12, Aditya tanggal 15.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "WHERE",
+    "isi": "WHERE menyaring baris. Hanya baris yang memenuhi syarat yang ditampilkan. Syarat bisa memakai =, >, <, >=, <=, <>, serta AND dan OR.",
+    "contoh": "SELECT * FROM akses_lab\nWHERE jam_masuk > '15:00';"
+   }
+  },
+  {
+   "id": "h07",
+   "jenis": "harian",
+   "konsep": "LIKE",
+   "judul": "Buku Basis Data",
+   "briefing": [
+    "Ada catatan di buku Basis Data yang dikembalikan pada 13 Oktober. Bu Ratna ingin tahu NIS peminjamnya.",
+    "Judul bukunya mengandung kata Basis Data."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan nis, judul, dan tanggal_kembali dari pinjam_buku yang judulnya mengandung Basis Data.",
+     "query_kunci": "SELECT nis, judul, tanggal_kembali FROM pinjam_buku WHERE judul LIKE '%Basis Data%'",
+     "petunjuk": [
+      "Tabelnya pinjam_buku.",
+      "Pakai % di depan dan di belakang kata yang dicari.",
+      "SELECT nis, judul, tanggal_kembali FROM pinjam_buku WHERE judul LIKE '%____%'"
+     ],
+     "komentar_benar": "Lihat kolom tanggal_kembali.",
+     "wajib": [
+      "LIKE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "S14",
+    "S07",
+    "S12"
+   ],
+   "jawaban": "S14",
+   "penjelasan": "S14 mengembalikan Basis Data Lanjut pada 13 Oktober. S07 mengembalikan bukunya tanggal 9.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "LIKE",
+    "isi": "LIKE mencari teks yang cocok dengan pola. Tanda % mewakili huruf apa saja dengan jumlah berapa pun, sedangkan _ mewakili tepat satu huruf.",
+    "contoh": "SELECT * FROM siswa\nWHERE nama LIKE 'A%';"
+   }
+  },
+  {
+   "id": "h08",
+   "jenis": "harian",
+   "konsep": "AGREGASI",
+   "judul": "Pembeli Paling Rajin",
+   "briefing": [
+    "Bu Sri memberi hadiah kecil untuk pembeli dengan belanja terbanyak minggu ini.",
+    "Jumlahkan belanja setiap pembeli."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Hitung total harga yang dibayar setiap pembeli di tabel kantin.",
+     "query_kunci": "SELECT pembeli, SUM(harga) FROM kantin GROUP BY pembeli",
+     "petunjuk": [
+      "Tabelnya kantin.",
+      "SUM(harga) menjumlahkan harga di setiap kelompok pembeli.",
+      "SELECT pembeli, SUM(harga) FROM kantin GROUP BY ____"
+     ],
+     "komentar_benar": "Cari total yang paling besar.",
+     "wajib": [
+      "SUM",
+      "GROUP BY"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Kevin Anggara",
+    "Aditya Pratama",
+    "Gilang Ramadhan"
+   ],
+   "jawaban": "Kevin Anggara",
+   "penjelasan": "Kevin Anggara berbelanja Rp48.000, paling banyak minggu ini.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "COUNT, SUM, dan GROUP BY",
+    "isi": "COUNT menghitung banyak baris dan SUM menjumlahkan nilai. GROUP BY mengelompokkan baris yang nilainya sama, lalu HAVING menyaring hasil kelompok.",
+    "contoh": "SELECT kelas, COUNT(*)\nFROM siswa\nGROUP BY kelas;"
+   }
+  },
+  {
+   "id": "h09",
+   "jenis": "harian",
+   "konsep": "JOIN",
+   "judul": "Juara Basis Data",
+   "briefing": [
+    "Sekolah akan mengirim satu siswa dengan nilai Basis Data tertinggi ke lomba.",
+    "Tabel nilai hanya menyimpan NIS. Gabungkan dengan tabel siswa supaya namanya terlihat."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan nama siswa dan skor untuk mapel Basis Data.",
+     "query_kunci": "SELECT siswa.nama, nilai.skor FROM nilai JOIN siswa ON nilai.nis = siswa.nis WHERE nilai.mapel = 'Basis Data'",
+     "petunjuk": [
+      "Hubungkan nilai.nis dengan siswa.nis.",
+      "Saring mapel Basis Data dengan WHERE.",
+      "SELECT siswa.nama, nilai.skor FROM nilai JOIN siswa ON nilai.nis = siswa.nis WHERE nilai.mapel = '____'"
+     ],
+     "komentar_benar": "Cari skor yang paling tinggi. ORDER BY skor DESC bisa membantu.",
+     "wajib": [
+      "JOIN",
+      "ON"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Naufal Rizki",
+    "Gilang Ramadhan",
+    "Salma Azzahra"
+   ],
+   "jawaban": "Naufal Rizki",
+   "penjelasan": "Naufal Rizki mendapat skor 96, lebih tinggi dari Gilang (93) dan Salma (91).",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "JOIN",
+    "isi": "JOIN menggabungkan dua tabel berdasarkan kolom yang nilainya sama, ditulis setelah ON. Tulis nama_tabel.kolom supaya jelas kolom itu milik tabel mana.",
+    "contoh": "SELECT siswa.nama, nilai.skor\nFROM nilai\nJOIN siswa ON nilai.nis = siswa.nis;"
+   }
+  },
+  {
+   "id": "h10",
+   "jenis": "harian",
+   "konsep": "WHERE",
+   "judul": "Pembina Ekskul di Perpustakaan",
+   "briefing": [
+    "Siswa baru ingin bergabung dengan ekskul yang latihan di Perpustakaan.",
+    "Ia perlu tahu siapa pembinanya."
+   ],
+   "langkah": [
+    {
+     "instruksi": "Tampilkan nama ekskul dan pembina yang ruang latihannya Perpustakaan.",
+     "query_kunci": "SELECT nama, pembina FROM ekskul WHERE ruang = 'Perpustakaan'",
+     "petunjuk": [
+      "Tabelnya ekskul.",
+      "Saring kolom ruang.",
+      "SELECT nama, pembina FROM ekskul WHERE ruang = '____'"
+     ],
+     "komentar_benar": "Sekarang kamu tahu pembinanya.",
+     "wajib": [
+      "WHERE"
+     ],
+     "cocok": "minimal",
+     "blok_tambahan": []
+    }
+   ],
+   "opsi": [
+    "Bu Wulan",
+    "Bu Melati",
+    "Pak Yusuf"
+   ],
+   "jawaban": "Bu Wulan",
+   "penjelasan": "Jurnalistik latihan di Perpustakaan dan dibina Bu Wulan.",
+   "xp": 30,
+   "koin": 10,
+   "kartu": {
+    "judul": "WHERE",
+    "isi": "WHERE menyaring baris. Hanya baris yang memenuhi syarat yang ditampilkan. Syarat bisa memakai =, >, <, >=, <=, <>, serta AND dan OR.",
+    "contoh": "SELECT * FROM akses_lab\nWHERE jam_masuk > '15:00';"
+   }
+  }
+ ],
+ "arsip": {
+  "sql": "CREATE TABLE siswa (nis TEXT PRIMARY KEY, nama TEXT, kelas TEXT, kota TEXT, ekskul TEXT);\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S01', 'Aditya Pratama', 'X RPL', 'Bandung', 'Futsal');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S02', 'Bella Safitri', 'X RPL', 'Cimahi', 'Paduan Suara');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S03', 'Candra Wijaya', 'X RPL', 'Bandung', 'Robotik');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S04', 'Dinda Maharani', 'X TKJ', 'Sumedang', 'Jurnalistik');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S05', 'Eko Saputra', 'X TKJ', 'Cimahi', 'Futsal');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S06', 'Farah Nabila', 'X TKJ', 'Bandung', 'Desain Grafis');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S07', 'Gilang Ramadhan', 'XI RPL', 'Bandung', 'Robotik');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S08', 'Hani Lestari', 'XI RPL', 'Garut', 'Paduan Suara');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S09', 'Irfan Hakim', 'XI RPL', 'Cimahi', 'Robotik');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S10', 'Jihan Aulia', 'XI RPL', 'Bandung', 'Desain Grafis');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S11', 'Kevin Anggara', 'XI TKJ', 'Sumedang', 'Futsal');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S12', 'Laras Wulandari', 'XI TKJ', 'Bandung', 'Jurnalistik');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S13', 'Mega Putri', 'XI TKJ', 'Cimahi', 'Desain Grafis');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S14', 'Naufal Rizki', 'XII RPL', 'Garut', 'Robotik');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S15', 'Oktavia Sari', 'XII RPL', 'Bandung', 'Jurnalistik');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S16', 'Putra Mahendra', 'XII RPL', 'Cimahi', 'Futsal');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S17', 'Qori Amelia', 'XII RPL', 'Bandung', 'Paduan Suara');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S18', 'Reza Firmansyah', 'XII TKJ', 'Sumedang', 'Robotik');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S19', 'Salma Azzahra', 'XII TKJ', 'Bandung', 'Desain Grafis');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S20', 'Taufik Hidayat', 'XII TKJ', 'Garut', 'Futsal');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S21', 'Ulfa Rahmawati', 'X RPL', 'Bandung', 'Pramuka');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S22', 'Vino Kurniawan', 'XI RPL', 'Cimahi', 'Pramuka');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S23', 'Wulan Anggraini', 'XII TKJ', 'Cimahi', 'Pramuka');\nINSERT INTO siswa (nis, nama, kelas, kota, ekskul) VALUES ('S24', 'Yoga Prasetyo', 'X TKJ', 'Bandung', 'Robotik');\nCREATE TABLE ekskul (nama TEXT PRIMARY KEY, pembina TEXT, hari TEXT, ruang TEXT);\nINSERT INTO ekskul (nama, pembina, hari, ruang) VALUES ('Futsal', 'Pak Rahmat', 'Selasa', 'Lapangan');\nINSERT INTO ekskul (nama, pembina, hari, ruang) VALUES ('Robotik', 'Pak Hendra', 'Rabu', 'Lab RPL');\nINSERT INTO ekskul (nama, pembina, hari, ruang) VALUES ('Paduan Suara', 'Bu Melati', 'Kamis', 'Aula');\nINSERT INTO ekskul (nama, pembina, hari, ruang) VALUES ('Jurnalistik', 'Bu Wulan', 'Jumat', 'Perpustakaan');\nINSERT INTO ekskul (nama, pembina, hari, ruang) VALUES ('Desain Grafis', 'Pak Yusuf', 'Rabu', 'Lab Multimedia');\nINSERT INTO ekskul (nama, pembina, hari, ruang) VALUES ('Pramuka', 'Pak Asep', 'Sabtu', 'Lapangan');\nCREATE TABLE keterlambatan (id INTEGER PRIMARY KEY, nis TEXT, tanggal TEXT, menit INTEGER, FOREIGN KEY (nis) REFERENCES siswa(nis));\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (1, 'S16', '2026-10-05', 10);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (2, 'S05', '2026-10-05', 15);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (3, 'S08', '2026-10-05', 5);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (4, 'S16', '2026-10-06', 20);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (5, 'S11', '2026-10-06', 10);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (6, 'S01', '2026-10-07', 5);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (7, 'S16', '2026-10-07', 15);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (8, 'S05', '2026-10-08', 25);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (9, 'S20', '2026-10-08', 10);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (10, 'S16', '2026-10-09', 5);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (11, 'S11', '2026-10-09', 30);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (12, 'S03', '2026-10-12', 10);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (13, 'S16', '2026-10-12', 10);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (14, 'S05', '2026-10-13', 5);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (15, 'S20', '2026-10-13', 45);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (16, 'S14', '2026-10-14', 20);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (17, 'S11', '2026-10-15', 10);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (18, 'S22', '2026-10-16', 15);\nINSERT INTO keterlambatan (id, nis, tanggal, menit) VALUES (19, 'S09', '2026-10-16', 5);\nCREATE TABLE kantin (id INTEGER PRIMARY KEY, tanggal TEXT, pembeli TEXT, menu TEXT, harga INTEGER);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (1, '2026-10-12', 'Aditya Pratama', 'Nasi Goreng', 12000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (2, '2026-10-12', 'Bella Safitri', 'Es Teh', 3000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (3, '2026-10-12', 'Gilang Ramadhan', 'Nasi Goreng', 12000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (4, '2026-10-12', 'Hani Lestari', 'Bakso', 10000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (5, '2026-10-12', 'Kevin Anggara', 'Paket Ayam Geprek', 18000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (6, '2026-10-13', 'Aditya Pratama', 'Es Teh', 3000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (7, '2026-10-13', 'Irfan Hakim', 'Nasi Goreng', 12000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (8, '2026-10-13', 'Jihan Aulia', 'Mie Ayam', 11000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (9, '2026-10-13', 'Putra Mahendra', 'Bakso', 10000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (10, '2026-10-13', 'Salma Azzahra', 'Nasi Goreng', 12000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (11, '2026-10-14', 'Gilang Ramadhan', 'Mie Ayam', 11000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (12, '2026-10-14', 'Kevin Anggara', 'Nasi Goreng', 12000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (13, '2026-10-14', 'Laras Wulandari', 'Es Teh', 3000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (14, '2026-10-14', 'Naufal Rizki', 'Paket Ayam Geprek', 18000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (15, '2026-10-15', 'Aditya Pratama', 'Bakso', 10000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (16, '2026-10-15', 'Oktavia Sari', 'Nasi Goreng', 12000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (17, '2026-10-15', 'Reza Firmansyah', 'Mie Ayam', 11000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (18, '2026-10-15', 'Kevin Anggara', 'Paket Ayam Geprek', 18000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (19, '2026-10-16', 'Mega Putri', 'Es Teh', 3000);\nINSERT INTO kantin (id, tanggal, pembeli, menu, harga) VALUES (20, '2026-10-16', 'Hani Lestari', 'Nasi Goreng', 12000);\nCREATE TABLE pinjam_buku (id INTEGER PRIMARY KEY, nis TEXT, judul TEXT, tanggal_pinjam TEXT, tanggal_kembali TEXT, FOREIGN KEY (nis) REFERENCES siswa(nis));\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (1, 'S03', 'Dasar Pemrograman Python', '2026-10-01', '2026-10-08');\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (2, 'S07', 'Basis Data untuk Pemula', '2026-10-02', '2026-10-09');\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (3, 'S10', 'Desain Grafis Praktis', '2026-10-02', NULL);\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (4, 'S15', 'Menulis Berita', '2026-10-05', '2026-10-12');\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (5, 'S09', 'Robotika untuk Pemula', '2026-10-05', NULL);\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (6, 'S12', 'Menulis Berita', '2026-10-13', NULL);\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (7, 'S14', 'Basis Data Lanjut', '2026-10-06', '2026-10-13');\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (8, 'S07', 'Algoritma dan Struktur Data', '2026-10-12', NULL);\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (9, 'S19', 'Desain Grafis Praktis', '2026-10-13', '2026-10-16');\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (10, 'S01', 'Kumpulan Taktik Futsal', '2026-10-14', NULL);\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (11, 'S18', 'Robotika untuk Pemula', '2026-10-14', '2026-10-15');\nINSERT INTO pinjam_buku (id, nis, judul, tanggal_pinjam, tanggal_kembali) VALUES (12, 'S03', 'Pemrograman Web Dasar', '2026-10-15', NULL);\nCREATE TABLE nilai (id INTEGER PRIMARY KEY, nis TEXT, mapel TEXT, skor INTEGER, FOREIGN KEY (nis) REFERENCES siswa(nis));\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (1, 'S01', 'Basis Data', 65);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (2, 'S01', 'Pemrograman Web', 72);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (3, 'S02', 'Basis Data', 78);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (4, 'S02', 'Pemrograman Web', 78);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (5, 'S03', 'Basis Data', 82);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (6, 'S03', 'Pemrograman Web', 92);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (7, 'S04', 'Basis Data', 65);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (8, 'S04', 'Pemrograman Web', 90);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (9, 'S05', 'Basis Data', 69);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (10, 'S05', 'Pemrograman Web', 90);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (11, 'S06', 'Basis Data', 81);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (12, 'S06', 'Pemrograman Web', 81);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (13, 'S07', 'Basis Data', 93);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (14, 'S07', 'Pemrograman Web', 75);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (15, 'S08', 'Basis Data', 87);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (16, 'S08', 'Pemrograman Web', 80);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (17, 'S09', 'Basis Data', 79);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (18, 'S09', 'Pemrograman Web', 88);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (19, 'S10', 'Basis Data', 85);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (20, 'S10', 'Pemrograman Web', 95);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (21, 'S11', 'Basis Data', 86);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (22, 'S11', 'Pemrograman Web', 77);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (23, 'S12', 'Basis Data', 86);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (24, 'S12', 'Pemrograman Web', 86);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (25, 'S13', 'Basis Data', 80);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (26, 'S13', 'Pemrograman Web', 76);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (27, 'S14', 'Basis Data', 96);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (28, 'S14', 'Pemrograman Web', 62);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (29, 'S15', 'Basis Data', 81);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (30, 'S15', 'Pemrograman Web', 64);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (31, 'S16', 'Basis Data', 65);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (32, 'S16', 'Pemrograman Web', 71);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (33, 'S17', 'Basis Data', 88);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (34, 'S17', 'Pemrograman Web', 65);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (35, 'S18', 'Basis Data', 76);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (36, 'S18', 'Pemrograman Web', 62);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (37, 'S19', 'Basis Data', 91);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (38, 'S19', 'Pemrograman Web', 90);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (39, 'S20', 'Basis Data', 83);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (40, 'S20', 'Pemrograman Web', 77);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (41, 'S21', 'Basis Data', 83);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (42, 'S21', 'Pemrograman Web', 72);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (43, 'S22', 'Basis Data', 68);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (44, 'S22', 'Pemrograman Web', 74);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (45, 'S23', 'Basis Data', 70);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (46, 'S23', 'Pemrograman Web', 73);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (47, 'S24', 'Basis Data', 73);\nINSERT INTO nilai (id, nis, mapel, skor) VALUES (48, 'S24', 'Pemrograman Web', 87);",
+  "tabel": [
+   {
+    "nama": "siswa",
+    "keterangan": "Data siswa",
+    "kolom": [
+     {
+      "nama": "nis",
+      "tipe": "TEXT",
+      "keterangan": "Nomor induk siswa"
+     },
+     {
+      "nama": "nama",
+      "tipe": "TEXT",
+      "keterangan": "Nama lengkap"
+     },
+     {
+      "nama": "kelas",
+      "tipe": "TEXT",
+      "keterangan": "Kelas"
+     },
+     {
+      "nama": "kota",
+      "tipe": "TEXT",
+      "keterangan": "Kota asal"
+     },
+     {
+      "nama": "ekskul",
+      "tipe": "TEXT",
+      "keterangan": "Ekskul yang diikuti"
+     }
+    ],
+    "relasi": [],
+    "jumlah_baris": 24
+   },
+   {
+    "nama": "ekskul",
+    "keterangan": "Daftar ekstrakurikuler",
+    "kolom": [
+     {
+      "nama": "nama",
+      "tipe": "TEXT",
+      "keterangan": "Nama ekskul"
+     },
+     {
+      "nama": "pembina",
+      "tipe": "TEXT",
+      "keterangan": "Guru pembina"
+     },
+     {
+      "nama": "hari",
+      "tipe": "TEXT",
+      "keterangan": "Hari latihan"
+     },
+     {
+      "nama": "ruang",
+      "tipe": "TEXT",
+      "keterangan": "Tempat latihan"
+     }
+    ],
+    "relasi": [],
+    "jumlah_baris": 6
+   },
+   {
+    "nama": "keterlambatan",
+    "keterangan": "Catatan siswa terlambat bulan Oktober",
+    "kolom": [
+     {
+      "nama": "id",
+      "tipe": "INTEGER",
+      "keterangan": "Nomor catatan"
+     },
+     {
+      "nama": "nis",
+      "tipe": "TEXT",
+      "keterangan": "NIS siswa"
+     },
+     {
+      "nama": "tanggal",
+      "tipe": "TEXT",
+      "keterangan": "Tanggal"
+     },
+     {
+      "nama": "menit",
+      "tipe": "INTEGER",
+      "keterangan": "Lama terlambat (menit)"
+     }
+    ],
+    "relasi": [
+     {
+      "kolom": "nis",
+      "tabel": "siswa",
+      "ke": "nis"
+     }
+    ],
+    "jumlah_baris": 19
+   },
+   {
+    "nama": "kantin",
+    "keterangan": "Pembelian di kantin Bu Sri",
+    "kolom": [
+     {
+      "nama": "id",
+      "tipe": "INTEGER",
+      "keterangan": "Nomor transaksi"
+     },
+     {
+      "nama": "tanggal",
+      "tipe": "TEXT",
+      "keterangan": "Tanggal"
+     },
+     {
+      "nama": "pembeli",
+      "tipe": "TEXT",
+      "keterangan": "Nama pembeli"
+     },
+     {
+      "nama": "menu",
+      "tipe": "TEXT",
+      "keterangan": "Menu yang dibeli"
+     },
+     {
+      "nama": "harga",
+      "tipe": "INTEGER",
+      "keterangan": "Harga (rupiah)"
+     }
+    ],
+    "relasi": [],
+    "jumlah_baris": 20
+   },
+   {
+    "nama": "pinjam_buku",
+    "keterangan": "Peminjaman buku perpustakaan",
+    "kolom": [
+     {
+      "nama": "id",
+      "tipe": "INTEGER",
+      "keterangan": "Nomor catatan"
+     },
+     {
+      "nama": "nis",
+      "tipe": "TEXT",
+      "keterangan": "NIS peminjam"
+     },
+     {
+      "nama": "judul",
+      "tipe": "TEXT",
+      "keterangan": "Judul buku"
+     },
+     {
+      "nama": "tanggal_pinjam",
+      "tipe": "TEXT",
+      "keterangan": "Tanggal pinjam"
+     },
+     {
+      "nama": "tanggal_kembali",
+      "tipe": "TEXT",
+      "keterangan": "Tanggal kembali, kosong jika belum"
+     }
+    ],
+    "relasi": [
+     {
+      "kolom": "nis",
+      "tabel": "siswa",
+      "ke": "nis"
+     }
+    ],
+    "jumlah_baris": 12
+   },
+   {
+    "nama": "nilai",
+    "keterangan": "Nilai ujian tengah semester",
+    "kolom": [
+     {
+      "nama": "id",
+      "tipe": "INTEGER",
+      "keterangan": "Nomor catatan"
+     },
+     {
+      "nama": "nis",
+      "tipe": "TEXT",
+      "keterangan": "NIS siswa"
+     },
+     {
+      "nama": "mapel",
+      "tipe": "TEXT",
+      "keterangan": "Mata pelajaran"
+     },
+     {
+      "nama": "skor",
+      "tipe": "INTEGER",
+      "keterangan": "Skor ujian"
+     }
+    ],
+    "relasi": [
+     {
+      "kolom": "nis",
+      "tabel": "siswa",
+      "ke": "nis"
+     }
+    ],
+    "jumlah_baris": 48
+   }
+  ]
+ },
+ "latihan": [
+  {
+   "instruksi": "Tampilkan seluruh isi tabel ekskul.",
+   "query_kunci": "SELECT * FROM ekskul",
+   "petunjuk": [
+    "Tabelnya ekskul.",
+    "Pakai * untuk semua kolom.",
+    "SELECT * FROM ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "SELECT",
+    "FROM"
+   ],
+   "cocok": "tepat",
+   "blok_tambahan": [],
+   "id": "ls1",
+   "konsep": "SELECT",
+   "judul": "Semua data ekskul"
+  },
+  {
+   "instruksi": "Tampilkan kolom nama dan kelas dari tabel siswa.",
+   "query_kunci": "SELECT nama, kelas FROM siswa",
+   "petunjuk": [
+    "Tabelnya siswa.",
+    "Pisahkan nama kolom dengan koma.",
+    "SELECT nama, ____ FROM siswa"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "SELECT",
+    "FROM"
+   ],
+   "cocok": "tepat",
+   "blok_tambahan": [],
+   "id": "ls2",
+   "konsep": "SELECT",
+   "judul": "Nama dan kelas"
+  },
+  {
+   "instruksi": "Tampilkan judul dan tanggal_pinjam dari tabel pinjam_buku.",
+   "query_kunci": "SELECT judul, tanggal_pinjam FROM pinjam_buku",
+   "petunjuk": [
+    "Tabelnya pinjam_buku.",
+    "Kolomnya judul dan tanggal_pinjam.",
+    "SELECT judul, ____ FROM pinjam_buku"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "SELECT"
+   ],
+   "cocok": "tepat",
+   "blok_tambahan": [],
+   "id": "ls3",
+   "konsep": "SELECT",
+   "judul": "Judul buku dipinjam"
+  },
+  {
+   "instruksi": "Tampilkan menu dan harga dari tabel kantin.",
+   "query_kunci": "SELECT menu, harga FROM kantin",
+   "petunjuk": [
+    "Tabelnya kantin.",
+    "Kolomnya menu dan harga.",
+    "SELECT ____, harga FROM kantin"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "SELECT"
+   ],
+   "cocok": "tepat",
+   "blok_tambahan": [],
+   "id": "ls4",
+   "konsep": "SELECT",
+   "judul": "Menu kantin"
+  },
+  {
+   "instruksi": "Tampilkan daftar kota asal siswa tanpa ada kota yang muncul dua kali.",
+   "query_kunci": "SELECT DISTINCT kota FROM siswa",
+   "petunjuk": [
+    "Kolomnya kota di tabel siswa.",
+    "DISTINCT setelah SELECT membuang baris yang sama.",
+    "SELECT DISTINCT ____ FROM siswa"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "DISTINCT"
+   ],
+   "cocok": "tepat",
+   "blok_tambahan": [],
+   "id": "ls5",
+   "konsep": "SELECT",
+   "judul": "Kota tanpa berulang"
+  },
+  {
+   "instruksi": "Tampilkan nama siswa kelas XI RPL.",
+   "query_kunci": "SELECT nama FROM siswa WHERE kelas = 'XI RPL'",
+   "petunjuk": [
+    "Tabelnya siswa.",
+    "Teks ditulis di antara tanda kutip.",
+    "SELECT nama FROM siswa WHERE kelas = '____'"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "WHERE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lw1",
+   "konsep": "WHERE",
+   "judul": "Siswa XI RPL"
+  },
+  {
+   "instruksi": "Tampilkan data keterlambatan yang lebih dari 15 menit.",
+   "query_kunci": "SELECT * FROM keterlambatan WHERE menit > 15",
+   "petunjuk": [
+    "Tabelnya keterlambatan.",
+    "Angka tidak perlu tanda kutip.",
+    "SELECT * FROM keterlambatan WHERE menit > ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "WHERE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lw2",
+   "konsep": "WHERE",
+   "judul": "Terlambat lama"
+  },
+  {
+   "instruksi": "Tampilkan pembelian di kantin yang harganya minimal 11000.",
+   "query_kunci": "SELECT * FROM kantin WHERE harga >= 11000",
+   "petunjuk": [
+    "Minimal berarti lebih dari atau sama dengan.",
+    "Operatornya >=.",
+    "SELECT * FROM kantin WHERE harga >= ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "WHERE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lw3",
+   "konsep": "WHERE",
+   "judul": "Belanja minimal 11 ribu"
+  },
+  {
+   "instruksi": "Tampilkan nama dan ekskul siswa yang ikut Futsal atau Robotik.",
+   "query_kunci": "SELECT nama, ekskul FROM siswa WHERE ekskul = 'Futsal' OR ekskul = 'Robotik'",
+   "petunjuk": [
+    "Salah satu syarat terpenuhi sudah cukup.",
+    "Gabungkan dengan OR.",
+    "SELECT nama, ekskul FROM siswa WHERE ekskul = 'Futsal' OR ekskul = '____'"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "WHERE",
+    "OR"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lw4",
+   "konsep": "WHERE",
+   "judul": "Futsal atau Robotik"
+  },
+  {
+   "instruksi": "Tampilkan nis dan skor mapel Basis Data, urutkan dari skor tertinggi.",
+   "query_kunci": "SELECT nis, skor FROM nilai WHERE mapel = 'Basis Data' ORDER BY skor DESC",
+   "petunjuk": [
+    "Saring mapel dengan WHERE.",
+    "ORDER BY skor DESC mengurutkan dari yang terbesar.",
+    "SELECT nis, skor FROM nilai WHERE mapel = 'Basis Data' ORDER BY ____ DESC"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "WHERE",
+    "ORDER BY"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lw5",
+   "konsep": "WHERE",
+   "judul": "Urutkan skor"
+  },
+  {
+   "instruksi": "Tampilkan nama siswa yang namanya diawali huruf A.",
+   "query_kunci": "SELECT nama FROM siswa WHERE nama LIKE 'A%'",
+   "petunjuk": [
+    "Pakai LIKE pada kolom nama.",
+    "Diawali berarti % di belakang.",
+    "SELECT nama FROM siswa WHERE nama LIKE '____'"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "LIKE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "ll1",
+   "konsep": "LIKE",
+   "judul": "Diawali huruf A"
+  },
+  {
+   "instruksi": "Tampilkan nama siswa yang namanya berakhiran huruf a.",
+   "query_kunci": "SELECT nama FROM siswa WHERE nama LIKE '%a'",
+   "petunjuk": [
+    "Berakhiran berarti % di depan.",
+    "Pola untuk huruf terakhir a adalah '%a'.",
+    "SELECT nama FROM siswa WHERE nama LIKE '____'"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "LIKE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "ll2",
+   "konsep": "LIKE",
+   "judul": "Berakhiran a"
+  },
+  {
+   "instruksi": "Tampilkan judul buku di pinjam_buku yang mengandung kata Pemrograman.",
+   "query_kunci": "SELECT judul FROM pinjam_buku WHERE judul LIKE '%Pemrograman%'",
+   "petunjuk": [
+    "Tabelnya pinjam_buku.",
+    "Mengandung berarti % di depan dan di belakang.",
+    "SELECT judul FROM pinjam_buku WHERE judul LIKE '%____%'"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "LIKE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "ll3",
+   "konsep": "LIKE",
+   "judul": "Buku pemrograman"
+  },
+  {
+   "instruksi": "Tampilkan nama dan kelas siswa yang kelasnya diawali XII.",
+   "query_kunci": "SELECT nama, kelas FROM siswa WHERE kelas LIKE 'XII%'",
+   "petunjuk": [
+    "Kelas XII RPL dan XII TKJ sama-sama diawali XII.",
+    "Pola diawali: 'XII%'.",
+    "SELECT nama, kelas FROM siswa WHERE kelas LIKE '____'"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "LIKE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "ll4",
+   "konsep": "LIKE",
+   "judul": "Kelas XII"
+  },
+  {
+   "instruksi": "Tampilkan nis dan nama siswa yang NIS-nya S1 diikuti tepat satu angka.",
+   "query_kunci": "SELECT nis, nama FROM siswa WHERE nis LIKE 'S1_'",
+   "petunjuk": [
+    "Tanda _ mewakili tepat satu karakter.",
+    "Polanya S1 lalu satu tanda _.",
+    "SELECT nis, nama FROM siswa WHERE nis LIKE '____'"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "LIKE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "ll5",
+   "konsep": "LIKE",
+   "judul": "NIS S1 dan satu angka"
+  },
+  {
+   "instruksi": "Hitung jumlah seluruh siswa.",
+   "query_kunci": "SELECT COUNT(*) FROM siswa",
+   "petunjuk": [
+    "COUNT(*) menghitung baris.",
+    "Tidak perlu GROUP BY karena yang dihitung semua siswa.",
+    "SELECT COUNT(*) FROM ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "COUNT"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "la1",
+   "konsep": "AGREGASI",
+   "judul": "Jumlah siswa"
+  },
+  {
+   "instruksi": "Hitung jumlah siswa di setiap kelas.",
+   "query_kunci": "SELECT kelas, COUNT(*) FROM siswa GROUP BY kelas",
+   "petunjuk": [
+    "Kelompokkan berdasarkan kelas.",
+    "Tampilkan kelas dan COUNT(*).",
+    "SELECT kelas, COUNT(*) FROM siswa GROUP BY ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "COUNT",
+    "GROUP BY"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "la2",
+   "konsep": "AGREGASI",
+   "judul": "Siswa per kelas"
+  },
+  {
+   "instruksi": "Hitung total pendapatan kantin dari kolom harga.",
+   "query_kunci": "SELECT SUM(harga) FROM kantin",
+   "petunjuk": [
+    "SUM menjumlahkan nilai sebuah kolom.",
+    "Kolomnya harga.",
+    "SELECT SUM(____) FROM kantin"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "SUM"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "la3",
+   "konsep": "AGREGASI",
+   "judul": "Pendapatan kantin"
+  },
+  {
+   "instruksi": "Hitung rata-rata skor setiap mapel.",
+   "query_kunci": "SELECT mapel, AVG(skor) FROM nilai GROUP BY mapel",
+   "petunjuk": [
+    "AVG mencari rata-rata.",
+    "Kelompokkan berdasarkan mapel.",
+    "SELECT mapel, AVG(skor) FROM nilai GROUP BY ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "AVG",
+    "GROUP BY"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "la4",
+   "konsep": "AGREGASI",
+   "judul": "Rata-rata skor"
+  },
+  {
+   "instruksi": "Tampilkan ekskul yang anggotanya lebih dari 4 orang beserta jumlahnya.",
+   "query_kunci": "SELECT ekskul, COUNT(*) FROM siswa GROUP BY ekskul HAVING COUNT(*) > 4",
+   "petunjuk": [
+    "Kelompokkan siswa berdasarkan ekskul.",
+    "Syarat untuk hasil COUNT ditulis dengan HAVING.",
+    "SELECT ekskul, COUNT(*) FROM siswa GROUP BY ekskul HAVING COUNT(*) > ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "GROUP BY",
+    "HAVING"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "la5",
+   "konsep": "AGREGASI",
+   "judul": "Ekskul ramai"
+  },
+  {
+   "instruksi": "Tampilkan nama siswa dan menit keterlambatannya.",
+   "query_kunci": "SELECT siswa.nama, keterlambatan.menit FROM keterlambatan JOIN siswa ON keterlambatan.nis = siswa.nis",
+   "petunjuk": [
+    "Hubungkan kolom nis di kedua tabel.",
+    "Tulis syaratnya setelah ON.",
+    "SELECT siswa.nama, keterlambatan.menit FROM keterlambatan JOIN siswa ON keterlambatan.nis = ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "JOIN",
+    "ON"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lj1",
+   "konsep": "JOIN",
+   "judul": "Nama yang terlambat"
+  },
+  {
+   "instruksi": "Tampilkan nama siswa dan judul buku yang ia pinjam.",
+   "query_kunci": "SELECT siswa.nama, pinjam_buku.judul FROM pinjam_buku JOIN siswa ON pinjam_buku.nis = siswa.nis",
+   "petunjuk": [
+    "Tabelnya pinjam_buku dan siswa.",
+    "Keduanya punya kolom nis.",
+    "SELECT siswa.nama, pinjam_buku.judul FROM pinjam_buku JOIN siswa ON pinjam_buku.nis = ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "JOIN",
+    "ON"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lj2",
+   "konsep": "JOIN",
+   "judul": "Siapa meminjam apa"
+  },
+  {
+   "instruksi": "Tampilkan nama siswa dan nama pembina ekskulnya.",
+   "query_kunci": "SELECT siswa.nama, ekskul.pembina FROM siswa JOIN ekskul ON siswa.ekskul = ekskul.nama",
+   "petunjuk": [
+    "Kolom ekskul di tabel siswa berisi nama ekskul.",
+    "Hubungkan siswa.ekskul dengan ekskul.nama.",
+    "SELECT siswa.nama, ekskul.pembina FROM siswa JOIN ekskul ON siswa.ekskul = ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "JOIN",
+    "ON"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lj3",
+   "konsep": "JOIN",
+   "judul": "Pembina ekskul"
+  },
+  {
+   "instruksi": "Tampilkan nama siswa yang skor Pemrograman Web-nya di atas 85, beserta skornya.",
+   "query_kunci": "SELECT siswa.nama, nilai.skor FROM nilai JOIN siswa ON nilai.nis = siswa.nis WHERE nilai.mapel = 'Pemrograman Web' AND nilai.skor > 85",
+   "petunjuk": [
+    "Gabungkan nilai dan siswa lewat nis.",
+    "Tambahkan dua syarat di WHERE: mapel dan skor.",
+    "... JOIN siswa ON nilai.nis = siswa.nis WHERE nilai.mapel = 'Pemrograman Web' AND nilai.skor > ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "JOIN",
+    "WHERE"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lj4",
+   "konsep": "JOIN",
+   "judul": "Jago pemrograman web"
+  },
+  {
+   "instruksi": "Tampilkan nama siswa dan berapa kali ia terlambat.",
+   "query_kunci": "SELECT siswa.nama, COUNT(*) FROM keterlambatan JOIN siswa ON keterlambatan.nis = siswa.nis GROUP BY siswa.nama",
+   "petunjuk": [
+    "JOIN dulu, baru GROUP BY.",
+    "Kelompokkan berdasarkan siswa.nama.",
+    "SELECT siswa.nama, COUNT(*) FROM keterlambatan JOIN siswa ON keterlambatan.nis = siswa.nis GROUP BY ____"
+   ],
+   "komentar_benar": "",
+   "wajib": [
+    "JOIN",
+    "GROUP BY"
+   ],
+   "cocok": "minimal",
+   "blok_tambahan": [],
+   "id": "lj5",
+   "konsep": "JOIN",
+   "judul": "Hitung keterlambatan"
+  }
+ ],
+ "penempatan": [
+  {
+   "konsep": "SELECT",
+   "pertanyaan": "Query mana yang menampilkan kolom nama dari tabel siswa?",
+   "opsi": [
+    "SELECT siswa FROM nama;",
+    "SELECT nama FROM siswa;",
+    "SHOW nama IN siswa;",
+    "GET nama FROM siswa;"
+   ],
+   "jawaban": 1,
+   "penjelasan": "Kolom ditulis setelah SELECT, tabel ditulis setelah FROM."
+  },
+  {
+   "konsep": "WHERE",
+   "pertanyaan": "Apa hasil query ini?",
+   "kode": "SELECT nama FROM siswa\nWHERE kelas = 'XI RPL';",
+   "tabel": {
+    "kolom": [
+     "nama",
+     "kelas"
+    ],
+    "baris": [
+     [
+      "Raka",
+      "XI RPL"
+     ],
+     [
+      "Sinta",
+      "X RPL"
+     ],
+     [
+      "Nadia",
+      "XI RPL"
+     ]
+    ]
+   },
+   "opsi": [
+    "Raka dan Nadia",
+    "Sinta saja",
+    "Raka, Sinta, dan Nadia",
+    "Tidak ada baris"
+   ],
+   "jawaban": 0,
+   "penjelasan": "WHERE hanya meloloskan baris yang kelasnya XI RPL, yaitu Raka dan Nadia."
+  },
+  {
+   "konsep": "LIKE",
+   "pertanyaan": "Pola mana yang cocok untuk nama yang diawali huruf B?",
+   "opsi": [
+    "LIKE '%B'",
+    "LIKE 'B'",
+    "LIKE 'B%'",
+    "LIKE '_B'"
+   ],
+   "jawaban": 2,
+   "penjelasan": "Tanda % di belakang berarti setelah huruf B boleh ada huruf apa saja."
+  },
+  {
+   "konsep": "AGREGASI",
+   "pertanyaan": "Tabel siswa berisi 5 baris dari 2 kelas berbeda. Berapa baris hasil query ini?",
+   "kode": "SELECT kelas, COUNT(*)\nFROM siswa\nGROUP BY kelas;",
+   "opsi": [
+    "1 baris",
+    "2 baris",
+    "5 baris",
+    "10 baris"
+   ],
+   "jawaban": 1,
+   "penjelasan": "GROUP BY membuat satu baris untuk setiap kelompok. Ada 2 kelas, jadi hasilnya 2 baris."
+  },
+  {
+   "konsep": "JOIN",
+   "pertanyaan": "Tabel nilai dan siswa sama-sama punya kolom nis. Bagian ON yang tepat adalah",
+   "kode": "SELECT siswa.nama, nilai.skor\nFROM nilai JOIN siswa\nON ...",
+   "opsi": [
+    "ON nilai.skor = siswa.nama",
+    "ON nilai = siswa",
+    "ON nilai.nis = siswa.nis",
+    "ON nis"
+   ],
+   "jawaban": 2,
+   "penjelasan": "JOIN menghubungkan baris yang nilai kolom kuncinya sama, yaitu nilai.nis dan siswa.nis."
+  }
+ ],
+ "catatan": {
+  "SELECT": {
+   "judul": "SELECT dan FROM",
+   "paragraf": [
+    "SELECT dipakai untuk mengambil data dari tabel. Setelah SELECT, tulis kolom yang ingin ditampilkan. Setelah FROM, tulis nama tabelnya.",
+    "Tanda * berarti semua kolom. Kalau hanya butuh beberapa kolom, tulis namanya dipisah koma supaya hasilnya lebih mudah dibaca.",
+    "DISTINCT setelah SELECT membuang baris yang sama persis, misalnya untuk melihat daftar kota tanpa berulang."
+   ],
+   "contoh": [
+    {
+     "query": "SELECT * FROM peminjaman_kunci;",
+     "arti": "Menampilkan semua kolom dan semua baris."
+    },
+    {
+     "query": "SELECT nama, ruang FROM peminjaman_kunci;",
+     "arti": "Menampilkan kolom nama dan ruang saja."
+    },
+    {
+     "query": "SELECT DISTINCT kota FROM siswa;",
+     "arti": "Menampilkan setiap kota satu kali."
+    }
+   ],
+   "kesalahan": [
+    "Menulis nama tabel setelah SELECT dan nama kolom setelah FROM. Urutannya kolom dulu, baru tabel.",
+    "Lupa koma di antara nama kolom.",
+    "Salah ketik nama kolom. Cek Peta Tabel untuk melihat nama kolom yang benar."
+   ]
+  },
+  "WHERE": {
+   "judul": "WHERE",
+   "paragraf": [
+    "WHERE menyaring baris. Hanya baris yang memenuhi syarat yang ditampilkan.",
+    "Operator yang bisa dipakai: = sama dengan, <> tidak sama dengan, > lebih dari, < kurang dari, >= minimal, <= maksimal.",
+    "Teks dan tanggal ditulis di antara tanda kutip tunggal, misalnya '15:00'. Angka ditulis tanpa tanda kutip.",
+    "AND berarti semua syarat harus terpenuhi. OR berarti cukup salah satu syarat terpenuhi. ORDER BY mengurutkan hasil, tambahkan DESC untuk urutan dari yang terbesar."
+   ],
+   "contoh": [
+    {
+     "query": "SELECT nama FROM akses_lab WHERE jam_masuk > '15:00';",
+     "arti": "Orang yang masuk setelah pukul 15.00."
+    },
+    {
+     "query": "SELECT * FROM presensi WHERE tanggal = '2026-09-14' AND status = 'Hadir';",
+     "arti": "Dua syarat sekaligus."
+    },
+    {
+     "query": "SELECT nis, skor FROM nilai ORDER BY skor DESC;",
+     "arti": "Diurutkan dari skor tertinggi."
+    }
+   ],
+   "kesalahan": [
+    "Lupa tanda kutip pada teks, misalnya WHERE kelas = XI RPL.",
+    "Memakai tanda kutip ganda. Di SQL, teks ditulis dengan kutip tunggal.",
+    "Memakai AND padahal maksudnya salah satu, atau sebaliknya."
+   ]
+  },
+  "LIKE": {
+   "judul": "LIKE",
+   "paragraf": [
+    "LIKE mencari teks yang cocok dengan pola, bukan yang sama persis.",
+    "Tanda % mewakili huruf apa saja dengan jumlah berapa pun, termasuk tidak ada huruf sama sekali. Tanda _ mewakili tepat satu huruf.",
+    "Di SQLite, LIKE tidak membedakan huruf besar dan kecil untuk huruf biasa."
+   ],
+   "contoh": [
+    {
+     "query": "WHERE nama LIKE 'A%'",
+     "arti": "Diawali A."
+    },
+    {
+     "query": "WHERE nomor_hp LIKE '%0042'",
+     "arti": "Berakhiran 0042."
+    },
+    {
+     "query": "WHERE judul LIKE '%Basis Data%'",
+     "arti": "Mengandung kata Basis Data."
+    },
+    {
+     "query": "WHERE kode LIKE 'TI-0_4'",
+     "arti": "TI-0, satu karakter apa saja, lalu 4."
+    }
+   ],
+   "kesalahan": [
+    "Memakai = dengan tanda %. Tanda % hanya berlaku bersama LIKE.",
+    "Salah posisi %. Diawali berarti % di belakang, berakhiran berarti % di depan."
+   ]
+  },
+  "AGREGASI": {
+   "judul": "COUNT, SUM, dan GROUP BY",
+   "paragraf": [
+    "Fungsi agregasi meringkas banyak baris menjadi satu nilai: COUNT(*) menghitung baris, SUM(kolom) menjumlahkan, AVG(kolom) mencari rata-rata, MAX dan MIN mencari nilai terbesar dan terkecil.",
+    "GROUP BY membagi baris menjadi kelompok berdasarkan kolom yang nilainya sama. Fungsi agregasi lalu dihitung untuk setiap kelompok.",
+    "WHERE menyaring baris sebelum dikelompokkan. HAVING menyaring hasil kelompok, misalnya HAVING COUNT(*) > 1."
+   ],
+   "contoh": [
+    {
+     "query": "SELECT kelas, COUNT(*) FROM siswa GROUP BY kelas;",
+     "arti": "Jumlah siswa per kelas."
+    },
+    {
+     "query": "SELECT stand, SUM(total) FROM penjualan GROUP BY stand;",
+     "arti": "Total penjualan per stand."
+    },
+    {
+     "query": "SELECT pemilih, COUNT(*) FROM suara GROUP BY pemilih HAVING COUNT(*) > 1;",
+     "arti": "Pemilih yang memilih lebih dari sekali."
+    }
+   ],
+   "kesalahan": [
+    "Menulis syarat COUNT di WHERE. Syarat untuk hasil agregasi ditulis di HAVING.",
+    "Menampilkan kolom yang tidak ada di GROUP BY dan tidak diagregasi, sehingga nilainya tidak bermakna."
+   ]
+  },
+  "JOIN": {
+   "judul": "JOIN",
+   "paragraf": [
+    "JOIN menggabungkan baris dari dua tabel yang punya hubungan. Hubungannya ditulis setelah ON, biasanya kunci tamu di satu tabel sama dengan kunci utama di tabel lain.",
+    "Tulis nama_tabel.kolom kalau ada nama kolom yang sama di dua tabel, misalnya siswa.nis dan nilai.nis.",
+    "JOIN bisa ditulis berkali-kali untuk menggabungkan tiga tabel atau lebih. Setelah itu, WHERE dan GROUP BY tetap bisa dipakai."
+   ],
+   "contoh": [
+    {
+     "query": "SELECT siswa.nama, nilai.skor FROM nilai JOIN siswa ON nilai.nis = siswa.nis;",
+     "arti": "Skor beserta nama siswa."
+    },
+    {
+     "query": "... FROM log_pintu JOIN kartu_akses ON log_pintu.no_kartu = kartu_akses.no_kartu JOIN warga ON kartu_akses.id_warga = warga.id",
+     "arti": "Tiga tabel sekaligus."
+    }
+   ],
+   "kesalahan": [
+    "Lupa bagian ON, sehingga setiap baris dipasangkan dengan semua baris tabel lain.",
+    "Menghubungkan kolom yang salah, misalnya id paket dengan id warga.",
+    "Menulis nama kolom tanpa nama tabel padahal kolom itu ada di dua tabel, sehingga muncul pesan ambiguous column."
+   ]
+  }
+ },
+ "kartu": {
+  "SELECT": {
+   "judul": "SELECT dan FROM",
+   "isi": "SELECT memilih kolom yang ingin ditampilkan. FROM menyebut tabel asal datanya. Tanda * berarti semua kolom.",
+   "contoh": "SELECT * FROM siswa;\nSELECT nama, kelas FROM siswa;"
+  },
+  "WHERE": {
+   "judul": "WHERE",
+   "isi": "WHERE menyaring baris. Hanya baris yang memenuhi syarat yang ditampilkan. Syarat bisa memakai =, >, <, >=, <=, <>, serta AND dan OR.",
+   "contoh": "SELECT * FROM akses_lab\nWHERE jam_masuk > '15:00';"
+  },
+  "LIKE": {
+   "judul": "LIKE",
+   "isi": "LIKE mencari teks yang cocok dengan pola. Tanda % mewakili huruf apa saja dengan jumlah berapa pun, sedangkan _ mewakili tepat satu huruf.",
+   "contoh": "SELECT * FROM siswa\nWHERE nama LIKE 'A%';"
+  },
+  "AGREGASI": {
+   "judul": "COUNT, SUM, dan GROUP BY",
+   "isi": "COUNT menghitung banyak baris dan SUM menjumlahkan nilai. GROUP BY mengelompokkan baris yang nilainya sama, lalu HAVING menyaring hasil kelompok.",
+   "contoh": "SELECT kelas, COUNT(*)\nFROM siswa\nGROUP BY kelas;"
+  },
+  "JOIN": {
+   "judul": "JOIN",
+   "isi": "JOIN menggabungkan dua tabel berdasarkan kolom yang nilainya sama, ditulis setelah ON. Tulis nama_tabel.kolom supaya jelas kolom itu milik tabel mana.",
+   "contoh": "SELECT siswa.nama, nilai.skor\nFROM nilai\nJOIN siswa ON nilai.nis = siswa.nis;"
+  }
+ },
+ "lencana": [
+  {
+   "kode": "kasus_pertama",
+   "nama": "Kasus Pertama",
+   "syarat": "Menyelesaikan kasus pertama."
+  },
+  {
+   "kode": "raja_join",
+   "nama": "Raja JOIN",
+   "syarat": "Menyelesaikan semua kasus di berkas JOIN."
+  },
+  {
+   "kode": "tanpa_petunjuk",
+   "nama": "Tanpa Petunjuk",
+   "syarat": "Menyelesaikan kasus utama dengan tiga bintang tanpa membuka petunjuk."
+  },
+  {
+   "kode": "streak_7_hari",
+   "nama": "Streak 7 Hari",
+   "syarat": "Bermain tujuh hari berturut-turut."
+  },
+  {
+   "kode": "detektif_kilat",
+   "nama": "Detektif Kilat",
+   "syarat": "Menyelesaikan kasus utama dalam waktu kurang dari 2 menit."
+  },
+  {
+   "kode": "kolektor_bukti",
+   "nama": "Kolektor Bukti",
+   "syarat": "Mengumpulkan 20 bukti dari kasus yang diselesaikan."
+  }
+ ],
+ "pangkat": [
+  {
+   "kode": "magang",
+   "nama": "Detektif Magang",
+   "xp": 0
+  },
+  {
+   "kode": "junior",
+   "nama": "Detektif Junior",
+   "xp": 300
+  },
+  {
+   "kode": "senior",
+   "nama": "Detektif Senior",
+   "xp": 800
+  },
+  {
+   "kode": "kepala",
+   "nama": "Kepala Detektif",
+   "xp": 1500
+  }
+ ]
+}
