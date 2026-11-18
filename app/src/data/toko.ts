@@ -7,8 +7,8 @@ import { useSyncExternalStore } from 'react';
 import { AppState } from 'react-native';
 
 import { GalatApi, api, muatAlamatServer } from '../api/klien';
-import { Kasus, Konsep, cariKasus } from '../konten';
-import { HarianLokal, ProgresLokal, Statistik, hitungStatistik } from '../permainan/aturan';
+import { BERKAS, Kasus, Konsep, cariKasus } from '../konten';
+import { HarianLokal, ProgresLokal, Statistik, berkasTerbuka, hitungStatistik } from '../permainan/aturan';
 import { geserTanggal, harianUntuk, tanggalWIB } from '../permainan/waktu';
 import { aturPengingat } from './pengingat';
 import { bacaJson, simpanJson } from './simpan';
@@ -452,7 +452,19 @@ export function catatSalahTuduh(idKasus: string) {
   });
 }
 
-export type Hadiah = { xp: number; koin: number; streak: number; lencanaBaru: string[]; bintangSebelumnya: number };
+export type Hadiah = {
+  xp: number;
+  koin: number;
+  streak: number;
+  lencanaBaru: string[];
+  bintangSebelumnya: number;
+  /** Streak bertambah atau pulih lewat kasus pemulihan. */
+  streakNaik: boolean;
+  /** Nama pangkat baru kalau pemain naik pangkat. */
+  pangkatBaru: string | null;
+  /** Nomor berkas yang baru terbuka karena kasus ini. */
+  berkasBaru: number[];
+};
 
 function hitungHadiah(sebelum: Simpanan, sesudah: Simpanan, bintangLama: number): Hadiah {
   const a = statistikDari(sebelum);
@@ -463,6 +475,9 @@ function hitungHadiah(sebelum: Simpanan, sesudah: Simpanan, bintangLama: number)
     streak: b.streak,
     lencanaBaru: b.lencana.filter((l) => !a.lencana.includes(l)),
     bintangSebelumnya: bintangLama,
+    streakNaik: b.streak > a.streak,
+    pangkatBaru: b.pangkat !== a.pangkat ? b.namaPangkat : null,
+    berkasBaru: BERKAS.filter((x) => !berkasTerbuka(x.nomor, sebelum.progres, sebelum.penempatan) && berkasTerbuka(x.nomor, sesudah.progres, sesudah.penempatan)).map((x) => x.nomor),
   };
 }
 

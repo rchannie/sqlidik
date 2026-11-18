@@ -12,6 +12,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PramuatGambar } from '../komponen/pramuat';
 import { mulai, useToko } from '../data/toko';
 import { siapkanMesin } from '../mesin/sqlite';
+import { siapkanSuara } from '../suara/mesin';
 import { W } from '../tema';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -23,6 +24,7 @@ export default function Akar() {
   useEffect(() => {
     mulai();
     siapkanMesin();
+    siapkanSuara();
     if (Platform.OS === 'web') {
       document.title = 'SQLidik';
       document.body.style.backgroundColor = W.malam3;

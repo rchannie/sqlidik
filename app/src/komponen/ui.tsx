@@ -1,6 +1,6 @@
 /* Komponen dasar bergaya pixel: teks, kotak bertepi tebal, tombol, isian, tab, dan lainnya. */
 import { Image } from 'expo-image';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Modal,
@@ -17,6 +17,9 @@ import {
 } from 'react-native';
 
 import { A } from '../aset';
+import type { NamaEfek } from '../suara/katalog';
+import { efek } from '../suara/mesin';
+import { Gerak } from './gerak';
 import { H, W } from '../tema';
 
 type TeksProps = { children: ReactNode; style?: StyleProp<TextStyle>; warna?: string; ukuran?: number; tebal?: boolean; garis?: number; pilih?: boolean };
@@ -83,22 +86,33 @@ type TombolProps = {
   style?: StyleProp<ViewStyle>;
   ukuranTeks?: number;
   testID?: string;
+  /** Efek saat diketuk. Bawaan ui_tap, null untuk tanpa suara (misalnya kalau layar memutar efeknya sendiri). */
+  suara?: NamaEfek | null;
+  /** Tombol utama berdenyut pelan supaya menarik perhatian. */
+  denyut?: boolean;
 };
 
-export function Tombol({ label, onPress, varian = 'emas', kecil, mati, memuat, ikon, style, ukuranTeks, testID }: TombolProps) {
+export function Tombol({ label, onPress, varian = 'emas', kecil, mati, memuat, ikon, style, ukuranTeks, testID, suara = 'ui_tap', denyut }: TombolProps) {
   const g = GAYA_TOMBOL[varian];
   const nonaktif = mati || memuat;
+  const [diatas, setDiatas] = useState(false);
   return (
     <Pressable
       testID={testID}
       accessibilityRole="button"
       accessibilityLabel={label}
       disabled={nonaktif}
-      onPress={onPress}
+      onPress={() => {
+        if (suara && onPress) efek(suara);
+        onPress?.();
+      }}
+      onHoverIn={() => setDiatas(true)}
+      onHoverOut={() => setDiatas(false)}
       style={[{ opacity: nonaktif ? 0.55 : 1 }, style]}
     >
       {({ pressed }) => (
-        <View style={{ paddingBottom: pressed ? 0 : 4, marginTop: pressed ? 4 : 0 }}>
+        <Gerak jenis="denyut" jarak={3} aktif={!!denyut && !nonaktif}>
+        <View style={{ paddingBottom: pressed ? 0 : 4, marginTop: pressed ? 4 : 0, transform: [{ translateY: diatas && !pressed && !nonaktif ? -2 : 0 }] }}>
           <View style={{ position: 'absolute', left: 0, right: 0, top: 4, bottom: 0, backgroundColor: g.bayang, borderWidth: 3, borderColor: W.tinta }} />
           <View
             style={{
@@ -120,6 +134,7 @@ export function Tombol({ label, onPress, varian = 'emas', kecil, mati, memuat, i
             </Judul>
           </View>
         </View>
+        </Gerak>
       )}
     </Pressable>
   );
@@ -151,7 +166,14 @@ export function Chip({ label, warna = W.navy, teks = W.kertas, onPress, aktif, s
   );
   if (!onPress) return isi;
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label}>
+    <Pressable
+      onPress={() => {
+        efek('ui_tap');
+        onPress();
+      }}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+    >
       {isi}
     </Pressable>
   );
@@ -208,7 +230,10 @@ export function Tab<T extends string>({ pilihan, nilai, ubah, gelap }: { pilihan
             accessibilityRole="tab"
             accessibilityState={{ selected: aktif }}
             accessibilityLabel={p.label}
-            onPress={() => ubah(p.kode)}
+            onPress={() => {
+              efek('ui_tab');
+              ubah(p.kode);
+            }}
             style={{
               flex: 1,
               paddingVertical: 11,
@@ -230,12 +255,21 @@ export function Tab<T extends string>({ pilihan, nilai, ubah, gelap }: { pilihan
   );
 }
 
-export function Bintang({ jumlah, ukuran = 22, maks = 3 }: { jumlah: number; ukuran?: number; maks?: number }) {
+/** letup: bintang yang baru terisi meletup lalu berdenyut (dipakai di layar hasil). */
+export function Bintang({ jumlah, ukuran = 22, maks = 3, letup }: { jumlah: number; ukuran?: number; maks?: number; letup?: boolean }) {
   return (
     <View style={{ flexDirection: 'row', gap: 3 }} accessibilityLabel={`${jumlah} dari ${maks} bintang`}>
-      {Array.from({ length: maks }, (_, i) => (
-        <Ikon key={i} src={A.ikon.bintang} ukuran={ukuran} style={{ opacity: i < jumlah ? 1 : 0.25 }} />
-      ))}
+      {Array.from({ length: maks }, (_, i) =>
+        letup && i < jumlah ? (
+          <Gerak key={i + '-isi'} jenis="muncul">
+            <Gerak jenis="denyut" jarak={6} tunda={400 + i * 200}>
+              <Ikon src={A.ikon.bintang} ukuran={ukuran} />
+            </Gerak>
+          </Gerak>
+        ) : (
+          <Ikon key={i} src={A.ikon.bintang} ukuran={ukuran} style={{ opacity: i < jumlah ? 1 : 0.25 }} />
+        ),
+      )}
     </View>
   );
 }
@@ -261,33 +295,58 @@ export function Memuat({ teks = 'Memuat...', gelap = true }: { teks?: string; ge
 
 export function Pesan({ teks, jenis = 'info', onTutup }: { teks: string; jenis?: 'info' | 'galat' | 'sukses'; onTutup?: () => void }) {
   const warna = jenis === 'galat' ? W.merah : jenis === 'sukses' ? W.hijau : W.biru;
+  useEffect(() => {
+    // Isian salah atau gagal terhubung ke server.
+    if (jenis === 'galat') efek('ui_galat');
+  }, [teks, jenis]);
   return (
-    <View style={{ borderWidth: 3, borderColor: W.tinta, backgroundColor: W.kertasPutih, flexDirection: 'row' }}>
+    <Gerak key={teks} jenis="goyang" aktif={jenis === 'galat'} style={{ borderWidth: 3, borderColor: W.tinta, backgroundColor: W.kertasPutih, flexDirection: 'row' }}>
       <View style={{ width: 10, backgroundColor: warna }} />
       <View style={{ flex: 1, padding: 10 }}>
         <Teks ukuran={16}>{teks}</Teks>
       </View>
       {onTutup ? (
-        <Pressable onPress={onTutup} style={{ padding: 10 }} accessibilityLabel="Tutup pesan">
+        <Pressable
+          onPress={() => {
+            efek('ui_kembali');
+            onTutup();
+          }}
+          style={{ padding: 10 }}
+          accessibilityLabel="Tutup pesan"
+        >
           <Judul ukuran={10}>X</Judul>
         </Pressable>
       ) : null}
-    </View>
+    </Gerak>
   );
 }
 
-/** Lembar dari bawah layar untuk pilihan dan formulir singkat. */
-export function Lembar({ terbuka, tutup, judul, children, lebar = 520 }: { terbuka: boolean; tutup: () => void; judul: string; children: ReactNode; lebar?: number }) {
+/**
+ * Lembar dari bawah layar untuk pilihan dan formulir singkat.
+ * suaraBuka diputar saat lembar muncul (bawaan ui_lembar, null kalau layar sudah memutar efeknya sendiri).
+ */
+export function Lembar({ terbuka, tutup, judul, children, lebar = 520, suaraBuka = 'ui_lembar' }: { terbuka: boolean; tutup: () => void; judul: string; children: ReactNode; lebar?: number; suaraBuka?: NamaEfek | null }) {
+  const tadi = useRef(false);
+  useEffect(() => {
+    if (terbuka && !tadi.current && suaraBuka) efek(suaraBuka);
+    tadi.current = terbuka;
+  }, [terbuka]);
+  const tutupPengguna = () => {
+    efek('ui_kembali');
+    tutup();
+  };
   return (
-    <Modal visible={terbuka} transparent animationType={Platform.OS === 'web' ? 'none' : 'fade'} onRequestClose={tutup}>
-      <View style={{ flex: 1, backgroundColor: 'rgba(11,13,22,0.75)', justifyContent: 'flex-end', alignItems: 'center' }}>
-        <Pressable style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }} onPress={tutup} accessibilityLabel="Tutup" />
-        <View style={{ width: '100%', maxWidth: lebar, maxHeight: '88%', backgroundColor: W.kertas, borderWidth: 3, borderColor: W.tinta, borderBottomWidth: 0 }}>
+    <Modal visible={terbuka} transparent animationType={Platform.OS === 'web' ? 'none' : 'fade'} onRequestClose={tutupPengguna}>
+      <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+        <Gerak jenis="pudar" style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0, backgroundColor: 'rgba(11,13,22,0.75)' }}>
+          <Pressable style={{ flex: 1 }} onPress={tutupPengguna} accessibilityLabel="Tutup" />
+        </Gerak>
+        <Gerak jenis="naik" style={{ width: '100%', maxWidth: lebar, maxHeight: '88%', backgroundColor: W.kertas, borderWidth: 3, borderColor: W.tinta, borderBottomWidth: 0 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: W.tinta, paddingHorizontal: 14, paddingVertical: 12 }}>
             <Judul ukuran={11} warna={W.emas} style={{ flex: 1 }}>
               {judul}
             </Judul>
-            <Pressable onPress={tutup} accessibilityLabel="Tutup" hitSlop={12}>
+            <Pressable onPress={tutupPengguna} accessibilityLabel="Tutup" hitSlop={12}>
               <Judul ukuran={12} warna={W.kertas}>
                 X
               </Judul>
@@ -296,7 +355,7 @@ export function Lembar({ terbuka, tutup, judul, children, lebar = 520 }: { terbu
           <ScrollView contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 30 }} keyboardShouldPersistTaps="handled">
             {children}
           </ScrollView>
-        </View>
+        </Gerak>
       </View>
     </Modal>
   );

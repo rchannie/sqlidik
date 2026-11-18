@@ -57,6 +57,15 @@ async function main() {
   const uji = async (q: string) => periksaLangkah(db, L1, q);
   cek((await uji("SELECT * FROM akses_lab WHERE jam_masuk > '15:00'")).benar, 'SELECT * dengan WHERE seharusnya diterima (cocok minimal)');
   cek((await uji("select jam_masuk, nama from akses_lab where jam_masuk > '15:00'")).benar, 'urutan kolom berbeda seharusnya diterima');
+  cek((await uji('SELECT nama, jam_masuk FROM akses_lab WHERE jam_masuk > ‘15:00’')).benar, 'kutip melengkung dari papan ketik HP seharusnya diterima');
+  let rk = await uji('SELECT nama, jam_masuk FROM akses_lab WHERE jam_masuk > 15:00');
+  cek(!rk.benar && /tanda kutip/.test(rk.pesan) && rk.pesan.includes("'15:00'"), `jam tanpa kutip seharusnya diberi saran memakai kutip: ${rk.pesan}`);
+  rk = await uji('SELECT * FROM akses_lab WHERE jam_masuk > "15:00" AND nama <> \'x\'');
+  cek(!/Jam disimpan/.test(rk.pesan), 'jam dalam kutip ganda tidak boleh dianggap jam tanpa kutip');
+  const kas = KASUS_UTAMA.find((k) => k.id === 'b2k2')!;
+  const dbKas = buka(kas.sql);
+  rk = await periksaLangkah(dbKas, kas.langkah[1], 'SELECT * FROM nota_belanja WHERE tanggal = 2026-09-14');
+  cek(!rk.benar && rk.pesan.includes("'2026-09-14'"), `tanggal tanpa kutip seharusnya diberi saran memakai kutip: ${rk.pesan}`);
   let r = await uji('SELECT nama, jam_masuk FROM akses_lab');
   cek(!r.benar && r.pesan.includes('lebih sedikit'), 'tanpa WHERE: ' + r.pesan);
   r = await uji("SELECT nama, jam_masuk FROM akses_lab WHERE jam_masuk > '15:30'");

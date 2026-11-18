@@ -27,11 +27,31 @@ export function pakaiKata(sql: string, kata: string): boolean {
   return pola.test(normalSql(sql));
 }
 
+/**
+ * Papan ketik HP (terutama iPhone) sering mengganti tanda kutip lurus menjadi kutip melengkung,
+ * dan SQL tidak mengenal kutip melengkung. Ganti ke kutip lurus. Panjang teks tidak berubah,
+ * jadi posisi kursor di kotak ketik tetap aman.
+ */
+export function rapikanKutip(teks: string): string {
+  return teks.replace(/[‘’‚‛′´]/g, "'").replace(/[“”„″]/g, '"').replace(/ /g, ' ');
+}
+
 export type Siap = { ok: true; sql: string } | { ok: false; pesan: string; jenis: JenisError };
 
 export function siapkanQuery(masukan: string): Siap {
-  const sql = tanpaKomentar(masukan).trim().replace(/;+\s*$/, '').trim();
+  const sql = tanpaKomentar(rapikanKutip(masukan)).trim().replace(/;+\s*$/, '').trim();
   if (!sql) return { ok: false, pesan: 'Tulis query dulu, Detektif.', jenis: 'lain' };
+  // Jam dan tanggal di data kasus disimpan sebagai teks, jadi harus diberi tanda kutip.
+  // Tanpa kutip, jam membuat error yang membingungkan dan tanggal dihitung sebagai pengurangan angka.
+  const polos = tanpaTeks(sql).replace(/"[^"]*"/g, '""');
+  const tanggal = polos.match(/\b\d{4}-\d{1,2}-\d{1,2}\b/);
+  if (tanggal) {
+    return { ok: false, pesan: `Tanggal disimpan sebagai teks, jadi tulis dengan tanda kutip, misalnya '${tanggal[0]}'.`, jenis: 'sintaks' };
+  }
+  const jam = polos.match(/\b\d{1,2}:\d{2}\b/);
+  if (jam) {
+    return { ok: false, pesan: `Jam disimpan sebagai teks, jadi tulis dengan tanda kutip, misalnya '${jam[0]}'.`, jenis: 'sintaks' };
+  }
   if (tanpaTeks(sql).includes(';')) {
     return { ok: false, pesan: 'Jalankan satu query saja dalam sekali jalan.', jenis: 'sintaks' };
   }

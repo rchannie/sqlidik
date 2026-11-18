@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
 
 import { AVATAR, AVATAR_PEMAIN, A } from '../aset';
+import { Gerak } from '../komponen/gerak';
 import { Layar } from '../komponen/layar';
 import { Pengaturan } from '../komponen/pengaturan';
 import { Isian, Judul, Kotak, Label, Pesan, Tab, Teks, Tombol } from '../komponen/ui';
 import { daftar, daftarGuru, masuk, useToko } from '../data/toko';
+import { efek, useMusikLayar } from '../suara/mesin';
 import { W } from '../tema';
 
 type Mode = 'masuk' | 'daftar' | 'guru';
@@ -26,6 +28,7 @@ export default function LayarMasuk() {
   const [galat, setGalat] = useState<string | null>(null);
   const [proses, setProses] = useState(false);
   const [atur, setAtur] = useState(false);
+  useMusikLayar('musik_judul', { hujan: true });
 
   const kirim = async () => {
     setGalat(null);
@@ -61,7 +64,9 @@ export default function LayarMasuk() {
     <Layar latar={A.latar.judul}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ gap: 16 }}>
         <View style={{ alignItems: 'center', marginTop: 8 }}>
-          <Image source={A.logo} style={{ width: 220, height: 48 }} contentFit="contain" />
+          <Gerak jenis="melayang" jarak={3} durasi={1800} patah={3}>
+            <Image source={A.logo} style={{ width: 220, height: 48 }} contentFit="contain" />
+          </Gerak>
         </View>
         <Tab pilihan={pilihan} nilai={mode} ubah={(m) => { setMode(m); setGalat(null); }} gelap />
         <Kotak warna={W.kertas} isi={{ gap: 14 }}>
@@ -76,7 +81,7 @@ export default function LayarMasuk() {
               <Label>PILIH AVATAR</Label>
               <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
                 {AVATAR_PEMAIN.map((a) => (
-                  <Pressable key={a} onPress={() => setAvatar(a)} accessibilityLabel={'Avatar ' + a} accessibilityState={{ selected: avatar === a }}>
+                  <Pressable key={a} onPress={() => { efek('ui_tap'); setAvatar(a); }} accessibilityLabel={'Avatar ' + a} accessibilityState={{ selected: avatar === a }}>
                     <View style={{ borderWidth: 3, borderColor: avatar === a ? W.emas : W.tinta, backgroundColor: avatar === a ? W.emasMuda : W.kertasPutih }}>
                       <Image source={AVATAR[a]} style={{ width: 58, height: 58 }} />
                     </View>
@@ -94,7 +99,7 @@ export default function LayarMasuk() {
           {galat ? <Pesan teks={galat} jenis="galat" /> : null}
           <Tombol label={mode === 'masuk' ? 'MASUK' : 'DAFTAR'} onPress={kirim} memuat={proses} testID="tombol-kirim" />
         </Kotak>
-        <Tombol label="PENGATURAN SERVER" varian="navy" kecil onPress={() => setAtur(true)} />
+        <Tombol label="PENGATURAN" varian="navy" kecil onPress={() => setAtur(true)} />
       </KeyboardAvoidingView>
       <Pengaturan terbuka={atur} tutup={() => setAtur(false)} />
     </Layar>

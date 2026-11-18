@@ -6,12 +6,14 @@ import { Pressable, View } from 'react-native';
 
 import { A, AVATAR, AVATAR_PEMAIN } from '../../aset';
 import { Pengaturan } from '../../komponen/pengaturan';
-import { JudulBagian, Layar } from '../../komponen/layar';
+import { Gerak } from '../../komponen/gerak';
+import { HudMenu, JudulBagian, Layar } from '../../komponen/layar';
 import { Bilah, Ikon, Isian, Judul, Kotak, Label, Lembar, Pesan, Teks, Tombol } from '../../komponen/ui';
 import { LENCANA, PANGKAT } from '../../konten';
 import { PENGINGAT_DIDUKUNG } from '../../data/pengingat';
 import { adaAntrian, aturPengingatHarian, keluar, sinkron, ubahProfil, useStatistik, useToko } from '../../data/toko';
 import { waktuSingkat } from '../../permainan/waktu';
+import { efek, useMusikLayar } from '../../suara/mesin';
 import { LEBAR_GURU, LEBAR_HP, W } from '../../tema';
 
 export default function Profil() {
@@ -19,6 +21,7 @@ export default function Profil() {
   const sink = useToko((k) => k.sinkron);
   const st = useStatistik()!;
   const guru = s.pengguna.peran === 'guru';
+  useMusikLayar(guru ? null : 'musik_peta');
   const [ubahAvatar, setUbahAvatar] = useState(false);
   const [ubahNama, setUbahNama] = useState(false);
   const [nama, setNama] = useState(s.pengguna.nama);
@@ -45,12 +48,14 @@ export default function Profil() {
   };
 
   return (
-    <Layar latar={guru ? undefined : A.latar.papan} warna={W.malam} lebar={guru ? LEBAR_GURU : LEBAR_HP}>
+    <Layar latar={guru ? undefined : A.latar.papan} warna={W.malam} lebar={guru ? LEBAR_GURU : LEBAR_HP} atas={<HudMenu judul={guru ? 'Profil Guru' : 'Profil Detektif'} />}>
       <View style={{ width: '100%', maxWidth: LEBAR_HP, alignSelf: 'center', gap: 16 }}>
         <Kotak warna={W.tinta} tepi={W.kertas} isi={{ flexDirection: 'row', gap: 14, alignItems: 'center' }}>
           <Pressable disabled={guru} onPress={() => setUbahAvatar(true)} accessibilityLabel="Ganti avatar">
-            <View style={{ borderWidth: 3, borderColor: W.emas, backgroundColor: W.kertas }}>
-              <Image source={AVATAR[s.pengguna.avatar] ?? AVATAR.pemain_01} style={{ width: 84, height: 84 }} />
+            <View style={{ borderWidth: 3, borderColor: W.emas, backgroundColor: W.kertas, overflow: 'hidden' }}>
+              <Gerak jenis="melayang" jarak={3} durasi={1600}>
+                <Image source={AVATAR[s.pengguna.avatar] ?? AVATAR.pemain_01} style={{ width: 84, height: 84 }} />
+              </Gerak>
             </View>
           </Pressable>
           <View style={{ flex: 1, gap: 6 }}>
@@ -68,7 +73,9 @@ export default function Profil() {
           <>
             <Kotak isi={{ gap: 10 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                <Ikon src={A.pangkat[st.pangkat]} ukuran={44} />
+                <Gerak jenis="melayang">
+                  <Ikon src={A.pangkat[st.pangkat]} ukuran={44} />
+                </Gerak>
                 <View style={{ flex: 1, gap: 4 }}>
                   <Label>PANGKAT</Label>
                   <Judul ukuran={12}>{st.namaPangkat.toUpperCase()}</Judul>
@@ -105,7 +112,9 @@ export default function Profil() {
                 return (
                   <Pressable key={l.kode} onPress={() => setLencana(l.kode)} accessibilityRole="button" accessibilityLabel={`${l.nama}${punya ? '' : ', belum didapat'}`} style={{ width: '31%' }}>
                     <View style={{ backgroundColor: punya ? W.navy : W.malam3, borderWidth: 3, borderColor: punya ? W.emas : W.abu3, alignItems: 'center', padding: 8, gap: 6, minHeight: 130 }}>
-                      <Image source={A.lencana[l.kode]} style={{ width: 48, height: 63, opacity: punya ? 1 : 0.25 }} />
+                      <Gerak jenis="denyut" jarak={6} aktif={punya} tunda={LENCANA.indexOf(l) * 250}>
+                        <Image source={A.lencana[l.kode]} style={{ width: 48, height: 63, opacity: punya ? 1 : 0.25 }} />
+                      </Gerak>
                       <Judul ukuran={7} warna={punya ? W.kertas : W.abu2} style={{ textAlign: 'center' }}>{l.nama.toUpperCase()}</Judul>
                     </View>
                   </Pressable>
@@ -142,7 +151,7 @@ export default function Profil() {
           </>
         ) : null}
 
-        <Tombol label="PENGATURAN SERVER" varian="navy" kecil onPress={() => setAtur(true)} />
+        <Tombol label="PENGATURAN" varian="navy" kecil ikon={A.ikon.pengaturan} onPress={() => setAtur(true)} />
         <Tombol label="KELUAR" varian="merah" kecil onPress={() => setYakinKeluar(true)} testID="keluar" />
       </View>
 
@@ -152,6 +161,7 @@ export default function Profil() {
             <Pressable
               key={a}
               onPress={async () => {
+                efek('ui_tap');
                 setUbahAvatar(false);
                 try {
                   await ubahProfil({ avatar: a });

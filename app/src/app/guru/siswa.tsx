@@ -11,6 +11,7 @@ import { Bilah, Bintang, Ikon, Judul, Kode, Kotak, Label, Lembar, Memuat, Pesan,
 import { BERKAS, PANGKAT } from '../../konten';
 import { useToko } from '../../data/toko';
 import { durasiTeks, tanggalSingkat, waktuSingkat } from '../../permainan/waktu';
+import { useMusikLayar } from '../../suara/mesin';
 import { LEBAR_GURU, NAMA_KONSEP, W } from '../../tema';
 
 type Detail = {
@@ -27,6 +28,7 @@ export default function DetailSiswa() {
   const [d, setD] = useState<Detail | null>(null);
   const [galat, setGalat] = useState<string | null>(null);
   const [yakin, setYakin] = useState(false);
+  useMusikLayar(null);
 
   useEffect(() => {
     api<Detail>(`/api/guru/kelas/${kelas}/siswa/${siswa}`, { token }).then(setD, (e) => setGalat(e?.message ?? 'Gagal memuat.'));

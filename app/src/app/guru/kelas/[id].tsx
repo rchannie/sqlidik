@@ -11,6 +11,7 @@ import { Bilah, Bintang, Isian, Judul, Kode, Kotak, Label, Lembar, Memuat, Pesan
 import { BERKAS } from '../../../konten';
 import { useToko } from '../../../data/toko';
 import { durasiTeks, geserTanggal, sisaWaktu, tanggalSingkat, tanggalWIB, waktuSingkat } from '../../../permainan/waktu';
+import { useMusikLayar } from '../../../suara/mesin';
 import { LEBAR_GURU, NAMA_KONSEP, W } from '../../../tema';
 
 type Anggota = {
@@ -37,6 +38,7 @@ export default function DasborKelas() {
   const [galat, setGalat] = useState<string | null>(null);
   const [tab, setTab] = useState<'siswa' | 'tugas' | 'rekap' | 'peringkat' | 'atur'>('siswa');
   const [pesan, setPesan] = useState<{ teks: string; jenis: 'galat' | 'sukses' | 'info' } | null>(null);
+  useMusikLayar(null);
 
   const muat = useCallback(async () => {
     try {

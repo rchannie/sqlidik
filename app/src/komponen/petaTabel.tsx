@@ -4,6 +4,7 @@ import { Pressable, View } from 'react-native';
 
 import type { MetaTabel } from '../konten';
 import { DbKasus, Hasil } from '../mesin/jenis';
+import { efek } from '../suara/mesin';
 import { W } from '../tema';
 import { TabelHasil } from './tabel';
 import { Judul, Kode, Label, Teks, Tombol } from './ui';
@@ -25,7 +26,7 @@ export function PetaTabel({ tabel, db, sisip }: { tabel: MetaTabel[]; db: DbKasu
       {sisip ? <Teks ukuran={15} warna={W.biruMuda}>Ketuk nama tabel atau kolom untuk menyalinnya ke query.</Teks> : null}
       {tabel.map((t) => (
         <View key={t.nama} style={{ borderWidth: 3, borderColor: W.tinta, backgroundColor: W.kertasPutih }}>
-          <Pressable disabled={!sisip} onPress={() => sisip?.(t.nama)} accessibilityLabel={'Tabel ' + t.nama}>
+          <Pressable disabled={!sisip} onPress={() => { efek('ui_tap'); sisip?.(t.nama); }} accessibilityLabel={'Tabel ' + t.nama}>
             <View style={{ backgroundColor: W.navy, padding: 8, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Kode ukuran={23} warna={W.emas} style={{ flex: 1 }}>{t.nama}</Kode>
               <Judul ukuran={8} warna={W.kertas}>{`${t.jumlah_baris} BARIS`}</Judul>
@@ -36,7 +37,7 @@ export function PetaTabel({ tabel, db, sisip }: { tabel: MetaTabel[]; db: DbKasu
             {t.kolom.map((k, i) => {
               const fk = t.relasi.find((r) => r.kolom === k.nama);
               return (
-                <Pressable key={k.nama} disabled={!sisip} onPress={() => sisip?.(k.nama)} accessibilityLabel={'Kolom ' + k.nama}>
+                <Pressable key={k.nama} disabled={!sisip} onPress={() => { efek('ui_tap'); sisip?.(k.nama); }} accessibilityLabel={'Kolom ' + k.nama}>
                   <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8, paddingVertical: 3 }}>
                     <Kode ukuran={21} warna={i === 0 ? W.merah : W.tinta} style={{ minWidth: 120 }}>{k.nama}</Kode>
                     <Kode ukuran={17} warna={W.abu3}>{k.tipe}</Kode>

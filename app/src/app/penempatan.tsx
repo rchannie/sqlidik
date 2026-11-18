@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { A } from '../aset';
-import { Dialog, Layar } from '../komponen/layar';
+import { Gerak } from '../komponen/gerak';
+import { Dialog, Layar, SyaratDialog } from '../komponen/layar';
 import { TabelHasil } from '../komponen/tabel';
 import { Judul, Kode, Kotak, Label, Teks, Tombol } from '../komponen/ui';
 import { BERKAS, PENEMPATAN } from '../konten';
 import { simpanPenempatan } from '../data/toko';
+import { efek, useMusikLayar } from '../suara/mesin';
 import { W } from '../tema';
 
 export default function Penempatan() {
@@ -16,6 +18,8 @@ export default function Penempatan() {
   const [no, setNo] = useState(0);
   const [pilih, setPilih] = useState<number | null>(null);
   const [benar, setBenar] = useState<boolean[]>([]);
+  const [dibaca, setDibaca] = useState(false);
+  useMusikLayar('musik_arsip');
 
   const soal = PENEMPATAN[no];
   const level = (() => {
@@ -40,9 +44,11 @@ export default function Penempatan() {
             'Selamat bergabung di tim, Detektif. Sebelum mulai, jawab lima pertanyaan singkat.',
             'Hasilnya menentukan berkas pertamamu. Kalau sudah paham SELECT atau WHERE, kamu bisa langsung lompat.',
           ]}
+          saatSelesai={() => setDibaca(true)}
         />
-        <Tombol label="MULAI TES" onPress={() => setTahap('soal')} testID="mulai-tes" />
-        <Tombol label="LEWATI, MULAI DARI AWAL" varian="navy" onPress={() => selesai(0)} />
+        <Tombol label="MULAI TES" onPress={() => setTahap('soal')} mati={!dibaca} testID="mulai-tes" denyut={dibaca} />
+        <Tombol label="LEWATI, MULAI DARI AWAL" varian="navy" mati={!dibaca} onPress={() => selesai(0)} />
+        <SyaratDialog tampil={!dibaca} />
       </Layar>
     );
   }
@@ -82,11 +88,11 @@ export default function Penempatan() {
             const kunci = sudah && i === soal.jawaban;
             const warna = kunci ? W.hijau : dipilih ? W.merah : W.kertasPutih;
             return (
-              <Pressable key={i} disabled={sudah} onPress={() => setPilih(i)} accessibilityRole="button" accessibilityLabel={o}>
-                <View style={{ borderWidth: 3, borderColor: W.tinta, backgroundColor: sudah ? warna : W.kertasPutih, padding: 12, flexDirection: 'row', gap: 10 }}>
+              <Pressable key={i} disabled={sudah} onPress={() => { efek('ui_tap'); setPilih(i); }} accessibilityRole="button" accessibilityLabel={o}>
+                <Gerak key={sudah ? 'sudah' : 'belum'} jenis={kunci ? 'denyut' : 'goyang'} aktif={sudah && (kunci || dipilih)} style={{ borderWidth: 3, borderColor: W.tinta, backgroundColor: sudah ? warna : W.kertasPutih, padding: 12, flexDirection: 'row', gap: 10 }}>
                   <Judul ukuran={10} warna={sudah && (kunci || dipilih) ? W.kertas : W.biru}>{String.fromCharCode(65 + i)}</Judul>
                   <Kode ukuran={21} warna={sudah && (kunci || dipilih) ? W.kertas : W.tinta} style={{ flex: 1 }}>{o}</Kode>
-                </View>
+                </Gerak>
               </Pressable>
             );
           })}

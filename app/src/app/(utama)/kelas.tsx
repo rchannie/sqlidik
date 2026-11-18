@@ -5,14 +5,16 @@ import { Pressable, View } from 'react-native';
 
 import { A } from '../../aset';
 import { api } from '../../api/klien';
-import { HudPemain, JudulBagian, Layar } from '../../komponen/layar';
+import { HudMenu, HudPemain, JudulBagian, Layar } from '../../komponen/layar';
 import { Bintang, Isian, Judul, Kode, Kotak, Label, Lembar, Pesan, Teks, Tombol } from '../../komponen/ui';
 import { KelasSiswa, Tugas, gabungKelas, keluarKelas, muatKelas, useToko } from '../../data/toko';
 import { sisaWaktu, waktuSingkat } from '../../permainan/waktu';
+import { efek, useMusikLayar } from '../../suara/mesin';
 import { LEBAR_GURU, NAMA_KONSEP, W } from '../../tema';
 
 export default function Kelas() {
   const peran = useToko((k) => k.s?.pengguna.peran);
+  useMusikLayar(peran === 'guru' ? null : 'musik_peta');
   return peran === 'guru' ? <KelasGuru /> : <KelasSiswaLayar />;
 }
 
@@ -84,7 +86,7 @@ function KelasSiswaLayar() {
                 <Judul ukuran={12}>{c.nama_kelas.toUpperCase()}</Judul>
                 <Teks ukuran={15} warna={W.teksRedup}>{`Guru: ${c.guru}`}</Teks>
               </View>
-              <Pressable onPress={() => setKeluarDari(c)} accessibilityRole="button" accessibilityLabel={`Keluar dari ${c.nama_kelas}`}>
+              <Pressable onPress={() => { efek('ui_tap'); setKeluarDari(c); }} accessibilityRole="button" accessibilityLabel={`Keluar dari ${c.nama_kelas}`}>
                 <Judul ukuran={7} warna={W.merah}>KELUAR</Judul>
               </Pressable>
             </View>
@@ -175,7 +177,7 @@ function KelasGuru() {
   };
 
   return (
-    <Layar warna={W.malam} lebar={LEBAR_GURU} segarkan={muat}>
+    <Layar warna={W.malam} lebar={LEBAR_GURU} segarkan={muat} atas={<HudMenu judul="Mode Kelas" />}>
       <View style={{ gap: 6 }}>
         <Judul ukuran={14} warna={W.emas}>MODE KELAS</Judul>
         <Teks warna={W.kertas}>{`Selamat datang, ${nama}. Buat kelas, bagikan kodenya, lalu pantau perkembangan siswa di sini.`}</Teks>
@@ -195,7 +197,7 @@ function KelasGuru() {
       {daftar?.length === 0 ? <Teks warna={W.kertas}>Belum ada kelas.</Teks> : null}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14 }}>
         {daftar?.map((k) => (
-          <Pressable key={k.id_kelas} onPress={() => router.push(`/guru/kelas/${k.id_kelas}`)} accessibilityRole="button" accessibilityLabel={`Buka kelas ${k.nama_kelas}`} style={{ flexGrow: 1, flexBasis: 300, maxWidth: 480 }} testID={'kelas-' + k.id_kelas}>
+          <Pressable key={k.id_kelas} onPress={() => { efek('ui_tap'); router.push(`/guru/kelas/${k.id_kelas}`); }} accessibilityRole="button" accessibilityLabel={`Buka kelas ${k.nama_kelas}`} style={{ flexGrow: 1, flexBasis: 300, maxWidth: 480 }} testID={'kelas-' + k.id_kelas}>
             <Kotak warna={W.kertas} isi={{ gap: 8 }}>
               <Judul ukuran={12}>{k.nama_kelas.toUpperCase()}</Judul>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>

@@ -29,9 +29,24 @@
       "backgroundColor": "#141826"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "asyncRoutes": {
+            "web": false
+          }
+        }
+      ],
       "expo-sqlite",
       "expo-secure-store",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": false
+        }
+      ],
       [
         "expo-notifications",
         {

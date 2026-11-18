@@ -4,16 +4,19 @@ import { Pressable, View } from 'react-native';
 
 import { A } from '../../aset';
 import { ikonKonsep } from '../../komponen/kartu';
-import { HudPemain, JudulBagian, Layar } from '../../komponen/layar';
+import { Gerak } from '../../komponen/gerak';
+import { HudMenu, HudPemain, JudulBagian, Layar } from '../../komponen/layar';
 import { Ikon, Judul, Kotak, Label, Teks, Tombol } from '../../komponen/ui';
 import { BERKAS, LATIHAN, URUTAN_KONSEP } from '../../konten';
 import { berkasTerbuka } from '../../permainan/aturan';
 import { konsepLemah, useToko } from '../../data/toko';
+import { efek, useMusikLayar } from '../../suara/mesin';
 import { NAMA_KONSEP, W } from '../../tema';
 
 export default function Arsip() {
   const s = useToko((k) => k.s)!;
   const guru = s.pengguna.peran === 'guru';
+  useMusikLayar('musik_peta');
   const lemah = konsepLemah(s);
   const target = lemah[0];
   const latihanUlang = target ? LATIHAN.filter((l) => l.konsep === target.konsep) : [];
@@ -23,10 +26,12 @@ export default function Arsip() {
   };
 
   return (
-    <Layar latar={A.latar.papan} atas={guru ? undefined : <HudPemain />}>
+    <Layar latar={A.latar.papan} atas={guru ? <HudMenu judul="Ruang Arsip" /> : <HudPemain />}>
       <Kotak warna={W.tinta} tepi={W.emas} isi={{ gap: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <Ikon src={A.ikon.arsip} ukuran={40} />
+          <Gerak jenis="melayang">
+            <Ikon src={A.ikon.arsip} ukuran={40} />
+          </Gerak>
           <View style={{ flex: 1 }}>
             <Label warna={W.emas}>LATIHAN ULANG</Label>
           </View>
@@ -41,7 +46,7 @@ export default function Arsip() {
                 <View key={i} style={{ flex: 1, height: 14, borderWidth: 2, borderColor: W.kertas, backgroundColor: i < target.beruntun ? W.hijau : W.malam3 }} />
               ))}
             </View>
-            <Tombol label="MULAI LATIHAN ULANG" onPress={mulaiUlang} testID="latihan-ulang" />
+            <Tombol label="MULAI LATIHAN ULANG" onPress={mulaiUlang} testID="latihan-ulang" denyut />
           </>
         ) : (
           <Teks warna={W.kertas}>Belum ada konsep yang perlu diulang. Konsep yang sering salah akan muncul di sini secara otomatis.</Teks>
@@ -56,7 +61,7 @@ export default function Arsip() {
             <Pressable
               key={b.nomor}
               disabled={!buka}
-              onPress={() => router.push(`/catatan/${b.konsep}`)}
+              onPress={() => { efek('ui_tap'); router.push(`/catatan/${b.konsep}`); }}
               accessibilityRole="button"
               accessibilityLabel={`Catatan ${b.judul}${buka ? '' : ', terkunci'}`}
               style={{ width: '47%' }}
@@ -80,7 +85,7 @@ export default function Arsip() {
             <Judul ukuran={10}>{NAMA_KONSEP[k]}</Judul>
           </View>
           {LATIHAN.filter((l) => l.konsep === k).map((l) => (
-            <Pressable key={l.id} onPress={() => router.push(`/latihan/${l.id}`)} accessibilityRole="button" accessibilityLabel={l.judul} testID={'latihan-' + l.id}>
+            <Pressable key={l.id} onPress={() => { efek('ui_tap'); router.push(`/latihan/${l.id}`); }} accessibilityRole="button" accessibilityLabel={l.judul} testID={'latihan-' + l.id}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 6, borderTopWidth: 2, borderColor: W.abu1 }}>
                 <View style={{ width: 22, height: 22, borderWidth: 2, borderColor: W.tinta, backgroundColor: s.latihan[l.id]?.selesai ? W.hijau : W.kertasPutih, alignItems: 'center', justifyContent: 'center' }}>
                   {s.latihan[l.id]?.selesai ? <Judul ukuran={8} warna={W.kertas}>V</Judul> : null}

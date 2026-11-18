@@ -4,9 +4,11 @@ import { View } from 'react-native';
 
 import { A } from '../../aset';
 import { ikonKonsep } from '../../komponen/kartu';
+import { Gerak } from '../../komponen/gerak';
 import { HudKasus, Layar } from '../../komponen/layar';
 import { Ikon, Judul, Kode, Kotak, Label, Teks, Tombol } from '../../komponen/ui';
 import { CATATAN, Konsep, LATIHAN, URUTAN_KONSEP } from '../../konten';
+import { useMusikLayar } from '../../suara/mesin';
 import { NAMA_KONSEP, W } from '../../tema';
 
 export default function Catatan() {
@@ -14,11 +16,14 @@ export default function Catatan() {
   const k = (URUTAN_KONSEP.includes(konsep as Konsep) ? konsep : 'SELECT') as Konsep;
   const c = CATATAN[k];
   const latihan = LATIHAN.find((l) => l.konsep === k);
+  useMusikLayar('musik_arsip');
   return (
     <Layar latar={A.latar.papan} atas={<HudKasus label="BUKU CATATAN DETEKTIF" judul={c.judul} />}>
       <Kotak isi={{ gap: 12 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <Ikon src={ikonKonsep(k)} ukuran={40} />
+          <Gerak jenis="melayang">
+            <Ikon src={ikonKonsep(k)} ukuran={40} />
+          </Gerak>
           <Judul ukuran={12} style={{ flex: 1 }}>{c.judul.toUpperCase()}</Judul>
         </View>
         {c.paragraf.map((p, i) => (

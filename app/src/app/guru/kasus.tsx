@@ -12,6 +12,7 @@ import { TabelHasil } from '../../komponen/tabel';
 import { Chip, Isian, Judul, Kotak, Label, Pesan, Tab, Teks, Tombol } from '../../komponen/ui';
 import { ARSIP, Kasus, URUTAN_KONSEP } from '../../konten';
 import { muatKasusGuruSendiri, useToko } from '../../data/toko';
+import { useMusikLayar } from '../../suara/mesin';
 import { LEBAR_GURU, NAMA_KONSEP, W } from '../../tema';
 
 type LangkahForm = { instruksi: string; query_kunci: string; petunjuk: string[]; komentar_benar: string };
@@ -68,6 +69,7 @@ export default function PenyuntingKasus() {
   const [pratinjau, setPratinjau] = useState<{ kolom: string[]; baris: any[][]; jumlah: number }[] | null>(null);
   const [galat, setGalat] = useState<{ pesan: string; bagian?: string } | null>(null);
   const [proses, setProses] = useState<'periksa' | 'simpan' | null>(null);
+  useMusikLayar(null);
   const [tersimpan, setTersimpan] = useState<string | null>(id ?? null);
   const [lihatArsip, setLihatArsip] = useState(false);
 

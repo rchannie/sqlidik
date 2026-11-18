@@ -2,11 +2,12 @@
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, useWindowDimensions } from 'react-native';
 
 import { A, AVATAR } from '../../aset';
+import { Gerak, Konfeti } from '../../komponen/gerak';
 import { KartuKonsep } from '../../komponen/kartu';
-import { Dialog, HudKasus, KoinHud, Layar } from '../../komponen/layar';
+import { Dialog, HudKasus, KoinHud, Layar, SyaratDialog } from '../../komponen/layar';
 import { PetaTabel } from '../../komponen/petaTabel';
 import { TabelHasil } from '../../komponen/tabel';
 import { Terminal } from '../../komponen/terminal';
@@ -30,7 +31,9 @@ import {
   tandaiKasusTerakhir,
   useToko,
 } from '../../data/toko';
-import { NAMA_KONSEP, W } from '../../tema';
+import { EFEK_BINTANG } from '../../suara/katalog';
+import { efek, jingle, tahanMusik, useMusikLayar } from '../../suara/mesin';
+import { LEBAR_HP, NAMA_KONSEP, W } from '../../tema';
 
 type Fase = 'briefing' | 'investigasi' | 'tuduh' | 'hasil';
 
@@ -67,7 +70,7 @@ export default function LayarKasus() {
     return (
       <Layar latar={A.latar.papan} atas={<HudKasus label={`BERKAS ${kasus.berkas}`} judul={kasus.judul} />}>
         <Dialog ekspresi="serius" teks="Berkas ini masih terkunci, Detektif. Selesaikan kasus sebelumnya dulu." />
-        <Tombol label="KE PAPAN KASUS" onPress={() => router.replace('/peta')} />
+        <Tombol label="KE PAPAN KASUS" onPress={() => router.dismissTo('/peta')} />
       </Layar>
     );
   }
@@ -95,11 +98,14 @@ function Permainan({ kasus, pemulihan, guru }: { kasus: Kasus; pemulihan: boolea
   const [lembarPetunjuk, setLembarPetunjuk] = useState(false);
   const [hadiah, setHadiah] = useState<Hadiah | null>(null);
   const [bintangAkhir, setBintangAkhir] = useState(0);
+  const [briefingDibaca, setBriefingDibaca] = useState(false);
+  const salahDiLangkah = useRef(0);
   const mulai = useRef(Date.now());
   const koin = useToko((k) => (k.s ? statistikDari(k.s).koin : 0));
   const total = kasus.langkah.length;
   const langkah = kasus.langkah[langkahKe];
   const gratis = guru;
+  useMusikLayar(fase === 'tuduh' ? 'musik_tuduh' : fase === 'hasil' ? 'musik_peta' : kasus.jenis === 'harian' ? 'musik_harian' : 'musik_investigasi');
 
   useEffect(() => {
     let db0: DbKasus | null = null;
@@ -137,15 +143,21 @@ function Permainan({ kasus, pemulihan, guru }: { kasus: Kasus; pemulihan: boolea
     }
     setSesi((x) => ({ ...x, percobaan: x.percobaan + 1, salahQuery: x.salahQuery + (r.benar ? 0 : 1) }));
     if (r.benar) {
+      salahDiLangkah.current = 0;
       setBenarSekarang(true);
       if (r.hasil) setBukti((b) => [...b.slice(0, langkahKe), r.hasil!]);
       setDialog({ teks: r.pesan, ekspresi: 'senang' });
     } else {
-      setDialog({ teks: r.jenis_error === 'hasil' || r.jenis_error === 'kata_wajib' ? r.pesan : 'Ada yang perlu diperbaiki. Baca pesan di terminal, lalu coba lagi.', ekspresi: 'serius' });
+      salahDiLangkah.current += 1;
+      const utama = r.jenis_error === 'hasil' || r.jenis_error === 'kata_wajib' ? r.pesan : 'Ada yang perlu diperbaiki. Baca pesan di terminal, lalu coba lagi.';
+      // Setelah dua kali salah di langkah yang sama, ingatkan bahwa petunjuk bisa dibuka lewat ikon di kanan atas.
+      const ingat = salahDiLangkah.current >= 2 && petunjukTerbuka[langkahKe] < 3 ? ' Kalau buntu, buka petunjuk lewat ikon lampu di kanan atas.' : '';
+      setDialog({ teks: utama + ingat, ekspresi: 'serius' });
     }
   };
 
   const lanjutLangkah = () => {
+    salahDiLangkah.current = 0;
     if (langkahKe + 1 < total) {
       setLangkahKe(langkahKe + 1);
       setBenarSekarang(false);
@@ -162,10 +174,12 @@ function Permainan({ kasus, pemulihan, guru }: { kasus: Kasus; pemulihan: boolea
     if (n >= 3) return;
     if (!gratis) {
       if (!belanjaPetunjuk(kasus.id)) {
+        efek('koin_kurang');
         setDialog({ teks: `Koinmu kurang. Satu petunjuk butuh ${ATURAN.biaya_petunjuk} koin. Kumpulkan koin dari kasus lain.`, ekspresi: 'serius' });
         return;
       }
     }
+    efek('petunjuk_buka');
     setPetunjukTerbuka((p) => p.map((v, i) => (i === langkahKe ? v + 1 : v)));
     setSesi((x) => ({ ...x, petunjuk: x.petunjuk + 1 }));
   };
@@ -192,6 +206,7 @@ function Permainan({ kasus, pemulihan, guru }: { kasus: Kasus; pemulihan: boolea
   };
 
   const ulangi = () => {
+    salahDiLangkah.current = 0;
     setFase('briefing');
     setLangkahKe(0);
     setBukti([]);
@@ -209,15 +224,21 @@ function Permainan({ kasus, pemulihan, guru }: { kasus: Kasus; pemulihan: boolea
       <Layar warna={W.malam} atas={<HudKasus label={label} judul={kasus.judul} kanan={guru ? undefined : <KoinHud />} />}>
         <View style={{ borderWidth: 3, borderColor: W.kayuTua, height: 170 }}>
           <Image source={A.latar.gabus} style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }} contentFit="cover" />
-          <Image source={A.dekor.polaroid} style={{ position: 'absolute', left: 16, top: 14, width: 86, height: 100, transform: [{ rotate: '-4deg' }] }} />
-          <Image source={A.dekor.koran} style={{ position: 'absolute', left: 124, top: 18, width: 140, height: 94, transform: [{ rotate: '3deg' }] }} />
-          <Image source={A.dekor.catatan} style={{ position: 'absolute', right: 14, top: 74, width: 66, height: 58 }} />
+          <Gerak jenis="ayun" jarak={2} durasi={2800} style={{ position: 'absolute', left: 16, top: 14 }}>
+            <Image source={A.dekor.polaroid} style={{ width: 86, height: 100, transform: [{ rotate: '-4deg' }] }} />
+          </Gerak>
+          <Gerak jenis="ayun" jarak={1} durasi={3400} tunda={600} style={{ position: 'absolute', left: 124, top: 18 }}>
+            <Image source={A.dekor.koran} style={{ width: 140, height: 94, transform: [{ rotate: '3deg' }] }} />
+          </Gerak>
+          <Gerak jenis="ayun" jarak={3} durasi={3000} tunda={1200} style={{ position: 'absolute', right: 14, top: 74 }}>
+            <Image source={A.dekor.catatan} style={{ width: 66, height: 58 }} />
+          </Gerak>
           <View style={{ position: 'absolute', left: 14, bottom: 10, backgroundColor: W.kertasPutih, borderWidth: 3, borderColor: W.tinta, paddingHorizontal: 8, paddingVertical: 4, maxWidth: '78%' }}>
             <Label warna={W.merah}>TKP</Label>
             <Teks ukuran={15} garis={2}>{kasus.tkp ?? 'Sekolah'}</Teks>
           </View>
         </View>
-        <Dialog teks={kasus.briefing} />
+        <Dialog teks={kasus.briefing} saatSelesai={() => setBriefingDibaca(true)} />
         <KartuKonsep kartu={kasus.kartu} konsep={kasus.konsep} />
         <View style={{ gap: 8 }}>
           <Label warna={W.biruMuda}>TABEL YANG BISA DIPERIKSA</Label>
@@ -226,7 +247,8 @@ function Permainan({ kasus, pemulihan, guru }: { kasus: Kasus; pemulihan: boolea
           </View>
         </View>
         {galatDb ? <Teks warna={W.merah}>{galatDb}</Teks> : null}
-        <Tombol label="MULAI INVESTIGASI" onPress={mulaiInvestigasi} mati={!db} memuat={!db && !galatDb} testID="mulai-investigasi" />
+        <Tombol label="MULAI INVESTIGASI" onPress={mulaiInvestigasi} mati={!db || !briefingDibaca} memuat={!db && !galatDb} testID="mulai-investigasi" denyut={briefingDibaca} />
+        <SyaratDialog tampil={!!db && !briefingDibaca} />
         <Judul ukuran={8} warna={W.abu2} style={{ textAlign: 'center' }}>
           {`LANGKAH: ${total} · DURASI ${kasus.durasi ?? '3-5 MENIT'}`.toUpperCase()}
         </Judul>
@@ -292,11 +314,13 @@ function Permainan({ kasus, pemulihan, guru }: { kasus: Kasus; pemulihan: boolea
         {tab === 'bukti' ? <DaftarBukti kasus={kasus} bukti={bukti} /> : null}
         {benarSekarang ? (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: W.emas, borderWidth: 3, borderColor: W.tinta, paddingHorizontal: 10, paddingVertical: 6 }}>
-              <Image source={A.dekor.bukti} style={{ width: 28, height: 28 }} />
+            <Gerak jenis="muncul" style={{ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: W.emas, borderWidth: 3, borderColor: W.tinta, paddingHorizontal: 10, paddingVertical: 6 }}>
+              <Gerak jenis="melayang" jarak={3} durasi={900}>
+                <Image source={A.dekor.bukti} style={{ width: 28, height: 28 }} />
+              </Gerak>
               <Judul ukuran={9}>+1 BUKTI</Judul>
-            </View>
-            <Tombol label={langkahKe + 1 < total ? 'LANGKAH BERIKUTNYA' : 'TUDUH PELAKU'} varian={langkahKe + 1 < total ? 'emas' : 'merah'} onPress={lanjutLangkah} style={{ flex: 1 }} testID="lanjut-langkah" />
+            </Gerak>
+            <Tombol label={langkahKe + 1 < total ? 'LANGKAH BERIKUTNYA' : 'TUDUH PELAKU'} varian={langkahKe + 1 < total ? 'emas' : 'merah'} onPress={lanjutLangkah} style={{ flex: 1 }} testID="lanjut-langkah" denyut />
           </View>
         ) : null}
         {dialog ? <Dialog teks={dialog.teks} ekspresi={dialog.ekspresi} /> : null}
@@ -317,8 +341,9 @@ function Permainan({ kasus, pemulihan, guru }: { kasus: Kasus; pemulihan: boolea
               <Tombol
                 label={gratis ? `BUKA PETUNJUK ${terbuka + 1}` : `BUKA PETUNJUK ${terbuka + 1} (${ATURAN.biaya_petunjuk} KOIN)`}
                 ikon={A.ikon.petunjuk}
+                suara={null}
                 onPress={bukaPetunjuk}
-                mati={!gratis && koin < ATURAN.biaya_petunjuk}
+                varian={!gratis && koin < ATURAN.biaya_petunjuk ? 'kertas' : 'emas'}
                 testID="buka-petunjuk"
               />
               {!gratis && koin < ATURAN.biaya_petunjuk ? <Teks ukuran={15} warna={W.merah}>Koinmu belum cukup.</Teks> : null}
@@ -359,6 +384,7 @@ function DaftarBukti({ kasus, bukti }: { kasus: Kasus; bukti: Hasil[] }) {
 function Tuduh({ kasus, label, bukti, tuduh, dialogAwal }: { kasus: Kasus; label: string; bukti: Hasil[]; tuduh: (i: number) => boolean; dialogAwal: { teks: string; ekspresi: 'normal' | 'senang' | 'serius' } | null }) {
   const [pilih, setPilih] = useState<number | null>(null);
   const [ditolak, setDitolak] = useState<number | null>(null);
+  const [nTolak, setNTolak] = useState(0);
   const [terbukti, setTerbukti] = useState(false);
   const [lihatBukti, setLihatBukti] = useState(false);
   const pakaiAvatar = kasus.tersangka.every((t) => t.avatar);
@@ -370,11 +396,13 @@ function Tuduh({ kasus, label, bukti, tuduh, dialogAwal }: { kasus: Kasus; label
 
   return (
     <Layar warna={W.malam2} atas={<HudKasus label={label} judul={kasus.judul} kanan={<KoinHud />} />}>
-      <Judul ukuran={13} warna={W.emas} style={{ textAlign: 'center' }}>
-        {kasus.jenis === 'harian' ? 'APA JAWABANNYA?' : 'SIAPA PELAKUNYA?'}
-      </Judul>
+      <Gerak jenis="denyut" jarak={4} aktif={!terbukti}>
+        <Judul ukuran={13} warna={W.emas} style={{ textAlign: 'center' }}>
+          {kasus.jenis === 'harian' ? 'APA JAWABANNYA?' : 'SIAPA PELAKUNYA?'}
+        </Judul>
+      </Gerak>
       {pakaiAvatar ? (
-        <View style={{ height: 270, borderWidth: 3, borderColor: W.tinta, overflow: 'hidden' }}>
+        <Gerak key={'tolak' + nTolak} jenis="goyang" aktif={nTolak > 0} jarak={6} style={{ height: 270, borderWidth: 3, borderColor: W.tinta, overflow: 'hidden' }}>
           <Image source={A.latar.lineup} style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }} contentFit="cover" contentPosition="center" />
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around', paddingBottom: 6 }}>
             {kasus.tersangka.map((t, i) => {
@@ -383,6 +411,7 @@ function Tuduh({ kasus, label, bukti, tuduh, dialogAwal }: { kasus: Kasus; label
                 <Pressable
                   key={t.nama}
                   onPress={() => {
+                    efek('tersangka_pilih');
                     setPilih(i);
                     setDitolak(null);
                   }}
@@ -393,9 +422,19 @@ function Tuduh({ kasus, label, bukti, tuduh, dialogAwal }: { kasus: Kasus; label
                   testID={'tersangka-' + i}
                   style={{ alignItems: 'center', width: `${Math.floor(100 / kasus.tersangka.length)}%` as any }}
                 >
-                  <Image source={dipilih ? A.dekor.sorotPilih : A.dekor.sorot} style={{ position: 'absolute', top: -120, width: 100, height: 260, opacity: dipilih ? 0.95 : 0.55 }} contentFit="contain" />
-                  {dipilih ? <Image source={A.dekor.panah} style={{ width: 30, height: 20, transform: [{ rotate: '90deg' }], marginBottom: 4 }} /> : <View style={{ height: 24 }} />}
-                  <Image source={AVATAR[t.avatar!]} style={{ width: 96, height: 96 }} />
+                  <Gerak key={dipilih ? 'sorot-pilih' : 'sorot'} jenis="sorot" jarak={dipilih ? 12 : 30} durasi={dipilih ? 1200 : 2200 + i * 350} tunda={i * 300} style={{ position: 'absolute', top: -120 }}>
+                    <Image source={dipilih ? A.dekor.sorotPilih : A.dekor.sorot} style={{ width: 100, height: 260, opacity: dipilih ? 0.95 : 0.55 }} contentFit="contain" />
+                  </Gerak>
+                  {dipilih ? (
+                    <Gerak jenis="melayang" jarak={4} durasi={600}>
+                      <Image source={A.dekor.panah} style={{ width: 30, height: 20, transform: [{ rotate: '90deg' }], marginBottom: 4 }} />
+                    </Gerak>
+                  ) : (
+                    <View style={{ height: 24 }} />
+                  )}
+                  <Gerak key={dipilih ? 'pilih' : 'diam'} jenis={dipilih ? 'lompat' : 'melayang'} jarak={dipilih ? 6 : 2} durasi={dipilih ? 520 : 1500 + i * 200} tunda={dipilih ? 0 : i * 250}>
+                    <Image source={AVATAR[t.avatar!]} style={{ width: 96, height: 96 }} />
+                  </Gerak>
                   <View style={{ marginTop: -14, width: 44, height: 28, alignItems: 'center', justifyContent: 'center' }}>
                     <Image source={A.dekor.nomor} style={{ position: 'absolute', width: 44, height: 28 }} />
                     <Judul ukuran={10}>{i + 1}</Judul>
@@ -407,14 +446,16 @@ function Tuduh({ kasus, label, bukti, tuduh, dialogAwal }: { kasus: Kasus; label
           </View>
           {terbukti || ditolak !== null ? (
             <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 90, alignItems: 'center' }}>
-              <Image source={terbukti ? A.stempel.terbukti : A.stempel.ditolak} style={{ width: 240, height: 70, transform: [{ rotate: '-8deg' }] }} />
+              <Gerak key={terbukti ? 'terbukti' : 'ditolak' + nTolak} jenis="cap">
+                <Image source={terbukti ? A.stempel.terbukti : A.stempel.ditolak} style={{ width: 240, height: 70, transform: [{ rotate: '-8deg' }] }} />
+              </Gerak>
             </View>
           ) : null}
-        </View>
+        </Gerak>
       ) : (
         <View style={{ gap: 10 }}>
           {kasus.tersangka.map((t, i) => (
-            <Pressable key={t.nama} onPress={() => { setPilih(i); setDitolak(null); }} disabled={terbukti} accessibilityRole="button" accessibilityLabel={`Pilih ${t.nama}`} testID={'tersangka-' + i}>
+            <Pressable key={t.nama} onPress={() => { efek('tersangka_pilih'); setPilih(i); setDitolak(null); }} disabled={terbukti} accessibilityRole="button" accessibilityLabel={`Pilih ${t.nama}`} testID={'tersangka-' + i}>
               <View style={{ borderWidth: 3, borderColor: pilih === i ? W.emas : W.tinta, backgroundColor: pilih === i ? W.navy : W.kertas, padding: 14, flexDirection: 'row', gap: 12, alignItems: 'center' }}>
                 <Judul ukuran={12} warna={pilih === i ? W.emas : W.biru}>{i + 1}</Judul>
                 <Teks tebal warna={pilih === i ? W.kertas : W.tinta} style={{ flex: 1 }}>{t.nama}</Teks>
@@ -423,7 +464,9 @@ function Tuduh({ kasus, label, bukti, tuduh, dialogAwal }: { kasus: Kasus; label
           ))}
           {terbukti || ditolak !== null ? (
             <View style={{ alignItems: 'center' }}>
-              <Image source={terbukti ? A.stempel.terbukti : A.stempel.ditolak} style={{ width: 240, height: 70, transform: [{ rotate: '-6deg' }] }} />
+              <Gerak key={terbukti ? 'terbukti' : 'ditolak' + nTolak} jenis="cap">
+                <Image source={terbukti ? A.stempel.terbukti : A.stempel.ditolak} style={{ width: 240, height: 70, transform: [{ rotate: '-6deg' }] }} />
+              </Gerak>
             </View>
           ) : null}
         </View>
@@ -440,7 +483,11 @@ function Tuduh({ kasus, label, bukti, tuduh, dialogAwal }: { kasus: Kasus; label
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
             {kasus.langkah.map((_, i) => (
               <View key={i} style={{ width: 62, height: 62, borderWidth: 3, borderStyle: i < bukti.length ? 'solid' : 'dashed', borderColor: i < bukti.length ? W.emas : W.abu3, alignItems: 'center', justifyContent: 'center', backgroundColor: W.navy }}>
-                {i < bukti.length ? <Image source={A.dekor.bukti} style={{ width: 40, height: 40 }} /> : null}
+                {i < bukti.length ? (
+                  <Gerak jenis="melayang" durasi={1400} tunda={i * 250}>
+                    <Image source={A.dekor.bukti} style={{ width: 40, height: 40 }} />
+                  </Gerak>
+                ) : null}
               </View>
             ))}
           </View>
@@ -453,10 +500,17 @@ function Tuduh({ kasus, label, bukti, tuduh, dialogAwal }: { kasus: Kasus; label
         ukuranTeks={16}
         mati={pilih === null || terbukti}
         testID="tombol-tuduh"
+        suara={null}
         onPress={() => {
           if (pilih === null) return;
-          if (tuduh(pilih)) setTerbukti(true);
-          else setDitolak(pilih);
+          if (tuduh(pilih)) {
+            efek('stempel_terbukti');
+            setTerbukti(true);
+          } else {
+            efek('stempel_ditolak');
+            setDitolak(pilih);
+            setNTolak((n) => n + 1);
+          }
         }}
       />
       <Dialog teks={dialog.teks} ekspresi={dialog.ekspresi} />
@@ -482,38 +536,113 @@ function HasilKasus({ kasus, label, bintang, hadiah, guru, ulangi, pemulihan }: 
   const berkasBerikut = kasus.jenis === 'utama' && !berikutDiBerkas ? BERKAS.find((b) => b.nomor === (kasus.berkas ?? 0) + 1) : undefined;
   const lanjut = () => {
     if (berikutDiBerkas) router.replace(`/kasus/${berikutDiBerkas.id}`);
-    else if (kasus.jenis === 'harian') router.replace('/harian');
-    else if (kasus.jenis === 'guru') router.replace(guru ? '/kasus-saya' : '/kelas');
-    else router.replace('/peta');
+    else if (kasus.jenis === 'harian') router.dismissTo('/harian');
+    else if (kasus.jenis === 'guru') router.dismissTo(guru ? '/kasus-saya' : '/kelas');
+    else router.dismissTo('/peta');
   };
+  const [tampilBintang, setTampilBintang] = useState(0);
+  const layar = useWindowDimensions();
+  // Jadwal (milidetik sejak layar muncul) untuk bunyi dan animasi hadiah, supaya keduanya serempak.
+  const jadwal = useMemo(() => {
+    let t = 1000;
+    const j: { bintang: number[]; hadiah: number; xp?: number; koin?: number; streak?: number; lencana?: number; berkas?: number; pangkat?: number; akhir: number } = { bintang: [], hadiah: 0, akhir: 0 };
+    for (let i = 0; i < bintang; i++) {
+      j.bintang.push(t);
+      t += 380;
+    }
+    t += 200;
+    j.hadiah = t;
+    if (hadiah && hadiah.xp > 0) {
+      j.xp = t;
+      t += 500;
+    }
+    if (hadiah && hadiah.koin > 0) {
+      j.koin = t;
+      t += 450;
+    }
+    if (hadiah?.streakNaik) {
+      j.streak = t;
+      t += 800;
+    }
+    if (hadiah?.lencanaBaru.length) {
+      j.lencana = t;
+      t += 1200;
+    }
+    if (hadiah?.berkasBaru.length) {
+      j.berkas = t;
+      t += 900;
+    }
+    if (hadiah?.pangkatBaru) j.pangkat = t;
+    j.akhir = t;
+    return j;
+  }, []);
+  useEffect(() => {
+    const jam: ReturnType<typeof setTimeout>[] = [];
+    const nanti = (ms: number | undefined, fn: () => void) => {
+      if (ms !== undefined) jam.push(setTimeout(fn, ms));
+    };
+    nanti(350, () => jingle('jingle_menang'));
+    jadwal.bintang.forEach((ms, i) =>
+      nanti(ms, () => {
+        setTampilBintang(i + 1);
+        efek(EFEK_BINTANG[i]);
+      }),
+    );
+    nanti(jadwal.xp, () => efek('xp_naik'));
+    nanti(jadwal.koin, () => efek('koin_dapat'));
+    nanti(jadwal.streak, () => efek('streak_naik'));
+    nanti(jadwal.lencana, () => efek('lencana_dapat'));
+    nanti(jadwal.berkas, () => efek('berkas_terbuka'));
+    nanti(jadwal.pangkat, () => jingle('jingle_pangkat'));
+    // Musik latar ditahan sampai urutan bunyi hadiah selesai supaya tidak timbul tenggelam.
+    const lanjutMusik = tahanMusik(jadwal.akhir + 300);
+    return () => {
+      jam.forEach(clearTimeout);
+      lanjutMusik();
+    };
+  }, []);
   const pesanPenutup = pemulihan
     ? 'Streak-mu pulih. Besok jangan sampai terlewat lagi, Detektif.'
     : berkasBerikut
       ? `${kasus.penutup} Berkas ${berkasBerikut.nomor} sudah terbuka.`
       : kasus.penutup;
   return (
-    <Layar latar={A.latar.papan} atas={<HudKasus label={label} judul={kasus.judul} kembali={() => router.replace(kasus.jenis === 'harian' ? '/harian' : '/peta')} />}>
-      <View style={{ alignSelf: 'center', backgroundColor: W.tinta, borderWidth: 3, borderColor: W.emas, paddingHorizontal: 16, paddingVertical: 10 }}>
-        <Judul ukuran={16} warna={W.emas} style={{ textAlign: 'center' }}>
-          KASUS SELESAI
-        </Judul>
-      </View>
+    <Layar
+      latar={A.latar.papan}
+      atas={<HudKasus label={label} judul={kasus.judul} kembali={() => router.dismissTo(kasus.jenis === 'harian' ? '/harian' : '/peta')} />}
+      lapisan={<Konfeti lebar={Math.min(layar.width, LEBAR_HP)} tinggi={layar.height} />}
+    >
+      <Gerak jenis="turun" style={{ alignSelf: 'center', backgroundColor: W.tinta, borderWidth: 3, borderColor: W.emas, paddingHorizontal: 16, paddingVertical: 10 }}>
+        <Gerak jenis="denyut" jarak={4} tunda={600}>
+          <Judul ukuran={16} warna={W.emas} style={{ textAlign: 'center' }}>
+            KASUS SELESAI
+          </Judul>
+        </Gerak>
+      </Gerak>
       <Kotak isi={{ gap: 12, alignItems: 'center' }}>
         <Label warna={W.abu3}>{label}</Label>
-        <Image source={A.stempel.terbukti} style={{ width: 260, height: 74, transform: [{ rotate: '-4deg' }] }} />
+        <Gerak jenis="cap" tunda={250}>
+          <Image source={A.stempel.terbukti} style={{ width: 260, height: 74, transform: [{ rotate: '-4deg' }] }} />
+        </Gerak>
         <Teks tebal style={{ textAlign: 'center' }}>
           {kasus.jenis === 'harian' ? `Jawaban: ${pelaku.nama}` : `Pelaku: ${pelaku.nama}${pelaku.peran ? ` (${pelaku.peran})` : ''}`}
         </Teks>
-        <Bintang jumlah={bintang} ukuran={46} />
+        <Bintang jumlah={tampilBintang} ukuran={46} letup />
         {guru ? (
           <Teks ukuran={15} warna={W.teksRedup}>Mode coba main: hadiah tidak dicatat.</Teks>
         ) : hadiah ? (
           <View style={{ alignSelf: 'stretch', gap: 8 }}>
-            <BarisHadiah ikon={A.ikon.xp} label="XP" nilai={hadiah.xp > 0 ? `+${hadiah.xp}` : '+0'} />
+            <Gerak jenis="naik" jarak={10} tunda={jadwal.xp ?? jadwal.hadiah}>
+              <BarisHadiah ikon={A.ikon.xp} label="XP" nilai={hadiah.xp > 0 ? `+${hadiah.xp}` : '+0'} />
+            </Gerak>
             <Pemisah />
-            <BarisHadiah ikon={A.ikon.koin} label="Koin" nilai={hadiah.koin >= 0 ? `+${hadiah.koin}` : `${hadiah.koin}`} />
+            <Gerak jenis="naik" jarak={10} tunda={jadwal.koin ?? jadwal.hadiah + 150}>
+              <BarisHadiah ikon={A.ikon.koin} label="Koin" nilai={hadiah.koin >= 0 ? `+${hadiah.koin}` : `${hadiah.koin}`} />
+            </Gerak>
             <Pemisah />
-            <BarisHadiah ikon={A.ikon.streak} label="Streak" nilai={`${hadiah.streak} HARI`} />
+            <Gerak jenis="naik" jarak={10} tunda={jadwal.streak ?? jadwal.hadiah + 300}>
+              <BarisHadiah ikon={A.ikon.streak} label="Streak" nilai={`${hadiah.streak} HARI`} />
+            </Gerak>
             {hadiah.bintangSebelumnya >= bintang && hadiah.bintangSebelumnya > 0 ? (
               <Teks ukuran={14} warna={W.teksRedup}>XP dan koin kasus ini sudah didapat sebelumnya. Kejar bintang yang lebih banyak untuk tambahan XP.</Teks>
             ) : null}
@@ -533,23 +662,36 @@ function HasilKasus({ kasus, label, bintang, hadiah, guru, ulangi, pemulihan }: 
           </Teks>
         </Kotak>
       </Pressable>
+      {hadiah?.pangkatBaru ? (
+        <Gerak jenis="muncul" tunda={jadwal.pangkat} style={{ borderWidth: 3, borderStyle: 'dashed', borderColor: W.emas, backgroundColor: W.navy, padding: 12, flexDirection: 'row', gap: 14, alignItems: 'center' }}>
+          <Gerak jenis="lompat" jarak={4} durasi={700}>
+            <Image source={A.pangkat[statistikDari(s).pangkat] ?? A.pangkat.magang} style={{ width: 56, height: 56 }} />
+          </Gerak>
+          <View style={{ flex: 1, gap: 4 }}>
+            <Label warna={W.emas}>NAIK PANGKAT!</Label>
+            <Teks warna={W.kertas} tebal>{hadiah.pangkatBaru}</Teks>
+          </View>
+        </Gerak>
+      ) : null}
       {hadiah?.lencanaBaru.map((l) => {
         const info = LENCANA.find((x) => x.kode === l);
         return (
-          <View key={l} style={{ borderWidth: 3, borderStyle: 'dashed', borderColor: W.emas, backgroundColor: W.navy, padding: 12, flexDirection: 'row', gap: 14, alignItems: 'center' }}>
-            <Image source={A.lencana[l]} style={{ width: 56, height: 74 }} />
+          <Gerak key={l} jenis="muncul" tunda={jadwal.lencana} style={{ borderWidth: 3, borderStyle: 'dashed', borderColor: W.emas, backgroundColor: W.navy, padding: 12, flexDirection: 'row', gap: 14, alignItems: 'center' }}>
+            <Gerak jenis="denyut" jarak={8} tunda={(jadwal.lencana ?? 0) + 400}>
+              <Image source={A.lencana[l]} style={{ width: 56, height: 74 }} />
+            </Gerak>
             <View style={{ flex: 1, gap: 4 }}>
               <Label warna={W.emas}>LENCANA BARU!</Label>
               <Teks warna={W.kertas} tebal>{info?.nama ?? l}</Teks>
               <Teks ukuran={14} warna={W.biruMuda}>{info?.syarat}</Teks>
             </View>
-          </View>
+          </Gerak>
         );
       })}
       <Dialog ekspresi="senang" teks={pesanPenutup} />
       <View style={{ flexDirection: 'row', gap: 10 }}>
         <Tombol label="ULANGI" varian="navy" onPress={ulangi} style={{ flex: 1 }} />
-        <Tombol label="LANJUT" onPress={lanjut} style={{ flex: 1 }} testID="tombol-lanjut-hasil" />
+        <Tombol label="LANJUT" onPress={lanjut} style={{ flex: 1 }} testID="tombol-lanjut-hasil" denyut />
       </View>
     </Layar>
   );

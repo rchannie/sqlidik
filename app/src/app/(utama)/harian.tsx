@@ -6,9 +6,11 @@ import { View } from 'react-native';
 
 import { A, AVATAR } from '../../aset';
 import { api } from '../../api/klien';
+import { Gerak } from '../../komponen/gerak';
 import { HudPemain, JudulBagian, Layar } from '../../komponen/layar';
 import { Bintang, Ikon, Judul, Kotak, Label, Pesan, Tab, Teks, Tombol } from '../../komponen/ui';
 import { muatKelas, useStatistik, useToko } from '../../data/toko';
+import { useMusikLayar } from '../../suara/mesin';
 import { durasiTeks, geserTanggal, harianUntuk, tanggalPanjang, tanggalWIB } from '../../permainan/waktu';
 import { NAMA_KONSEP, W } from '../../tema';
 
@@ -28,6 +30,7 @@ export default function Harian() {
   const [papan, setPapan] = useState<Peringkat | null>(null);
   const [galat, setGalat] = useState<string | null>(null);
   const idKelas = pilihKelas ?? kelas[0]?.id_kelas ?? null;
+  useMusikLayar('musik_peta');
 
   const muatPapan = useCallback(async () => {
     if (!idKelas || !token) return;
@@ -49,7 +52,9 @@ export default function Harian() {
     <Layar latar={A.latar.papan} atas={<HudPemain />} segarkan={async () => { await muatKelas(); await muatPapan(); }}>
       <Kotak warna={W.tinta} tepi={W.emas} isi={{ gap: 10 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <Ikon src={A.ikon.harian} ukuran={40} />
+          <Gerak jenis="melayang">
+            <Ikon src={A.ikon.harian} ukuran={40} />
+          </Gerak>
           <View style={{ flex: 1, gap: 4 }}>
             <Label warna={W.emas}>KASUS HARIAN</Label>
             <Teks ukuran={15} warna={W.biruMuda}>{tanggalPanjang(hariIni)}</Teks>
@@ -67,12 +72,14 @@ export default function Harian() {
             </View>
           </View>
         ) : null}
-        <Tombol label={hasil ? 'MAIN LAGI' : 'MAINKAN'} onPress={() => router.push(`/kasus/${kasus.id}`)} testID="main-harian" />
+        <Tombol label={hasil ? 'MAIN LAGI' : 'MAINKAN'} onPress={() => router.push(`/kasus/${kasus.id}`)} testID="main-harian" denyut={!hasil} />
         {hasil ? <Teks ukuran={14} warna={W.biruMuda}>Main lagi tidak menambah hadiah, tetapi waktu tercepatmu tetap dipakai di papan peringkat.</Teks> : null}
       </Kotak>
 
       <Kotak isi={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-        <Image source={A.ikon.streak} style={{ width: 54, height: 54 }} />
+        <Gerak jenis="nyala" aktif={st.streak > 0}>
+          <Image source={A.ikon.streak} style={{ width: 54, height: 54 }} />
+        </Gerak>
         <View style={{ flex: 1, gap: 4 }}>
           <Judul ukuran={13}>{`${st.streak} HARI`}</Judul>
           <Teks ukuran={15} warna={W.teksRedup}>{`Streak terpanjang ${st.streakTerpanjang} hari. Selesaikan minimal satu kasus atau latihan setiap hari.`}</Teks>

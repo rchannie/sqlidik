@@ -4,11 +4,12 @@ import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 
 import { api } from '../../api/klien';
-import { JudulBagian, Layar } from '../../komponen/layar';
+import { HudMenu, JudulBagian, Layar } from '../../komponen/layar';
 import { Judul, Kotak, Label, Lembar, Pesan, Teks, Tombol } from '../../komponen/ui';
 import type { Kasus } from '../../konten';
 import { muatKasusGuruSendiri, useToko } from '../../data/toko';
 import { waktuSingkat } from '../../permainan/waktu';
+import { useMusikLayar } from '../../suara/mesin';
 import { LEBAR_GURU, NAMA_KONSEP, W } from '../../tema';
 
 export default function KasusSaya() {
@@ -17,6 +18,7 @@ export default function KasusSaya() {
   const [daftar, setDaftar] = useState<(Kasus & { diperbarui_pada?: string; sumber_data?: string })[] | null>(null);
   const [hapus, setHapus] = useState<Kasus | null>(null);
   const [pesan, setPesan] = useState<string | null>(null);
+  useMusikLayar(null);
 
   const muat = useCallback(async () => {
     try {
@@ -35,7 +37,7 @@ export default function KasusSaya() {
   if (peran !== 'guru') return <Redirect href="/peta" />;
 
   return (
-    <Layar warna={W.malam} lebar={LEBAR_GURU} segarkan={muat}>
+    <Layar warna={W.malam} lebar={LEBAR_GURU} segarkan={muat} atas={<HudMenu judul="Kasus Saya" />}>
       <View style={{ gap: 6 }}>
         <Judul ukuran={14} warna={W.emas}>KASUS BUATAN SAYA</Judul>
         <Teks warna={W.kertas}>Buat kasus sesuai materi di kelas. Kasus otomatis bisa dimainkan siswa di semua kelas Bapak/Ibu, dan bisa dijadikan tugas.</Teks>

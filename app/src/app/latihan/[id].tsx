@@ -13,6 +13,7 @@ import type { DbKasus } from '../../mesin/jenis';
 import type { HasilPeriksa } from '../../mesin/periksa';
 import { bukaDb } from '../../mesin/sqlite';
 import { catatLatihan, catatPercobaan, useToko } from '../../data/toko';
+import { useMusikLayar } from '../../suara/mesin';
 import { NAMA_KONSEP, W } from '../../tema';
 
 export default function Latihan() {
@@ -26,6 +27,7 @@ export default function Latihan() {
   const [dialog, setDialog] = useState<{ teks: string; ekspresi: 'normal' | 'senang' | 'serius' }>({ teks: 'Latihan bebas. Petunjuk gratis, jadi jangan ragu membukanya.', ekspresi: 'normal' });
   const [sisipan, setSisipan] = useState<{ teks: string; n: number } | null>(null);
   const modeUlang = ulang === '1';
+  useMusikLayar('musik_arsip');
 
   useEffect(() => {
     let d0: DbKasus | null = null;

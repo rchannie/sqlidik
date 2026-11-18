@@ -6,14 +6,17 @@ import { View } from 'react-native';
 
 import { A } from '../aset';
 import { Pengaturan } from '../komponen/pengaturan';
+import { Gerak } from '../komponen/gerak';
 import { Layar } from '../komponen/layar';
 import { Judul, Teks, Tombol } from '../komponen/ui';
 import { useToko } from '../data/toko';
+import { useMusikLayar } from '../suara/mesin';
 import { W } from '../tema';
 
 export default function LayarJudul() {
   const s = useToko((k) => k.s);
   const [atur, setAtur] = useState(false);
+  useMusikLayar('musik_judul', { hujan: true });
   const lanjut = () => {
     if (!s) return router.push('/masuk');
     if (s.pengguna.peran === 'guru') return router.replace('/kelas');
@@ -24,10 +27,17 @@ export default function LayarJudul() {
     <Layar latar={A.latar.judul} gulir={false}>
       <View style={{ flex: 1, padding: 24, justifyContent: 'space-between' }}>
         <View style={{ alignItems: 'center', marginTop: '22%', gap: 18 }}>
-          <Image source={A.logo} style={{ width: 300, height: 66 }} contentFit="contain" accessibilityLabel="SQLidik" />
-          <Judul ukuran={11} warna={W.emas} style={{ textAlign: 'center' }}>
-            DETEKTIF DATA SEKOLAH
-          </Judul>
+          <Gerak jenis="melayang" jarak={4} durasi={1800} patah={3}>
+            <Image source={A.logo} style={{ width: 300, height: 66 }} contentFit="contain" accessibilityLabel="SQLidik" />
+          </Gerak>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Judul ukuran={11} warna={W.emas} style={{ textAlign: 'center' }}>
+              DETEKTIF DATA SEKOLAH
+            </Judul>
+            <Gerak jenis="kedip" durasi={900}>
+              <Judul ukuran={11} warna={W.emas}>_</Judul>
+            </Gerak>
+          </View>
         </View>
         <View style={{ gap: 14, marginBottom: 28 }}>
           {s ? (
@@ -35,11 +45,11 @@ export default function LayarJudul() {
               <Teks warna={W.kertas} style={{ textAlign: 'center' }}>
                 Halo, {s.pengguna.nama}.
               </Teks>
-              <Tombol label={s.pengguna.peran === 'guru' ? 'BUKA MODE KELAS' : 'LANJUTKAN'} onPress={lanjut} testID="tombol-lanjut" />
+              <Tombol label={s.pengguna.peran === 'guru' ? 'BUKA MODE KELAS' : 'LANJUTKAN'} onPress={lanjut} testID="tombol-lanjut" denyut />
             </>
           ) : (
             <>
-              <Tombol label="MULAI PENYELIDIKAN" onPress={() => router.push({ pathname: '/masuk', params: { tab: 'daftar' } })} testID="tombol-mulai" />
+              <Tombol label="MULAI PENYELIDIKAN" onPress={() => router.push({ pathname: '/masuk', params: { tab: 'daftar' } })} testID="tombol-mulai" denyut />
               <Tombol label="SUDAH PUNYA AKUN" varian="navy" onPress={() => router.push('/masuk')} />
             </>
           )}

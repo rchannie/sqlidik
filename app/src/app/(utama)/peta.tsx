@@ -5,11 +5,13 @@ import { useState } from 'react';
 import { LayoutChangeEvent, Pressable, View } from 'react-native';
 
 import { A } from '../../aset';
-import { HudPemain, Layar } from '../../komponen/layar';
+import { Gerak } from '../../komponen/gerak';
+import { HudMenu, HudPemain, Layar } from '../../komponen/layar';
 import { Bintang, Judul, Kotak, Label, Lembar, Teks, Tombol } from '../../komponen/ui';
 import { BERKAS, Berkas, kasusDiBerkas } from '../../konten';
 import { berkasSelesai, berkasTerbuka, kasusBerikutnya, kasusTerbuka } from '../../permainan/aturan';
 import { useToko } from '../../data/toko';
+import { efek, useMusikLayar } from '../../suara/mesin';
 import { NAMA_KONSEP, W } from '../../tema';
 
 const TINGGI_BARIS = 190;
@@ -19,7 +21,10 @@ export default function PetaKasus() {
   const s = useToko((k) => k.s)!;
   const [lebar, setLebar] = useState(360);
   const [buka, setBuka] = useState<Berkas | null>(null);
+  const [goyang, setGoyang] = useState<{ nomor: number; n: number } | null>(null);
+  const [diatas, setDiatas] = useState<number | null>(null);
   const guru = s.pengguna.peran === 'guru';
+  useMusikLayar('musik_peta', { hujan: true });
   const penempatan = guru ? 5 : s.penempatan;
   const berikut = kasusBerikutnya(s.progres, penempatan);
   const tugasAktif = (s.kelas ?? []).flatMap((c) => c.tugas.filter((t) => !t.selesai && !t.lewat_tenggat));
@@ -27,7 +32,7 @@ export default function PetaKasus() {
   const titik = BERKAS.map((b, i) => ({ x: POSISI_X[i] * lebar, y: i * TINGGI_BARIS + 70 }));
 
   return (
-    <Layar latar={A.latar.papan} atas={guru ? undefined : <HudPemain />}>
+    <Layar latar={A.latar.papan} atas={guru ? <HudMenu judul="Coba Main" /> : <HudPemain />}>
       {guru ? (
         <Kotak isi={{ gap: 6 }}>
           <Label>MODE COBA MAIN</Label>
@@ -37,7 +42,7 @@ export default function PetaKasus() {
         <Kotak warna={W.tinta} tepi={W.emas} isi={{ gap: 10 }}>
           <Label warna={W.emas}>{`KASUS BERIKUTNYA · BERKAS ${berikut.berkas}`}</Label>
           <Judul ukuran={12} warna={W.kertas}>{berikut.judul.toUpperCase()}</Judul>
-          <Tombol label="BUKA BERKAS" onPress={() => router.push(`/kasus/${berikut.id}`)} testID="kasus-berikutnya" />
+          <Tombol label="BUKA BERKAS" suara="berkas_buka" onPress={() => router.push(`/kasus/${berikut.id}`)} testID="kasus-berikutnya" denyut />
         </Kotak>
       ) : (
         <Kotak isi={{ gap: 6 }}>
@@ -46,7 +51,7 @@ export default function PetaKasus() {
         </Kotak>
       )}
       {tugasAktif.length ? (
-        <Pressable onPress={() => router.navigate('/kelas')} accessibilityRole="button">
+        <Pressable onPress={() => { efek('ui_tap'); router.navigate('/kelas'); }} accessibilityRole="button">
           <Kotak warna={W.emasMuda} isi={{ gap: 4 }}>
             <Label warna={W.merahTua}>TUGAS DARI GURU</Label>
             <Teks ukuran={16}>{`${tugasAktif.length} tugas belum selesai. Ketuk untuk melihat.`}</Teks>
@@ -68,9 +73,15 @@ export default function PetaKasus() {
             />
           );
         })}
-        <Image source={A.dekor.polaroid} style={{ position: 'absolute', left: 4, top: TINGGI_BARIS * 1.2, width: 72, height: 84 }} />
-        <Image source={A.dekor.catatan} style={{ position: 'absolute', right: 6, top: TINGGI_BARIS * 2.25, width: 54, height: 48 }} />
-        <Image source={A.dekor.koran} style={{ position: 'absolute', left: 0, top: TINGGI_BARIS * 3.55, width: 108, height: 72 }} />
+        <Gerak jenis="ayun" jarak={3} durasi={3000} style={{ position: 'absolute', left: 4, top: TINGGI_BARIS * 1.2 }}>
+          <Image source={A.dekor.polaroid} style={{ width: 72, height: 84 }} />
+        </Gerak>
+        <Gerak jenis="ayun" jarak={2} durasi={3400} tunda={700} style={{ position: 'absolute', right: 6, top: TINGGI_BARIS * 2.25 }}>
+          <Image source={A.dekor.catatan} style={{ width: 54, height: 48 }} />
+        </Gerak>
+        <Gerak jenis="ayun" jarak={2} durasi={3800} tunda={1400} style={{ position: 'absolute', left: 0, top: TINGGI_BARIS * 3.55 }}>
+          <Image source={A.dekor.koran} style={{ width: 108, height: 72 }} />
+        </Gerak>
         {BERKAS.map((b, i) => {
           const terbuka = guru || berkasTerbuka(b.nomor, s.progres, penempatan);
           const selesai = berkasSelesai(b.nomor, s.progres);
@@ -84,11 +95,22 @@ export default function PetaKasus() {
               testID={'berkas-' + b.nomor}
               accessibilityRole="button"
               accessibilityLabel={`Berkas ${b.nomor} ${b.judul}${terbuka ? '' : ', terkunci'}`}
-              onPress={() => setBuka(b)}
-              style={{ position: 'absolute', left: titik[i].x - 80, top: titik[i].y - 58, width: 160, alignItems: 'center' }}
+              onPress={() => {
+                efek(terbuka ? 'berkas_buka' : 'berkas_terkunci');
+                if (terbuka) return setBuka(b);
+                // Berkas terkunci digoyang dulu, baru lembarnya dibuka.
+                setGoyang({ nomor: b.nomor, n: Date.now() });
+                setTimeout(() => setBuka(b), 380);
+              }}
+              onHoverIn={() => setDiatas(b.nomor)}
+              onHoverOut={() => setDiatas((x) => (x === b.nomor ? null : x))}
+              style={{ position: 'absolute', left: titik[i].x - 80, top: titik[i].y - 58, width: 160, alignItems: 'center', transform: [{ translateY: diatas === b.nomor ? -3 : 0 }] }}
             >
+              <Gerak key={goyang?.nomor === b.nomor ? 'g' + goyang.n : 'diam'} jenis="goyang" aktif={goyang?.nomor === b.nomor} style={{ alignItems: 'center' }}>
               <Image source={A.dekor.paku} style={{ width: 30, height: 30, marginBottom: -14, zIndex: 2 }} />
-              <Image source={kartu} style={{ width: 112, height: 84 }} />
+              <Gerak jenis="melayang" jarak={4} durasi={1600} aktif={aktif}>
+                <Image source={kartu} style={{ width: 112, height: 84 }} />
+              </Gerak>
               <View style={{ marginTop: 4, width: 160, backgroundColor: aktif ? W.kertasPutih : terbuka ? W.kertas : W.abu2, borderWidth: 3, borderColor: aktif ? W.merah : W.tinta, padding: 6, alignItems: 'center', gap: 3 }}>
                 <Judul ukuran={8} warna={aktif ? W.merah : terbuka ? W.hijauTua : W.abu3}>
                   {b.nomor === 5 ? 'KASUS BESAR' : `BERKAS ${b.nomor}`}
@@ -98,12 +120,13 @@ export default function PetaKasus() {
                 </Teks>
                 {terbuka ? <Bintang jumlah={Math.round(bintang / Math.max(1, kasus.length))} ukuran={16} /> : <Teks ukuran={14} warna={W.abu3}>Terkunci</Teks>}
               </View>
+              </Gerak>
             </Pressable>
           );
         })}
       </View>
 
-      <Lembar terbuka={!!buka} tutup={() => setBuka(null)} judul={buka ? `BERKAS ${buka.nomor} · ${buka.judul.toUpperCase()}` : ''}>
+      <Lembar terbuka={!!buka} tutup={() => setBuka(null)} suaraBuka={null} judul={buka ? `BERKAS ${buka.nomor} · ${buka.judul.toUpperCase()}` : ''}>
         {buka ? (
           <>
             <Teks>{buka.ringkas}</Teks>
